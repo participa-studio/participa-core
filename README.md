@@ -27,3 +27,13 @@ for example a different accent colour.
 
 - Shared by both sites → change it here.
 - Specific to one site → change it in that site's `site.css`.
+
+## Preview (test area)
+
+New components are tried here first, never on the live sites:
+
+    https://participa-studio.github.io/participa-core/preview/design.html
+    https://participa-studio.github.io/participa-core/preview/studio.html
+
+The preview pages are hidden from search engines (`noindex`).
+Only when a component works here is it added to the live sites.
