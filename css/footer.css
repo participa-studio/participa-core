@@ -1,0 +1,58 @@
+/* ==========================================================
+   PARTICIPA CORE — FOOTER
+   Mirrors the header:
+   [ © year  PARTICIPA . SITE ] ........ [ EMAIL · LINKEDIN ]
+   Aligned to the content area (--inset in tokens.css).
+   ========================================================== */
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--inset);
+  color: var(--colour-ink);
+  font-size: 0.8125rem;        /* 13 px, same as the menu */
+  font-weight: var(--weight-display);
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer ul {
+  display: flex;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+/* On the full-screen holding page: pinned to the bottom edge */
+body.holding .site-footer {
+  position: fixed;
+  inset: auto 0 0 0;
+}
+
+/* Phones: stack the two halves */
+@media (max-width: 720px) {
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}
