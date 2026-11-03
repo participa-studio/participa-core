@@ -178,7 +178,7 @@
     left: 0;
     right: 0;
     margin: 0;
-    padding: var(--space-3) var(--space-2);
+    padding: var(--space-3) var(--inset);   /* links line up with the content edge */
     background: var(--colour-accent);
     display: none;
   }
