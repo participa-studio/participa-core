@@ -29,13 +29,16 @@
   letter-spacing: 0.12em;
 }
 
-/* Icon group: one compact container, icons 12 px apart.
+/* Icon group: one compact container.
    The group's negative right margin lets the last icon meet the content edge. */
 .site-footer ul {
   display: flex;
   align-items: center;
-  gap: 0;
-  margin: 0 -0.375rem 0 0;     /* top right bottom left */
+  /* Large screens: space between icons grows with the screen width,
+     from 0 at 720 px up to 16 px extra on wide screens.
+     Phones: fixed (see @media below). */
+  gap: clamp(0rem, 2vw - 0.9rem, 1rem);
+  margin: 0 -0.25rem 0 0;      /* last icon meets the content edge (32 px box - 24 px icon) / 2 */
   padding: 0;
   list-style: none;
 }
@@ -46,13 +49,13 @@
   text-decoration: none;
 }
 
-/* Icon links: 24 px icon in a 36 x 44 px tap area.
+/* Icon links: 24 px icon in a 32 x 44 px tap area.
    ".site-footer .site-footer__icon" outranks ".site-footer a" (specificity) */
 .site-footer .site-footer__icon {
   display: grid;
   place-items: center;
-  width: 2rem;              /* 36 px wide: 24 px icon + 6 px each side = 12 px between icons */
-  height: 2rem;             /* 44 px tall tap area */
+  width: 2rem;                 /* 32 px wide: 24 px icon + 4 px each side = 8 px between icons */
+  height: 2.75rem;             /* 44 px tall tap area */
 }
 
 .site-footer__icon svg {
@@ -74,6 +77,9 @@ body.holding .site-footer {
 
 /* Phones: smaller copyright, still one row */
 @media (max-width: 720px) {
+  .site-footer ul {
+    gap: 0;                    /* phones: fixed, icons 8 px apart */
+  }
   .site-footer p {
     font-size: 0.625rem;       /* 10 px copyright on phones */
   }
