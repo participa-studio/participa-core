@@ -21,8 +21,12 @@
   text-transform: uppercase;
 }
 
+/* Copyright: small and quiet, left */
 .site-footer p {
   margin: 0;
+  font-size: 0.6875rem;        /* 11 px */
+  font-weight: var(--weight-body);
+  letter-spacing: 0.12em;
 }
 
 .site-footer ul {
@@ -67,10 +71,9 @@ body.holding .site-footer {
   inset: auto 0 0 0;
 }
 
-/* Phones: smaller text, still one row */
+/* Phones: smaller copyright, still one row */
 @media (max-width: 720px) {
-  .site-footer {
-    font-size: 0.6875rem;      /* 11 px */
-    letter-spacing: 0.12em;
+  .site-footer p {
+    font-size: 0.625rem;       /* 10 px copyright on phones */
   }
 }
