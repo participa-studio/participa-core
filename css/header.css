@@ -3,14 +3,21 @@
    Layout (desktop):
    [ own logo ] ............ [ links ]  [ sister logo + label ]
    Layout (mobile, under 720 px):
-   [ own logo ] ......... [ sister logo ]  [ menu button ]
-   The links then open as a panel below the header.
+   [ menu button ] [ own logo ] ......... [ sister logo ]
+   The menu button sits far from the sister logo, so a thumb
+   cannot switch sites by accident. The links open in a panel
+   of fixed width below the button.
    ========================================================== */
 
 :root {
   --header-height: 5.5rem;     /* 88 px */
   --logo-own: 3.5rem;          /* 56 px: the site's own logo, slightly bigger */
   --logo-sister: 2.25rem;      /* 36 px: the sister logo */
+  /* Mobile menu panel: fixed width, identical on both sites.
+     Sized on the longest menu word across both sites
+     ("PROJECTS", about 86 px) plus the side margin each side. */
+  --menu-word-max: 6rem;
+  --menu-width: calc(var(--menu-word-max) + 2 * var(--inset));
 }
 
 .site-header {
@@ -172,11 +179,18 @@
   .site-header__toggle span::before { position: absolute; top: -7px; }
   .site-header__toggle span::after  { position: absolute; top: 7px; }
 
+  /* Menu button: first, left of the own logo */
+  .site-header__toggle {
+    order: -1;
+    margin-left: calc(-1 * var(--space-1));   /* icon lines up with the content edge */
+  }
+
+  /* Panel: fixed width, opens under the button on the left */
   .site-header__nav {
     position: absolute;
     top: var(--header-height);
     left: 0;
-    right: 0;
+    width: var(--menu-width);
     margin: 0;
     padding: var(--space-3) var(--inset);   /* links line up with the content edge */
     background: var(--colour-accent);
