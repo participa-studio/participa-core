@@ -3,7 +3,7 @@
    Layout (desktop):
    [ own logo ] ............ [ links ]  [ sister logo + label ]
    Layout (mobile, under 720 px):
-   [ menu button ] [ own logo ] ......... [ sister logo ]
+   [ menu button ] [ own logo  PARTICIPA . DESIGN ] ...... [ sister logo ]
    The menu button sits far from the sister logo, so a thumb
    cannot switch sites by accident. The links open in a panel
    of fixed width below the button.
@@ -132,12 +132,20 @@
     gap: var(--space-2);
   }
 
-  /* Wordmark stacks on two lines: PARTICIPA / . DESIGN */
-  .site-header__name {
-    font-size: 0.8125rem;
+  /* Smaller own logo so the wordmark fits on one line */
+  .site-header__home {
+    gap: var(--space-1);
   }
-  .site-header__name span {
-    display: block;
+  .site-header__home img {
+    width: 2.75rem;            /* 44 px */
+    height: 2.75rem;
+  }
+
+  /* Wordmark on one line: PARTICIPA . DESIGN */
+  .site-header__name {
+    font-size: 0.75rem;        /* 12 px */
+    letter-spacing: 0.14em;
+    white-space: nowrap;
   }
 
   .site-header__sister {
@@ -145,12 +153,7 @@
   }
 
   .site-header__sister span {
-    display: none;             /* logo only on small screens */
-  }
-
-  /* Minimal header has room for the label, so keep it */
-  .site-header__home + .site-header__sister span {
-    display: inline;
+    display: none;             /* phones: sister logo only, no label */
   }
 
   .site-header__toggle {
