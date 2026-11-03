@@ -24,4 +24,11 @@
   --space-4: 2rem;     /* 32 px */
   --space-6: 3rem;     /* 48 px */
   --space-8: 4rem;     /* 64 px */
+
+  /* Content area: everything aligns to these two edges */
+  --content-max: 1200px;                    /* widest the content gets */
+  --gutter: clamp(1rem, 4vw, 3rem);         /* side margin: 16 px on phones, up to 48 px */
+  /* The actual left/right inset: the gutter, or more on wide screens
+     so the content stays within --content-max */
+  --inset: max(var(--gutter), calc((100vw - var(--content-max)) / 2));
 }
