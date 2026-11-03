@@ -51,8 +51,8 @@
 .site-footer .site-footer__icon {
   display: grid;
   place-items: center;
-  width: 2.25rem;              /* 36 px wide: 24 px icon + 6 px each side = 12 px between icons */
-  height: 2.75rem;             /* 44 px tall tap area */
+  width: 2rem;              /* 36 px wide: 24 px icon + 6 px each side = 12 px between icons */
+  height: 2rem;             /* 44 px tall tap area */
 }
 
 .site-footer__icon svg {
