@@ -48,7 +48,7 @@ body.holding {
 
 /* Footer present on the holding page: keep its strip free too */
 body.holding:has(.site-footer) {
-  --stage-bottom: 4.5rem;
+  --stage-bottom: 6rem;        /* footer height (92 px) plus a little air */
 }
 
 /* SO/ON sized on the stage, not on the screen:
