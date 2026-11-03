@@ -28,3 +28,32 @@ body.holding {
 .soon span {
   display: block;
 }
+
+/* ---------- Stage: the main content container ---------- */
+/* Usage: <main class="stage"> ... </main>, after the header.
+   It fills only the space between the header and the bottom edge
+   (or the footer), so content can never slide under the header,
+   whatever the device or orientation.
+   "container-type: size" lets content inside measure the stage
+   itself with cqw / cqh units (% of the stage's width / height). */
+
+.stage {
+  position: fixed;
+  inset: var(--header-height) 0 var(--stage-bottom, var(--space-4)) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  container-type: size;
+}
+
+/* Footer present on the holding page: keep its strip free too */
+body.holding:has(.site-footer) {
+  --stage-bottom: 4.5rem;
+}
+
+/* SO/ON sized on the stage, not on the screen:
+   two lines at 0.8 line-height need 1.6 x font-size in height,
+   and "SO" needs about 1.4 x font-size in width. */
+.stage .soon {
+  font-size: min(64cqw, 58cqh);
+}
