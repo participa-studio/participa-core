@@ -91,6 +91,7 @@
 /* Sister logo + label, far right */
 .site-header__sister {
   display: flex;
+  flex-direction: row-reverse; /* label first, logo on the outer edge */
   align-items: center;
   gap: var(--space-1);
 }
