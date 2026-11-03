@@ -1,0 +1,10 @@
+/* ==========================================================
+   PARTICIPA CORE
+   The one file each site links to. It pulls in the parts
+   in a fixed order: tokens first, then base, then components.
+   ========================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+@import url("css/tokens.css");
+@import url("css/base.css");
+@import url("css/components.css");

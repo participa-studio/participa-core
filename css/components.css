@@ -1,0 +1,30 @@
+/* ==========================================================
+   PARTICIPA CORE — COMPONENTS
+   Reusable pieces, built only from tokens.
+   ========================================================== */
+
+/* ---------- Holding page: the stacked SO / ON ---------- */
+/* Usage: <body class="holding"> <h1 class="soon">...</h1> </body> */
+
+body.holding {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--colour-accent);
+}
+
+.soon {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: min(58vw, 54vh);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.soon span {
+  display: block;
+}

@@ -1,0 +1,26 @@
+/* ==========================================================
+   PARTICIPA CORE — BASE
+   Page basics that apply to every page on both sites.
+   ========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;   /* sizes include padding: easier layouts */
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--colour-paper);
+  color: var(--colour-ink);
+  font-family: var(--font-body);
+  font-weight: var(--weight-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;          /* images never overflow their container */
+  height: auto;
+}

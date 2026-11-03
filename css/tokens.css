@@ -1,0 +1,27 @@
+/* ==========================================================
+   PARTICIPA CORE — TOKENS
+   The basic design decisions, each stored once under a name.
+   Every other file refers to these names, never to raw values.
+   A site can override any token in its own site.css.
+   ========================================================== */
+
+:root {
+  /* Colour */
+  --colour-accent: #FFE300;      /* Participa yellow */
+  --colour-ink: #000000;         /* text and logos */
+  --colour-paper: #FFFFFF;       /* light backgrounds */
+
+  /* Type */
+  --font-display: "Inter", Helvetica, Arial, sans-serif;
+  --font-body: "Inter", Helvetica, Arial, sans-serif;
+  --weight-display: 700;
+  --weight-body: 400;
+
+  /* Spacing scale (multiples of 8 px) */
+  --space-1: 0.5rem;   /*  8 px */
+  --space-2: 1rem;     /* 16 px */
+  --space-3: 1.5rem;   /* 24 px */
+  --space-4: 2rem;     /* 32 px */
+  --space-6: 3rem;     /* 48 px */
+  --space-8: 4rem;     /* 64 px */
+}
