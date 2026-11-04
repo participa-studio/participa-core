@@ -6,15 +6,22 @@
    fading slowly (js/quotes.js). Hover or focus pauses the rotation.
    ========================================================== */
 
-/* Centred in the content area, in a narrow container;
-   text-wrap: balance evens out the line lengths at every width. */
+/* Two columns: the quote on the left, set flush right against a thin rule,
+   and a small label on the right (name, title, place, project link).
+   text-wrap: balance evens out the line lengths at every width.
+   On phones the columns stack and the label sits under the quote. */
 .quote {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: center;
+  max-width: 56rem;
   margin: 0 auto;
-  max-width: 34rem;
-  text-align: center;
 }
 .quote blockquote {
   margin: 0;
+  padding-right: var(--space-4);
+  border-right: 1px solid var(--colour-ink);
+  text-align: right;
 }
 .quote blockquote p {
   margin: 0;
@@ -26,26 +33,29 @@
   text-wrap: balance;
 }
 .quote figcaption {
-  margin-top: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-4);
 }
 .quote__name {
   display: block;
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
   font-weight: var(--weight-display);
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-.quote__role {
+.quote__role,
+.quote__place {
   display: block;
-  margin-top: 0.125rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
 }
+.quote__role { margin-top: 0.25rem; }
 
 /* Link to the project the quote belongs to (home page) */
 .quote__project {
   display: inline-block;
-  margin-top: var(--space-2);
-  font-size: 0.6875rem;
+  margin-top: var(--space-1);
+  font-size: 0.625rem;
   font-weight: var(--weight-display);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -118,6 +128,17 @@
 }
 .quotes__dots button[aria-current="true"]::before {
   background: var(--colour-ink);
+}
+
+@media (max-width: 720px) {
+  .quote { grid-template-columns: 1fr; }
+  .quote blockquote { padding: 0; border-right: 0; text-align: left; }
+  .quote figcaption {
+    max-width: 16rem;
+    margin-top: var(--space-2);
+    padding: var(--space-2) 0 0;
+    border-top: 1px solid var(--colour-ink);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
