@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{%- comment -%}
+  PARTICIPA THEME — DEFAULT LAYOUT
+  Header + content + footer. Every page on both sites builds on this.
+{%- endcomment -%}
+{%- assign p = site.participa %}
+<html lang="en-GB">
+<head>
+{% include head.html %}
+</head>
+<body class="{{ page.body_class | default: 'page' }}">
+{% include header.html %}
+
+<main>
+{{ content }}
+</main>
+
+{% include footer.html %}
+
+<script src="{{ p.core }}/js/header.js?v={{ p.version }}" defer></script>
+<script src="{{ p.core }}/js/slider.js?v={{ p.version }}" defer></script>
+<script src="{{ p.core }}/js/year.js?v={{ p.version }}" defer></script>
+</body>
+</html>

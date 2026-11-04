@@ -1,0 +1,59 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — CASE LAYOUT
+  A project page is a short text file that fills in these fields:
+    title, lead, facts (label + value), photos (src + caption),
+    challenge, approach, outcome, note
+  Anything written below the fields appears after the three blocks.
+{%- endcomment -%}
+<article class="case">
+  <h1 class="case__title">{{ page.title }}</h1>
+  {%- if page.lead %}
+  <p class="case__lead">{{ page.lead }}</p>
+  {%- endif %}
+
+  {%- if page.facts %}
+  <dl class="case__facts">
+    {%- for f in page.facts %}
+    <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+    {%- endfor %}
+  </dl>
+  {%- endif %}
+
+  {%- if page.photos %}
+  <div class="slider" aria-roledescription="carousel" aria-label="Project photos">
+    <div class="slider__track">
+      {%- for ph in page.photos %}
+      <figure class="slider__slide">
+        {%- if ph.src %}
+        <img src="{{ ph.src }}" alt="{{ ph.alt | default: ph.caption }}" loading="lazy">
+        {%- else %}
+        <div class="slider__placeholder">Photo {{ forloop.index }} · {{ ph.caption }}</div>
+        {%- endif %}
+        {%- if ph.caption %}<figcaption>{{ ph.caption }}</figcaption>{% endif %}
+      </figure>
+      {%- endfor %}
+    </div>
+  </div>
+  {%- endif %}
+
+  <div class="case__blocks">
+    {%- if page.challenge %}
+    <section><h2>Challenge</h2><p>{{ page.challenge }}</p></section>
+    {%- endif %}
+    {%- if page.approach %}
+    <section><h2>Approach</h2><p>{{ page.approach }}</p></section>
+    {%- endif %}
+    {%- if page.outcome %}
+    <section><h2>Outcome</h2><p>{{ page.outcome }}</p></section>
+    {%- endif %}
+  </div>
+
+  {{ content }}
+
+  {%- if page.note %}
+  <div class="case__note">{{ page.note | markdownify }}</div>
+  {%- endif %}
+</article>

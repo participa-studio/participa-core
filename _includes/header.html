@@ -1,0 +1,33 @@
+{%- comment -%}
+  PARTICIPA THEME — HEADER
+  Written once for both sites. Content comes from the site's _config.yml:
+  own logo and name, menu links, sister site.
+  A page can hide the menu links with  nav: false  in its fields.
+{%- endcomment -%}
+{%- assign p = site.participa -%}
+<header class="site-header site-header--aligned">
+  {%- if page.nav != false and p.nav %}
+  <button class="site-header__toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <span></span>
+  </button>
+  {%- endif %}
+  <a class="site-header__home" href="/" aria-label="{{ p.name_full }}, home">
+    <img src="{{ p.core }}/images/logo-{{ p.own }}.png" alt="">
+    <span class="site-header__name"><span class="site-header__brand">Participa . </span><span>{{ p.name }}</span></span>
+  </a>
+  {%- if page.nav != false and p.nav %}
+
+  <nav class="site-header__nav" id="site-nav" aria-label="Main">
+    <ul>
+      {%- for item in p.nav %}
+      <li><a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+      {%- endfor %}
+    </ul>
+  </nav>
+  {%- endif %}
+
+  <a class="site-header__sister" href="{{ p.sister.url }}" aria-label="Go to {{ p.sister.name_full }}">
+    <img src="{{ p.core }}/images/logo-{{ p.sister.own }}.png" alt="">
+    <span>{{ p.sister.name }}</span>
+  </a>
+</header>
