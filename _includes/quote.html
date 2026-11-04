@@ -1,0 +1,8 @@
+{%- comment -%}
+  PARTICIPA THEME — ONE QUOTE
+  {% include quote.html q=page.quote %}   q = text, name, role
+{%- endcomment -%}
+<figure class="quote">
+  <blockquote><p>“{{ include.q.text }}”</p></blockquote>
+  <figcaption><span class="quote__name">{{ include.q.name }}</span>{% if include.q.role %}<span class="quote__role">{{ include.q.role }}</span>{% endif %}</figcaption>
+</figure>

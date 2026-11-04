@@ -7,6 +7,7 @@ layout: default
     statement (the large opening line), intro,
     actions (title + url; the first is the main one),
     work_heading, cases (title, org, years, url, image, alt),
+    quotes (text, name, role; one shows at a time),
     sides (same fields as on About)
 {%- endcomment -%}
 <article class="home">
@@ -41,6 +42,16 @@ layout: default
       </li>
       {%- endfor %}
     </ul>
+  </section>
+  {%- endif %}
+
+  {%- if page.quotes %}
+  <section class="home__quotes" aria-label="{{ page.quotes_label | default: 'What people say' }}">
+    <div class="quotes" data-quotes>
+      {%- for q in page.quotes %}
+      {% include quote.html q=q %}
+      {%- endfor %}
+    </div>
   </section>
   {%- endif %}
 

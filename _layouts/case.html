@@ -6,6 +6,7 @@ layout: default
   A project page is a short text file that fills in these fields:
     title, lead, facts (label + value), photos (src + caption),
     challenge, approach, outcome,
+    quote (text, name, role),
     artefacts (label, file, format = PDF, status; leave file out while in preparation),
     note
   Anything written below the fields appears after the three blocks.
@@ -54,6 +55,10 @@ layout: default
   </div>
 
   {{ content }}
+
+  {%- if page.quote %}
+  <div class="case__quote">{% include quote.html q=page.quote %}</div>
+  {%- endif %}
 
   {%- if page.artefacts %}
   <section class="case__artefacts" aria-labelledby="artefacts-title">

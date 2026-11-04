@@ -1,0 +1,102 @@
+/* ==========================================================
+   PARTICIPA CORE — QUOTES
+   One quote: text, then the person's name and role.
+   On a case page: one quote after the three blocks.
+   On the home page: several quotes in the same place, one at a time,
+   fading slowly (js/quotes.js). Hover or focus pauses the rotation.
+   ========================================================== */
+
+.quote {
+  margin: 0;
+  max-width: 44rem;
+}
+.quote blockquote {
+  margin: 0;
+}
+.quote blockquote p {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.quote figcaption {
+  margin-top: var(--space-2);
+}
+.quote__name {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.quote__role {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+}
+
+/* ---------- On a case page ---------- */
+.case__quote {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--colour-ink);
+}
+
+/* ---------- On the home page: rotating ---------- */
+.home__quotes {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--colour-ink);
+}
+/* All quotes share one grid cell, so the block keeps the height
+   of the longest quote and the page does not jump. */
+.quotes {
+  display: grid;
+}
+.quotes > .quote {
+  grid-area: 1 / 1;
+}
+.quotes.is-rotating > .quote {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease, visibility 0s linear 1.2s;
+}
+.quotes.is-rotating > .quote.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1.2s ease, visibility 0s;
+}
+
+/* Small dots to pick a quote */
+.quotes__dots {
+  display: flex;
+  gap: 0;
+  margin: var(--space-2) 0 0 -0.75rem;
+  padding: 0;
+  list-style: none;
+}
+.quotes__dots button {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.quotes__dots button::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--colour-ink);
+  border-radius: 50%;
+}
+.quotes__dots button[aria-current="true"]::before {
+  background: var(--colour-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quotes.is-rotating > .quote,
+  .quotes.is-rotating > .quote.is-active { transition: none; }
+}
