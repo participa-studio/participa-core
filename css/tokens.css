@@ -13,6 +13,7 @@
 
   /* Type */
   --font-display: "Inter", Helvetica, Arial, sans-serif;
+  --font-quote: "Source Serif 4", Georgia, serif;   /* quotes only: someone else speaking */
   --font-body: "Inter", Helvetica, Arial, sans-serif;
   --weight-display: 700;
   --weight-body: 400;
