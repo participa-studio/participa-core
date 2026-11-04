@@ -16,7 +16,7 @@
   /* Mobile menu panel: fixed width, identical on both sites.
      Sized on the longest menu word across both sites
      ("PROJECTS", about 86 px) plus the side margin each side. */
-  --menu-word-max: 6rem;
+  --menu-word-max: 6.75rem;   /* longest menu word: EXPERIENCE (102 px) */
   --menu-width: calc(var(--menu-word-max) + 2 * var(--inset));
 }
 
@@ -218,4 +218,11 @@
     flex-direction: column;
     gap: var(--space-3);
   }
+}
+
+/* Narrow desktops and upright tablets (721–840 px): the full menu fits,
+   but "Participa . Design" would wrap onto two lines, so show only the
+   site's own name, as on phones. */
+@media (min-width: 721px) and (max-width: 840px) {
+  .site-header__name .site-header__brand { display: none; }
 }
