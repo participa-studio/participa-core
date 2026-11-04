@@ -25,11 +25,14 @@ layout: default
     {%- endif %}
   </section>
 
+  {%- assign case_count = site.pages | where: "layout", "case" | size %}
+  {%- if case_count > 0 %}
   <section class="home__work" id="work">
     <h2 class="cv__heading">{{ page.work_heading | default: "Selected work" }}</h2>
     {% include case-list.html random=1 hero=true %}
     {%- if page.work_link %}<p class="home__more"><a href="{{ page.work_link.url }}">{{ page.work_link.title }} →</a></p>{% endif %}
   </section>
+  {%- endif %}
 
   {%- if page.quotes %}
   <section class="home__quotes" aria-label="{{ page.quotes_label | default: 'What people say' }}">

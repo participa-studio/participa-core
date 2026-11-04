@@ -1,0 +1,28 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — BLOG (list of posts, newest first)
+  Fields: heading, intro, empty (shown while there are no posts yet).
+  Posts are files in _posts/, named YYYY-MM-DD-title.md, with layout: post.
+{%- endcomment -%}
+<article class="blog">
+  <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
+  {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
+
+  {%- if site.posts.size > 0 %}
+  <ul class="blog__list">
+    {%- for post in site.posts %}
+    <li>
+      <a class="blog__item" href="{{ post.url }}">
+        <time class="blog__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B %Y" }}</time>
+        <span class="blog__title">{{ post.title }}</span>
+        {%- if post.lead %}<span class="blog__excerpt">{{ post.lead }}</span>{% endif %}
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- else %}
+  <p class="shelf__empty">{{ page.empty | default: "First posts to follow." }}</p>
+  {%- endif %}
+</article>

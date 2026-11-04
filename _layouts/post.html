@@ -1,0 +1,18 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — ONE POST
+  Fields: title, lead (optional, one or two lines), and the text below the fields.
+  The date comes from the file name (YYYY-MM-DD-title.md).
+{%- endcomment -%}
+<article class="post">
+  <time class="blog__date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d %B %Y" }}</time>
+  <h1 class="case__title">{{ page.title }}</h1>
+  {%- if page.lead %}<p class="case__lead">{{ page.lead }}</p>{% endif %}
+  <div class="post__body">
+    {{ content }}
+  </div>
+  {%- assign blog = site.participa.nav | where: "title", "Blog" | first %}
+  {%- if blog %}<p class="home__more"><a href="{{ blog.url }}">← All posts</a></p>{% endif %}
+</article>
