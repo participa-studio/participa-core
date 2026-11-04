@@ -8,6 +8,13 @@
 
 body.page {
   background: var(--colour-accent);
+  /* Short pages still fill the screen, with the footer at the bottom */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+body.page main {
+  flex: 1 0 auto;
 }
 
 /* The header stays on top while the page scrolls under it,

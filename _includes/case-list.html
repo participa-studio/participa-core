@@ -1,0 +1,25 @@
+{%- comment -%}
+  PARTICIPA THEME — CASE CARDS
+  Builds the list from the case pages themselves (layout: case),
+  newest first by their "order" field. Each case page carries:
+    short_title (optional), org, years, cover (image, optional), cover_alt
+  {% include case-list.html featured=true %}  → only cases with featured: true
+  {% include case-list.html %}                → every case
+{%- endcomment -%}
+{%- assign cases = site.pages | where: "layout", "case" | sort: "order" -%}
+<ul class="home__cases">
+  {%- for c in cases %}
+  {%- if include.featured and c.featured != true %}{% continue %}{% endif %}
+  <li>
+    <a class="home__case" href="{{ c.url }}">
+      {%- if c.cover %}
+      <img src="{{ c.cover }}" alt="{{ c.cover_alt | default: '' }}" loading="lazy">
+      {%- else %}
+      <span class="home__case-image" aria-hidden="true"></span>
+      {%- endif %}
+      <span class="home__case-title">{{ c.short_title | default: c.title }}</span>
+      <span class="home__case-meta">{{ c.org }}{% if c.years %} · {{ c.years }}{% endif %}</span>
+    </a>
+  </li>
+  {%- endfor %}
+</ul>
