@@ -1,0 +1,131 @@
+/* ==========================================================
+   PARTICIPA CORE — PHOTO SLIDER
+   One photo at a time, dots below.
+   - Phones: swipe sideways (native scroll snapping, no script needed)
+   - Desktop: arrows, dots, or the keyboard's left/right keys
+   Markup:
+   <div class="slider" aria-roledescription="carousel" aria-label="...">
+     <div class="slider__track">
+       <figure class="slider__slide"> <img ...> <figcaption>...</figcaption> </figure>
+       ...
+     </div>
+     (slider.js adds the arrows and dots)
+   </div>
+   ========================================================== */
+
+.slider {
+  position: relative;
+  /* Photo + caption + dots always fit on one screen:
+     the width is capped so the 3:2 photo is never taller than
+     the screen minus the header and the controls (about 12rem). */
+  width: min(100%, calc((100svh - 12rem) * 1.5));
+  margin-inline: auto;
+}
+
+/* The track is a horizontal strip; each slide fills its width */
+.slider__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;       /* hide the scrollbar (Firefox) */
+}
+.slider__track::-webkit-scrollbar {
+  display: none;               /* hide the scrollbar (Safari, Chrome) */
+}
+
+.slider__slide {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+/* Photos: same 3:2 frame for every slide, cropped to fill */
+.slider__slide img,
+.slider__placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* Placeholder box until real photos arrive */
+.slider__placeholder {
+  display: grid;
+  place-items: center;
+  padding: var(--space-3);
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--colour-ink);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.slider__slide figcaption {
+  margin-top: var(--space-1);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+/* Controls row: dots in the middle, arrows at the sides */
+.slider__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.slider__dots {
+  display: flex;
+  gap: 0;
+}
+
+/* Each dot: 8 px visible, 32 px tap area */
+.slider__dot {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.slider__dot::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--colour-ink);
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+.slider__dot[aria-current="true"]::before {
+  background: var(--colour-ink);
+}
+
+.slider__arrow {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--colour-ink);
+  cursor: pointer;
+}
+.slider__arrow svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.slider__arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* Phones: swiping replaces the arrows */
+@media (max-width: 720px) {
+  .slider__arrow {
+    display: none;
+  }
+}

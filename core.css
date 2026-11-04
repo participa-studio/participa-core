@@ -8,8 +8,10 @@
    ========================================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
-@import url("css/tokens.css?v=20261104-2");
-@import url("css/base.css?v=20261104-2");
-@import url("css/components.css?v=20261104-2");
-@import url("css/header.css?v=20261104-2");
-@import url("css/footer.css?v=20261104-2");
+@import url("css/tokens.css?v=20261104-3");
+@import url("css/base.css?v=20261104-3");
+@import url("css/components.css?v=20261104-3");
+@import url("css/header.css?v=20261104-3");
+@import url("css/footer.css?v=20261104-3");
+@import url("css/slider.css?v=20261104-3");
+@import url("css/case.css?v=20261104-3");
