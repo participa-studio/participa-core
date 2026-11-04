@@ -96,17 +96,13 @@
   text-underline-offset: 0.3em;
 }
 
-/* Where you are: the current page is plain text in a lighter ink;
-   inside a section (a case page under Work) the section link stays underlined. */
-.site-header__current {
-  color: color-mix(in srgb, var(--colour-ink) 45%, transparent);
-  cursor: default;
-}
+/* Where you are: the current page (plain text, no link) and, on a case page,
+   the Work link are shown in the "here" colour. Same font and size as the other items. */
+.site-header__current,
 .site-header__nav a.is-section {
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
-  text-decoration-thickness: 1px;
+  color: var(--colour-here, #01B2FE);
 }
+.site-header__current { cursor: default; }
 
 /* Sister logo + label, far right */
 .site-header__sister {
@@ -221,17 +217,5 @@
   .site-header__nav ul {
     flex-direction: column;
     gap: var(--space-3);
-  }
-  /* In the phone menu the current page is also indented, after a short dash */
-  .site-header__current {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .site-header__current::before {
-    content: "";
-    width: 0.75rem;
-    height: 1px;
-    background: currentColor;
   }
 }

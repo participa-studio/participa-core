@@ -10,6 +10,7 @@
   --colour-accent: #FFE300;      /* Participa yellow */
   --colour-ink: #000000;         /* text and logos */
   --colour-paper: #FFFFFF;       /* light backgrounds */
+  --colour-here: #01B2FE;     /* menu: the page you are on */
 
   /* Type */
   --font-display: "Inter", Helvetica, Arial, sans-serif;
