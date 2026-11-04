@@ -20,7 +20,15 @@
   <nav class="site-header__nav" id="site-nav" aria-label="Main">
     <ul>
       {%- for item in p.nav %}
-      <li><a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+      {%- comment -%} The page you are on: no link, lighter colour (and indented on phones).
+        A page inside the item's section (layouts listed in _config.yml): link stays, underlined. {%- endcomment -%}
+      {%- if page.url == item.url %}
+      <li><span class="site-header__current" aria-current="page">{{ item.title }}</span></li>
+      {%- elsif item.layouts contains page.layout %}
+      <li><a class="is-section" href="{{ item.url }}" aria-current="true">{{ item.title }}</a></li>
+      {%- else %}
+      <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+      {%- endif %}
       {%- endfor %}
     </ul>
   </nav>
