@@ -1,0 +1,119 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — CV LAYOUT
+  The page is a text file with these fields:
+    person, headline, location, intro,
+    pdf (file, updated; leave file out while in preparation),
+    competencies (list),
+    experience (org, about, place, link, roles: title, dates, points or text),
+    education (title, org, place, dates, text),
+    lists (heading + items: title, detail — or heading + text)
+{%- endcomment -%}
+<article class="cv">
+
+  <header class="cv__top">
+    <div class="cv__intro">
+      <h1 class="cv__name">{{ page.person }}</h1>
+      <p class="cv__headline">{{ page.headline }}</p>
+      <p class="cv__lead">{{ page.intro }}</p>
+      <p class="cv__location">{{ page.location }}</p>
+    </div>
+
+    {%- if page.pdf %}
+    {%- if page.pdf.file %}
+    <a class="cv__download" href="{{ page.pdf.file }}" download>
+      <span class="cv__download-label">CV · PDF</span>
+      <span class="cv__download-action">Download ↓</span>
+      {%- if page.pdf.updated %}<span class="cv__download-meta">Updated {{ page.pdf.updated }}</span>{% endif %}
+    </a>
+    {%- else %}
+    <div class="cv__download cv__download--pending">
+      <span class="cv__download-label">CV · PDF</span>
+      <span class="cv__download-action">In preparation</span>
+    </div>
+    {%- endif %}
+    {%- endif %}
+  </header>
+
+  {%- if page.competencies %}
+  <section class="cv__section">
+    <h2 class="cv__heading">Core competencies</h2>
+    <ul class="cv__competencies">
+      {%- for c in page.competencies %}
+      <li>{{ c }}</li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  {%- if page.experience %}
+  <section class="cv__section">
+    <h2 class="cv__heading">Experience</h2>
+    {%- for e in page.experience %}
+    <div class="cv__entry">
+      <div class="cv__entry-org">
+        <h3>{% if e.link %}<a href="{{ e.link }}">{{ e.org }}</a>{% else %}{{ e.org }}{% endif %}</h3>
+        {%- if e.place %}<p>{{ e.place }}</p>{% endif %}
+      </div>
+      <div class="cv__entry-body">
+        {%- if e.about %}<p class="cv__about">{{ e.about }}</p>{% endif %}
+        {%- for r in e.roles %}
+        <div class="cv__role">
+          <h4>{{ r.title }}</h4>
+          <p class="cv__dates">{{ r.dates }}</p>
+          {%- if r.points %}
+          <ul>
+            {%- for pt in r.points %}<li>{{ pt }}</li>{% endfor %}
+          </ul>
+          {%- endif %}
+          {%- if r.text %}<p>{{ r.text }}</p>{% endif %}
+        </div>
+        {%- endfor %}
+      </div>
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+  {%- if page.education %}
+  <section class="cv__section">
+    <h2 class="cv__heading">Education</h2>
+    {%- for ed in page.education %}
+    <div class="cv__entry">
+      <div class="cv__entry-org">
+        <h3>{{ ed.title }}</h3>
+        {%- if ed.place %}<p>{{ ed.place }}</p>{% endif %}
+      </div>
+      <div class="cv__entry-body">
+        <div class="cv__role">
+          <h4>{{ ed.org }}</h4>
+          <p class="cv__dates">{{ ed.dates }}</p>
+          {%- if ed.text %}<p>{{ ed.text }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+  {%- if page.lists %}
+  <section class="cv__section cv__lists">
+    {%- for l in page.lists %}
+    <div class="cv__list">
+      <h2 class="cv__heading">{{ l.heading }}</h2>
+      {%- if l.items %}
+      <ul>
+        {%- for i in l.items %}
+        <li><strong>{{ i.title }}</strong>{% if i.detail %}<span>{{ i.detail }}</span>{% endif %}</li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
+      {%- if l.text %}<p>{{ l.text }}</p>{% endif %}
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+</article>
