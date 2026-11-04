@@ -77,6 +77,28 @@
   }
   .site-header__nav ul {
     justify-content: center;
+    gap: var(--space-4);
+  }
+  /* A middle dot between the links, as in "Participa . Design",
+     placed exactly midway in the space between two words */
+  .site-header__nav li + li {
+    position: relative;
+  }
+  .site-header__nav li + li::before {
+    content: "·";
+    position: absolute;
+    left: calc(var(--space-4) / -2);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8125rem;
+    font-weight: var(--weight-display);
+    line-height: 1;
+  }
+  /* Capitals carry letter spacing after their last letter too: take it back,
+     so the space between two words is truly even */
+  .site-header__nav a,
+  .site-header__current {
+    margin-right: -0.16em;
   }
 }
 
