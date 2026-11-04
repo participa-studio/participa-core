@@ -15,25 +15,7 @@ layout: default
   {%- if page.throughline %}<p class="about__text">{{ page.throughline }}</p>{% endif %}
 
   {%- if page.sides %}
-  <div class="about__sides">
-    {%- for s in page.sides %}
-    <section class="about__side about__side--{{ s.own }}">
-      <a class="about__side-head" href="{{ s.url }}">
-        <img src="{{ site.participa.core }}/images/logo-{{ s.own }}.png" alt="">
-        <span>
-          <span class="about__side-tag">{{ s.tag }}</span>
-          <h2>{{ s.name }}</h2>
-        </span>
-      </a>
-      <p>{{ s.text }}</p>
-      {%- if s.links %}
-      <ul class="about__side-links">
-        {%- for l in s.links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
-      </ul>
-      {%- endif %}
-    </section>
-    {%- endfor %}
-  </div>
+  {% include sides.html sides=page.sides %}
   {%- endif %}
 
   {%- if page.direction %}<p class="about__text about__direction">{{ page.direction }}</p>{% endif %}

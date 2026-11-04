@@ -1,0 +1,23 @@
+{%- comment -%}
+  PARTICIPA THEME — THE TWO SIDES (.design corporate, .studio social)
+  Used by the About and Home layouts: {% include sides.html sides=page.sides %}
+{%- endcomment -%}
+<div class="about__sides">
+  {%- for s in include.sides %}
+  <section class="about__side about__side--{{ s.own }}">
+    <a class="about__side-head" href="{{ s.url }}">
+      <img src="{{ site.participa.core }}/images/logo-{{ s.own }}.png" alt="">
+      <span>
+        <span class="about__side-tag">{{ s.tag }}</span>
+        <h2>{{ s.name }}</h2>
+      </span>
+    </a>
+    {%- if s.text %}<p>{{ s.text }}</p>{% endif %}
+    {%- if s.links %}
+    <ul class="about__side-links">
+      {%- for l in s.links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
+    </ul>
+    {%- endif %}
+  </section>
+  {%- endfor %}
+</div>

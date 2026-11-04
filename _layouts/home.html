@@ -1,0 +1,54 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — HOME LAYOUT
+  The page is a text file with these fields:
+    statement (the large opening line), intro,
+    actions (title + url; the first is the main one),
+    work_heading, cases (title, org, years, url, image, alt),
+    sides (same fields as on About)
+{%- endcomment -%}
+<article class="home">
+
+  <section class="home__opening">
+    <h1 class="home__statement">{{ page.statement }}</h1>
+    {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
+    {%- if page.actions %}
+    <ul class="home__actions">
+      {%- for a in page.actions %}
+      <li><a class="home__action{% if forloop.first %} home__action--main{% endif %}" href="{{ a.url }}">{{ a.title }}</a></li>
+      {%- endfor %}
+    </ul>
+    {%- endif %}
+  </section>
+
+  {%- if page.cases %}
+  <section class="home__work" id="work">
+    <h2 class="cv__heading">{{ page.work_heading | default: "Selected work" }}</h2>
+    <ul class="home__cases">
+      {%- for c in page.cases %}
+      <li>
+        <a class="home__case" href="{{ c.url }}">
+          {%- if c.image %}
+          <img src="{{ c.image }}" alt="{{ c.alt | default: '' }}" loading="lazy">
+          {%- else %}
+          <span class="home__case-image" aria-hidden="true"></span>
+          {%- endif %}
+          <span class="home__case-title">{{ c.title }}</span>
+          <span class="home__case-meta">{{ c.org }}{% if c.years %} · {{ c.years }}{% endif %}</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  {%- if page.sides %}
+  <section class="home__sides">
+    {% include sides.html sides=page.sides %}
+  </section>
+  {%- endif %}
+
+  {{ content }}
+</article>
