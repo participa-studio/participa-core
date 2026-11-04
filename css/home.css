@@ -39,11 +39,13 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-.home__action--main { border-width: 2px; }
+/* Hover and keyboard focus use the same blue as "you are here" in the menu;
+   the text stays black so it remains readable. All buttons are equal. */
 .home__action:hover,
 .home__action:focus-visible {
-  background: var(--colour-ink);
-  color: var(--colour-accent);
+  background: var(--colour-here);
+  border-color: var(--colour-ink);
+  color: var(--colour-ink);
 }
 
 /* ---------- Selected work ---------- */
