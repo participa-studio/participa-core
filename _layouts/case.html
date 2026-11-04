@@ -54,6 +54,6 @@ layout: default
   {{ content }}
 
   {%- if page.note %}
-  <div class="case__note">{{ page.note | markdownify }}</div>
+  <p class="case__note">{{ page.note | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
   {%- endif %}
 </article>
