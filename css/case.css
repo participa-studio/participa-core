@@ -2,7 +2,7 @@
    PARTICIPA CORE — CONTENT PAGES AND CASE STUDY
    body.page = a normal scrolling page (as opposed to body.holding).
    Case layout, top to bottom:
-   title · key facts · photo slider · three short blocks · note
+   title · key facts · photo slider · three short blocks · artefacts · note
    Everything aligns to the content area (--inset).
    ========================================================== */
 
@@ -79,6 +79,55 @@ body.page main {
   margin: 0;
   font-size: 1rem;
   line-height: 1.55;
+}
+
+/* ---------- Artefacts: files to download (books, reports, toolkits) ----------
+   One row per file: name on the left, format and status on the right.
+   A row with a file is a download link; without one it shows its status. */
+.case__artefacts {
+  margin-top: var(--space-8);
+}
+.case__artefacts h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.case__artefacts ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--colour-ink);
+}
+.case__artefacts li {
+  border-top: 1px solid var(--colour-ink);
+}
+.case__artefacts li > a,
+.case__artefacts li:not(:has(a)) {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  color: inherit;
+  text-decoration: none;
+}
+.case__artefact-name {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.case__artefact-meta {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.case__artefacts a:hover .case__artefact-name,
+.case__artefacts a:focus-visible .case__artefact-name {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* ---------- Note at the end (sources, confidentiality) ---------- */
