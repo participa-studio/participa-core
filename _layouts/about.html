@@ -1,0 +1,54 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — ABOUT LAYOUT
+  The page is a text file with these fields:
+    heading, intro, throughline,
+    sides (own = design or studio, name, tag, url, text, links: title + url),
+    direction, facts (label + value), contact (Markdown allowed)
+  Written once; each site fills it with its own text.
+{%- endcomment -%}
+<article class="about">
+  <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
+  {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
+  {%- if page.throughline %}<p class="about__text">{{ page.throughline }}</p>{% endif %}
+
+  {%- if page.sides %}
+  <div class="about__sides">
+    {%- for s in page.sides %}
+    <section class="about__side about__side--{{ s.own }}">
+      <a class="about__side-head" href="{{ s.url }}">
+        <img src="{{ site.participa.core }}/images/logo-{{ s.own }}.png" alt="">
+        <span>
+          <span class="about__side-tag">{{ s.tag }}</span>
+          <h2>{{ s.name }}</h2>
+        </span>
+      </a>
+      <p>{{ s.text }}</p>
+      {%- if s.links %}
+      <ul class="about__side-links">
+        {%- for l in s.links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
+      </ul>
+      {%- endif %}
+    </section>
+    {%- endfor %}
+  </div>
+  {%- endif %}
+
+  {%- if page.direction %}<p class="about__text about__direction">{{ page.direction }}</p>{% endif %}
+
+  {%- if page.facts %}
+  <dl class="case__facts">
+    {%- for f in page.facts %}
+    <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+    {%- endfor %}
+  </dl>
+  {%- endif %}
+
+  {%- if page.contact %}
+  <p class="about__text about__contact">{{ page.contact | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+  {%- endif %}
+
+  {{ content }}
+</article>

@@ -1,0 +1,94 @@
+/* ==========================================================
+   PARTICIPA CORE — ABOUT PAGE
+   Title and lead reuse the case styles (case.css).
+   The two sides of the practice sit as two framed panels,
+   each opened by its own logo: .design (corporate) and .studio (social).
+   ========================================================== */
+
+.about__text {
+  margin: var(--space-3) 0 0;
+  max-width: 40rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ---------- The two sides ---------- */
+.about__sides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+.about__side {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  border: 2px solid var(--colour-ink);
+}
+.about__side-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: inherit;
+  text-decoration: none;
+}
+.about__side-head img {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.about__side-head:hover img,
+.about__side-head:focus-visible img {
+  transform: rotate(-12deg);
+}
+.about__side-tag {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.about__side h2 {
+  margin: 0.125rem 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: 1.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.about__side p {
+  margin: var(--space-3) 0 0;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.about__side-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: auto 0 0;
+  padding: var(--space-3) 0 0;
+  list-style: none;
+}
+.about__side-links a {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+}
+.about__side-links a:hover,
+.about__side-links a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.about__direction { margin-top: var(--space-6); }
+.about__contact a { color: inherit; text-underline-offset: 0.2em; }
+
+/* Phones: panels stack */
+@media (max-width: 720px) {
+  .about__sides { grid-template-columns: 1fr; }
+  .about__side { padding: var(--space-3); }
+}
