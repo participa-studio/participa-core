@@ -1,8 +1,8 @@
 {%- comment -%}
   PARTICIPA THEME — ONE QUOTE
-  {% include quote.html q=page.quote %}   q = text, name, role
+  {% include quote.html q=page.quote %}   q = text, name, role, and optionally project + url (a link to the project it belongs to)
 {%- endcomment -%}
 <figure class="quote">
   <blockquote><p>“{{ include.q.text }}”</p></blockquote>
-  <figcaption><span class="quote__name">{{ include.q.name }}</span>{% if include.q.role %}<span class="quote__role">{{ include.q.role }}</span>{% endif %}</figcaption>
+  <figcaption><span class="quote__name">{{ include.q.name }}</span>{% if include.q.role %}<span class="quote__role">{{ include.q.role }}</span>{% endif %}{% if include.q.url %}<a class="quote__project" href="{{ include.q.url }}">{{ include.q.project | default: "See the project" }} →</a>{% endif %}</figcaption>
 </figure>
