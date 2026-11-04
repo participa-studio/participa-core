@@ -5,7 +5,8 @@ layout: default
   PARTICIPA THEME — CASE LAYOUT
   A project page is a short text file that fills in these fields:
     title, lead, facts (label + value), photos (src + caption),
-    challenge, approach, outcome, note
+    challenge, approach, outcome, note,
+    downloads (label + file; leave file out while it is in preparation)
   Anything written below the fields appears after the three blocks.
 {%- endcomment -%}
 <article class="case">
@@ -53,7 +54,13 @@ layout: default
 
   {{ content }}
 
-  {%- if page.note %}
-  <p class="case__note">{{ page.note | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+  {%- if page.note or page.downloads %}
+  <p class="case__note">
+    {%- if page.note %}{{ page.note | markdownify | remove: "<p>" | remove: "</p>" | strip }}{% endif %}
+    {%- for d in page.downloads %}
+    {%- if page.note or forloop.index > 1 %}<br>{% endif %}
+    {%- if d.file %}<a href="{{ d.file }}" download>{{ d.label }} (PDF)</a>{% else %}{{ d.label }} (PDF, in preparation){% endif %}
+    {%- endfor %}
+  </p>
   {%- endif %}
 </article>
