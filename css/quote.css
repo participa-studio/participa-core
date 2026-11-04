@@ -92,11 +92,16 @@
 .quotes.is-rotating > .quote {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 1.2s ease, visibility 0s linear 1.2s;
 }
 .quotes.is-rotating > .quote.is-active {
   opacity: 1;
   visibility: visible;
+}
+/* Fades only once the first quote is in place, so nothing fades on page load */
+.quotes.is-ready > .quote {
+  transition: opacity 1.2s ease, visibility 0s linear 1.2s;
+}
+.quotes.is-ready > .quote.is-active {
   transition: opacity 1.2s ease, visibility 0s;
 }
 

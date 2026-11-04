@@ -127,3 +127,52 @@
 
 /* ---------- Work page: the shelf ---------- */
 .work__shelf { margin-top: var(--space-6); }
+
+/* ---------- One case, large (home) ----------
+   Image about two thirds wide, text beside it; stacked on phones. */
+.home__cases--hero {
+  grid-template-columns: 1fr;
+}
+.home__cases--hero .home__case {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-rows: auto auto auto 1fr;
+  column-gap: var(--space-6);
+  align-items: start;
+}
+.home__cases--hero .home__case img,
+.home__cases--hero .home__case-image {
+  grid-row: 1 / -1;
+}
+.home__cases--hero .home__case-title {
+  margin-top: 0;
+  font-size: clamp(1.375rem, 2.4vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.home__cases--hero .home__case-meta { margin-top: var(--space-1); }
+.home__case-lead {
+  display: block;
+  margin-top: var(--space-3);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.home__case-more {
+  display: block;
+  margin-top: var(--space-3);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.home__cases--hero .home__case:hover .home__case-more,
+.home__cases--hero .home__case:focus-visible .home__case-more {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+@media (max-width: 720px) {
+  .home__cases--hero .home__case { grid-template-columns: 1fr; }
+  .home__cases--hero .home__case img,
+  .home__cases--hero .home__case-image { grid-row: auto; }
+  .home__cases--hero .home__case-title { margin-top: var(--space-2); }
+}

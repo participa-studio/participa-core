@@ -51,6 +51,10 @@
     });
 
     show(0);
+    // switch the fades on only after the first quote is drawn
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { box.classList.add("is-ready"); });
+    });
     restart();
   });
 })();

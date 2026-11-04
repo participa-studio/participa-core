@@ -7,11 +7,18 @@
   {% include case-list.html random=3 %}       → every case in the page; on each visit
       js/shuffle.js shows 3 of them, picked and ordered at random. Without the script,
       the cases marked featured: true show instead.
+  {% include case-list.html random=1 hero=true %} → one large case with its lead line;
+      without the script, the first featured case shows.
 {%- endcomment -%}
 {%- assign cases = site.pages | where: "layout", "case" | sort: "order" -%}
-<ul class="home__cases"{% if include.random %} data-random="{{ include.random }}"{% endif %}>
+{%- assign shown = 0 -%}
+<ul class="home__cases{% if include.hero %} home__cases--hero{% endif %}"{% if include.random %} data-random="{{ include.random }}"{% endif %}>
   {%- for c in cases %}
-  <li{% if include.random and c.featured != true %} hidden{% endif %}>
+  {%- assign hide = false -%}
+  {%- if include.random -%}
+    {%- if c.featured != true or shown >= include.random -%}{%- assign hide = true -%}{%- else -%}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+  {%- endif %}
+  <li{% if hide %} hidden{% endif %}>
     <a class="home__case" href="{{ c.url }}">
       {%- if c.cover %}
       <img src="{{ c.cover }}" alt="{{ c.cover_alt | default: '' }}" loading="lazy">
@@ -20,6 +27,10 @@
       {%- endif %}
       <span class="home__case-title">{{ c.short_title | default: c.title }}</span>
       <span class="home__case-meta">{{ c.org }}{% if c.years %} · {{ c.years }}{% endif %}</span>
+      {%- if include.hero %}
+      {%- if c.lead %}<span class="home__case-lead">{{ c.lead }}</span>{% endif %}
+      <span class="home__case-more">See the case →</span>
+      {%- endif %}
     </a>
   </li>
   {%- endfor %}
