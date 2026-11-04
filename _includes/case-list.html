@@ -3,14 +3,15 @@
   Builds the list from the case pages themselves (layout: case),
   newest first by their "order" field. Each case page carries:
     short_title (optional), org, years, cover (image, optional), cover_alt
-  {% include case-list.html featured=true %}  → only cases with featured: true
   {% include case-list.html %}                → every case
+  {% include case-list.html random=3 %}       → every case in the page; on each visit
+      js/shuffle.js shows 3 of them, picked and ordered at random. Without the script,
+      the cases marked featured: true show instead.
 {%- endcomment -%}
 {%- assign cases = site.pages | where: "layout", "case" | sort: "order" -%}
-<ul class="home__cases">
+<ul class="home__cases"{% if include.random %} data-random="{{ include.random }}"{% endif %}>
   {%- for c in cases %}
-  {%- if include.featured and c.featured != true %}{% continue %}{% endif %}
-  <li>
+  <li{% if include.random and c.featured != true %} hidden{% endif %}>
     <a class="home__case" href="{{ c.url }}">
       {%- if c.cover %}
       <img src="{{ c.cover }}" alt="{{ c.cover_alt | default: '' }}" loading="lazy">

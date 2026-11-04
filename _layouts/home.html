@@ -7,7 +7,7 @@ layout: default
     statement (the large opening line), intro,
     actions (title + url; the first is the main one),
     work_heading, work_link (title + url),
-    (the case cards come from the case pages marked featured: true)
+    (the case cards: three cases picked at random on each visit; see case-list.html)
     quotes (text, name, role, project + url; one shows at a time),
     sides (same fields as on About)
 {%- endcomment -%}
@@ -27,7 +27,7 @@ layout: default
 
   <section class="home__work" id="work">
     <h2 class="cv__heading">{{ page.work_heading | default: "Selected work" }}</h2>
-    {% include case-list.html featured=true %}
+    {% include case-list.html random=3 %}
     {%- if page.work_link %}<p class="home__more"><a href="{{ page.work_link.url }}">{{ page.work_link.title }} →</a></p>{% endif %}
   </section>
 
