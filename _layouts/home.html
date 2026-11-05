@@ -8,7 +8,8 @@ layout: default
     actions (title + url; the first is the main one),
     work_heading, work_link (title + url),
     (one case, shown large, picked at random on each visit; see case-list.html)
-    quotes (text, name, role, project + url; one shows at a time),
+    quotes: taken from the case pages (quote or quotes). Only the quotes of the
+      case shown above appear; several rotate; none means no quote block.
     sides (same fields as on About)
 {%- endcomment -%}
 <article class="home">
@@ -34,15 +35,25 @@ layout: default
   </section>
   {%- endif %}
 
-  {%- if page.quotes %}
-  <section class="home__quotes" aria-label="{{ page.quotes_label | default: 'What people say' }}">
+  {%- comment -%} One quote block per case; js/shuffle.js shows the one for the
+    case on screen. Without the script, the first featured case and its block show. {%- endcomment -%}
+  {%- assign qcases = site.pages | where: "layout", "case" | sort: "order" %}
+  {%- assign first_featured = qcases | where: "featured", true | first %}
+  {%- for c in qcases %}
+  {%- if c.quotes.size > 0 or c.quote %}
+  <section class="home__quotes" data-case="{{ c.url }}" aria-label="{{ page.quotes_label | default: 'What people say' }}"{% unless first_featured and c.url == first_featured.url %} hidden{% endunless %}>
     <div class="quotes" data-quotes>
-      {%- for q in page.quotes %}
-      {% include quote.html q=q %}
+      {%- if c.quotes.size > 0 %}
+      {%- for q in c.quotes %}
+      {% include quote.html q=q url=c.url project=c.title %}
       {%- endfor %}
+      {%- else %}
+      {% include quote.html q=c.quote url=c.url project=c.title %}
+      {%- endif %}
     </div>
   </section>
   {%- endif %}
+  {%- endfor %}
 
   {%- if page.sides %}
   <section class="home__sides">

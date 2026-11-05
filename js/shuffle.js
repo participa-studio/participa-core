@@ -15,5 +15,11 @@
       item.hidden = n >= count;
       list.appendChild(item);
     });
+    // Quotes follow the case: show only the quote block of the case on screen
+    var shown = list.querySelector("li:not([hidden]) a");
+    var url = shown && shown.getAttribute("href");
+    document.querySelectorAll(".home__quotes[data-case]").forEach(function (block) {
+      block.hidden = block.getAttribute("data-case") !== url;
+    });
   });
 })();

@@ -2,6 +2,7 @@
   PARTICIPA THEME — ONE QUOTE
   {% include quote.html q=page.quote %}
   q = text, name, role, place, and optionally project + url
+  (project= and url= on the include override them, used on the home page)
   Two columns: the quote on the left, a small label on the right.
 {%- endcomment -%}
 <figure class="quote">
@@ -10,6 +11,7 @@
     <span class="quote__name">{{ include.q.name }}</span>
     {%- if include.q.role %}<span class="quote__role">{{ include.q.role }}</span>{% endif %}
     {%- if include.q.place %}<span class="quote__place">{{ include.q.place }}</span>{% endif %}
-    {%- if include.q.url %}<a class="quote__project" href="{{ include.q.url }}">{{ include.q.project | default: "See the project" }} →</a>{% endif %}
+    {%- assign qurl = include.url | default: include.q.url %}{%- assign qproject = include.project | default: include.q.project %}
+    {%- if qurl %}<a class="quote__project" href="{{ qurl }}">{{ qproject | default: "See the project" }} →</a>{% endif %}
   </figcaption>
 </figure>

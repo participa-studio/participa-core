@@ -11,7 +11,7 @@
     <span></span>
   </button>
   {%- endif %}
-  <a class="site-header__home" href="/" aria-label="{{ p.name_full }}, home">
+  <a class="site-header__home" href="{{ p.home_url | default: '/' }}" aria-label="{{ p.name_full }}, home">
     <img src="{{ p.core }}/images/logo-{{ p.own }}.png" alt="">
     <span class="site-header__name"><span class="site-header__brand">Participa . </span><span>{{ p.name }}</span></span>
   </a>

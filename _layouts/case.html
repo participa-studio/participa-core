@@ -7,7 +7,7 @@ layout: default
     for the cards on Home and Work: short_title, org, years, cover, cover_alt, order, featured
     title, lead, facts (label + value), photos (src + caption),
     challenge, approach, outcome,
-    quote (text, name, role),
+    quote (text, name, role, place) — or quotes: a list of them, which rotate,
     tag (optional: posts carrying this tag are listed under the case),
     artefacts (label, file, format = PDF, status; leave file out while in preparation),
     note
@@ -58,7 +58,15 @@ layout: default
 
   {{ content }}
 
-  {%- if page.quote %}
+  {%- if page.quotes and page.quotes.size > 0 %}
+  <div class="case__quote">
+    <div class="quotes" data-quotes>
+      {%- for q in page.quotes %}
+      {% include quote.html q=q %}
+      {%- endfor %}
+    </div>
+  </div>
+  {%- elsif page.quote %}
   <div class="case__quote">{% include quote.html q=page.quote %}</div>
   {%- endif %}
 
