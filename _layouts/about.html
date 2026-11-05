@@ -6,7 +6,7 @@ layout: default
   The page is a text file with these fields:
     heading, intro, throughline,
     sides (own = design or studio, name, tag, url, text, links: title + url),
-    direction, facts (label + value), contact (Markdown allowed)
+    direction, facts (label + value; links allowed as [text](url), e.g. a Contact fact), contact (optional line, Markdown allowed)
   Written once; each site fills it with its own text.
 {%- endcomment -%}
 <article class="about">
@@ -23,7 +23,7 @@ layout: default
   {%- if page.facts %}
   <dl class="case__facts">
     {%- for f in page.facts %}
-    <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+    <div><dt>{{ f.label }}</dt><dd>{{ f.value | markdownify | remove: "<p>" | remove: "</p>" | strip }}</dd></div>
     {%- endfor %}
   </dl>
   {%- endif %}
