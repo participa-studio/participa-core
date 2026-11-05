@@ -43,7 +43,7 @@
    the text stays black. All buttons are equal. */
 .home__action:hover,
 .home__action:focus-visible {
-  background: var(--colour-hover-fill);   /* sky blue; the menu keeps cobalt for text */
+  background: var(--colour-hover-fill);   /* rust; the menu keeps its own text colour */
   border-color: var(--colour-ink);
   color: var(--colour-ink);
 }
