@@ -43,9 +43,9 @@
    the text stays black. All buttons are equal. */
 .home__action:hover,
 .home__action:focus-visible {
-  background: var(--colour-here);
+  background: var(--colour-hover-fill);   /* sky blue; the menu keeps cobalt for text */
   border-color: var(--colour-ink);
-  color: var(--colour-ink);    /* black on cobalt: 3.6:1, kept by choice */
+  color: var(--colour-ink);
 }
 
 /* ---------- Selected work ---------- */
