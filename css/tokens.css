@@ -10,7 +10,7 @@
   --colour-accent: #FFE300;      /* Participa yellow */
   --colour-ink: #000000;         /* text and logos */
   --colour-paper: #FFFFFF;       /* light backgrounds */
-  --colour-here: #01B2FE;     /* menu: the page you are on */
+  --colour-here: #0050FF;     /* cobalt: menu hover and the page you are on, button hover (was #01B2FE) */
 
   /* Type */
   --font-display: "Inter", Helvetica, Arial, sans-serif;

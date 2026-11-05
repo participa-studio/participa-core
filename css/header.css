@@ -127,7 +127,7 @@
 /* Hover and keyboard focus: the text turns the "here" blue, as on the home buttons */
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
-  color: var(--colour-here, #01B2FE);
+  color: var(--colour-here, #0050FF);
   text-decoration: none;
 }
 
@@ -135,7 +135,7 @@
    the Work link are shown in the "here" colour. Same font and size as the other items. */
 .site-header__current,
 .site-header__nav a.is-section {
-  color: var(--colour-here, #01B2FE);
+  color: var(--colour-here, #0050FF);
 }
 .site-header__current { cursor: default; }
 
