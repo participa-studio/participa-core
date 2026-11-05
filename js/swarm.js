@@ -1,10 +1,10 @@
 /* ==========================================================
    PARTICIPA CORE — ANTS (prototype)
    On the home page of a site that switches it on (swarm: true in
-   _config.yml), small dots walk out from under one of the two logos and
+   _config.yml), small dots walk in from outside the screen, level with one
+   of the two logos, pass under that logo and come out the other side, then
    wander like ants: a short run, a pause, a turn, another run.
-   Each ant starts at the centre of a logo and only shows once it has walked
-   past the logo's edge, so it seems to come out from under it.
+   Nothing appears out of nowhere: every ant walks in from the edge.
 
    Each visit picks one variation at random (weights in VARIANTS):
      swarm-right   a dozen ants from the sister logo, scattering off-screen
@@ -51,6 +51,12 @@
     return { x: r.left + r.width / 2, y: r.top + r.height / 2, r: r.width / 2 + 1 };
   }
   var R = circle(right), Lc = circle(left);
+  var VW = window.innerWidth;
+  // Where an ant enters: just outside the screen edge beside the logo
+  function entry(c) {
+    var fromRight = c === R;
+    return { x: fromRight ? VW + 8 : -8, y: c.y + rand(-4, 4), inward: fromRight ? Math.PI : 0 };
+  }
   var hb = header.getBoundingClientRect();
   var band = { top: hb.top + 10, bottom: hb.bottom - 10, mid: (R.y + Lc.y) / 2 };
 
@@ -83,9 +89,10 @@
     el.style.cssText = "position:absolute;left:0;top:0;width:" + SIZE + "px;height:" + SIZE +
       "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#000;opacity:0;will-change:transform;";
     layer.appendChild(el);
-    var heading = p.to ? Math.atan2(p.to.y - p.from.y, p.to.x - p.from.x) : p.goal + rand(-1, 1);
-    return { el: el, x: p.from.x, y: p.from.y, from: p.from, to: p.to, goal: p.goal, menu: p.menu, calm: p.calm,
-             heading: heading, speed: 0, born: START_DELAY + p.born, mode: "pause", until: 0, gone: false, out: false };
+    var e = entry(p.from);
+    return { el: el, x: e.x, y: e.y, inward: e.inward, entering: true, from: p.from, to: p.to, goal: p.goal,
+             menu: p.menu, calm: p.calm, heading: e.inward, speed: 0, born: START_DELAY + p.born,
+             mode: "pause", until: 0, gone: false, out: false };
   });
   document.body.appendChild(layer);
 
@@ -116,13 +123,17 @@
           a.mode = "run";
           a.speed = a.menu ? rand(90, 160) : a.calm ? rand(60, 120) : rand(70, 170);
           a.until = t + rand(250, 900);
-          a.heading += a.menu ? rand(-0.9, 0.9) : rand(-1.1, 1.1);
-          if (a.to) steer(a, Math.atan2(a.to.y - a.y, a.to.x - a.x), 0.55);
-          else steer(a, a.goal, a.calm ? 0.6 : 0.35);
+          if (a.entering) {
+            a.heading = a.inward + rand(-0.2, 0.2);    // walking in, straight under the logo
+          } else {
+            a.heading += a.menu ? rand(-0.9, 0.9) : rand(-1.1, 1.1);
+            if (a.to) steer(a, Math.atan2(a.to.y - a.y, a.to.x - a.x), 0.55);
+            else steer(a, a.goal, a.calm ? 0.6 : 0.35);
+          }
         }
       }
       if (a.mode === "run") {
-        a.heading += rand(-0.15, 0.15);              // small wobble while running
+        a.heading += a.entering ? rand(-0.05, 0.05) : rand(-0.15, 0.15);   // small wobble while running
         a.x += Math.cos(a.heading) * a.speed * dt;
         a.y += Math.sin(a.heading) * a.speed * dt;
         if (a.menu) {                                 // stay in the header, up and down around the menu
@@ -131,13 +142,15 @@
         }
       }
 
-      // Hidden while under a logo: visible once it has walked out
+      // Past the logo it walked under: free to wander
+      if (a.entering && (a.inward === 0 ? a.x > a.from.x + a.from.r : a.x < a.from.x - a.from.r)) a.entering = false;
+      // Hidden while under a logo
       var under = inside(a, a.from) || (a.to && a.out && inside(a, a.to));
-      if (!under) a.out = true;
+      if (!a.entering) a.out = true;
       a.el.style.opacity = under ? "0" : "1";
       a.el.style.transform = "translate(" + a.x.toFixed(1) + "px," + a.y.toFixed(1) + "px)";
 
-      var off = a.x < -20 || a.x > W + 20 || a.y < -20 || a.y > H + 20;
+      var off = !a.entering && (a.x < -20 || a.x > W + 20 || a.y < -20 || a.y > H + 20);
       var home = a.to && a.out && inside(a, a.to);   // went under the other logo
       if (off || home || t > (a.menu ? MAX_LIFE * 1.6 : MAX_LIFE)) {
         a.gone = true;
