@@ -1,12 +1,13 @@
 /* ==========================================================
    PARTICIPA CORE — SWAP TO THE SISTER SITE (a hint of a roll)
    When you click the sister logo, it starts rolling left and fades out
-   partway, while the rest of the header fades. It never reaches the other
+   halfway, while the rest of the header fades. It never reaches the other
    end, so there is no landing to match: the movement only points the way.
    Then the sister site opens normally: no second roll on arrival.
    A rolling logo turns by the distance it travels divided by its radius,
    so it looks like a wheel, not a spinning coin.
-   Short (0.35 s), because the next site only starts loading once it ends.
+   It rolls halfway across the header in 0.6 s on every screen; the next site
+   only starts loading once it ends.
    Back button: browsers may show the page as it was left, frozen at the end
    of the roll; the reset below puts the header back.
    With "reduce motion" switched on, nothing moves: the page simply changes.
@@ -22,10 +23,9 @@
   var ownImg = home && home.querySelector("img");
   if (!sister || !sisterImg || !ownImg) return;
 
-  var DURATION = 350;
+  var DURATION = 600;
   var EASE = "cubic-bezier(.4,0,.7,1)";           // starts gently, keeps going
-  var SHARE = 0.35;                               // part of the way it travels
-  var MAX_TRAVEL = 160;                           // pixels, so wide screens do not overdo it
+  var SHARE = 0.5;                                // halfway across the header, on every screen
   var running = [];
 
   function centre(el) {
@@ -45,7 +45,7 @@
     var href = sister.href;
 
     var from = centre(sisterImg), to = centre(ownImg);
-    var dx = Math.max((to.x - from.x) * SHARE, -MAX_TRAVEL);   // negative: rolling left
+    var dx = (to.x - from.x) * SHARE;             // negative: rolling left
     var radius = from.w / 2;
     var turn = (dx / radius) * (180 / Math.PI);
 
