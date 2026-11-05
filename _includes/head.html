@@ -5,14 +5,33 @@
 {%- assign p = site.participa -%}
 <meta charset="utf-8">
 {%- if p.sister.url %}
+<style>
+  /* Arriving from the sister site: hidden at once, before any stylesheet loads,
+     then faded in evenly over 0.8 s once the page and its fonts are ready. */
+  html.is-arriving body > * { opacity: 0; }
+  html.is-arriving.is-revealing body > * { opacity: 1; transition: opacity 0.8s ease-in-out; }
+</style>
 <script>
-  /* Arriving from the sister site: fade the page in (rule in base.css). */
   (function () { try {
     var sister = "{{ p.sister.url }}".split("/")[2];
     var from = document.referrer.split("/")[2];
-    if (sister && from === sister && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      document.documentElement.classList.add("is-arriving");
-  } catch (e) {} })();
+    if (!sister || from !== sister || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var root = document.documentElement, shown = false;
+    root.classList.add("is-arriving");
+    function show() {
+      if (shown) return; shown = true;
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        root.classList.add("is-revealing");
+        setTimeout(function () { root.classList.remove("is-arriving", "is-revealing"); }, 900);
+      }); });
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var fonts = document.fonts && document.fonts.ready;
+      if (fonts) Promise.race([fonts, new Promise(function (r) { setTimeout(r, 400); })]).then(show);
+      else show();
+    });
+    setTimeout(show, 2500);                       // safety: never leave the page hidden
+  } catch (e) { document.documentElement.classList.remove("is-arriving"); } })();
 </script>
 {%- endif %}
 <meta name="viewport" content="width=device-width, initial-scale=1">

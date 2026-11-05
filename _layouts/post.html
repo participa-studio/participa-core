@@ -16,6 +16,6 @@ layout: default
   <div class="post__body">
     {{ content }}
   </div>
-  {%- assign blog = site.participa.nav | where: "title", "Blog" | first %}
-  {%- if blog %}<p class="home__more"><a href="{{ blog.url }}">← All posts</a></p>{% endif %}
+  {%- assign blog = site.participa.nav | where_exp: "item", "item.layouts contains 'post'" | first %}
+  {%- if blog %}<p class="home__more"><a href="{{ blog.url }}">← All {{ blog.title | downcase }}</a></p>{% endif %}
 </article>

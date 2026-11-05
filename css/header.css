@@ -16,7 +16,7 @@
   /* Mobile menu panel: fixed width, identical on both sites.
      Sized on the longest menu word across both sites
      ("PROJECTS", about 86 px) plus the side margin each side. */
-  --menu-word-max: 6.75rem;   /* longest menu word: EXPERIENCE (102 px) */
+  --menu-word-max: 7.5rem;            /* longest menu word: EXPERIMENTS (about 115 px) */
   --menu-width: calc(var(--menu-word-max) + 2 * var(--inset));
 }
 
