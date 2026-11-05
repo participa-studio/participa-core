@@ -9,14 +9,18 @@
 
    Each visit picks one variation at random (weights in VARIANTS):
      swarm        a dozen ants come out of the Design logo (right) and scatter
-     walk-in      a single ant walks in from outside the screen, beside one of
-                  the logos, passes under it and heads down the page
-     left-hole    two or three ants come out of the Studio logo (left), look
-                  around for a while and go back into it
-     to-left      two ants come out of the Design logo, walk along the header
+     trail        3-4 ants come out of the Design logo one after another, each
+                  following the one in front
+     group-in     3-4 ants walk in from outside the screen beside one of the
+                  logos, pass under it and spread out
+     left-hole    3-4 ants come out of the Studio logo (left), look around for
+                  a while and go back into it
+     to-left      three ants come out of the Design logo, walk along the header
                   and go into the Studio logo
      to-right     the same, from the Studio logo into the Design logo
-     from-top     an ant drops in from the top of the screen and wanders off
+     top-group    three ants drop in from the top of the screen
+     walk-in      a single ant walks in from outside the screen beside a logo
+     from-top     a single ant drops in from the top of the screen
      none         no ants this time
    To see one on purpose, add ?ants=NAME to the address, e.g. ?ants=left-hole
 
@@ -33,8 +37,8 @@
   var leftImg = document.querySelector(".site-header__home img");
   if (!header || !rightImg || !leftImg || !window.requestAnimationFrame) return;
 
-  var VARIANTS = { "swarm": 3, "walk-in": 2, "left-hole": 2, "to-left": 2, "to-right": 1,
-                   "from-top": 2, "none": 1 };
+  var VARIANTS = { "swarm": 3, "trail": 3, "group-in": 2, "left-hole": 3, "to-left": 2,
+                   "to-right": 1, "top-group": 2, "walk-in": 1, "from-top": 1, "none": 1 };
   var SIZE = 5;              // dot size in pixels (?antshape=dot)
   var DOTS = /[?&]antshape=dot/.test(location.search);
   var ANT_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-16 -20 32 40\" width=\"16\" height=\"20\"><g class=\"pose-a\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-1.0 -5.0 L-5.2 -10.2 L-9.6 -18.2\"/><path d=\"M-1.0 -4.0 L-7.4 -4.2 L-14.6 -0.8\"/><path d=\"M-1.0 -3.0 L-6.4 0.4 L-12.4 11.6\"/><path d=\"M1.0 -5.0 L5.2 -8.6 L9.6 -15.0\"/><path d=\"M1.0 -4.0 L7.4 -5.8 L14.6 -4.0\"/><path d=\"M1.0 -3.0 L6.4 2.0 L12.4 14.8\"/><path d=\"M-1.3 -12.6 L-4.6 -15.4 L-5.0 -19.4\"/><path d=\"M1.3 -12.6 L4.6 -15.4 L5.0 -19.4\"/></g><g fill=\"#000\"><ellipse cx=\"0\" cy=\"-9.8\" rx=\"3.5\" ry=\"3.1\"/><ellipse cx=\"0\" cy=\"-4.2\" rx=\"1.6\" ry=\"2.5\"/><circle cx=\"0\" cy=\"-1.1\" r=\"0.95\"/><ellipse cx=\"0\" cy=\"5.0\" rx=\"4.3\" ry=\"5.4\"/></g></g><g class=\"pose-b\" style=\"display:none\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-1.0 -5.0 L-5.2 -8.6 L-9.6 -15.0\"/><path d=\"M-1.0 -4.0 L-7.4 -5.8 L-14.6 -4.0\"/><path d=\"M-1.0 -3.0 L-6.4 2.0 L-12.4 14.8\"/><path d=\"M1.0 -5.0 L5.2 -10.2 L9.6 -18.2\"/><path d=\"M1.0 -4.0 L7.4 -4.2 L14.6 -0.8\"/><path d=\"M1.0 -3.0 L6.4 0.4 L12.4 11.6\"/><path d=\"M-1.3 -12.6 L-4.6 -15.4 L-5.0 -19.4\"/><path d=\"M1.3 -12.6 L4.6 -15.4 L5.0 -19.4\"/></g><g fill=\"#000\"><ellipse cx=\"0\" cy=\"-9.8\" rx=\"3.5\" ry=\"3.1\"/><ellipse cx=\"0\" cy=\"-4.2\" rx=\"1.6\" ry=\"2.5\"/><circle cx=\"0\" cy=\"-1.1\" r=\"0.95\"/><ellipse cx=\"0\" cy=\"5.0\" rx=\"4.3\" ry=\"5.4\"/></g></g></svg>";
@@ -72,13 +76,23 @@
     for (var i = 0; i < 12; i++) plan.push({ start: "hole", from: R, goal: pick(exits), born: (i / 12) * 1600 + rand(0, 200) });
   } else if (name === "walk-in") {
     plan.push({ start: "edge", from: Math.random() < 0.5 ? R : L, goal: D, born: 0, calm: true });
+  } else if (name === "trail") {
+    var tn = Math.random() < 0.5 ? 3 : 4, tgoal = pick([D, D, LEFT]);
+    for (var q = 0; q < tn; q++) plan.push({ start: "hole", from: R, goal: tgoal, born: q * rand(450, 700),
+                                             follow: q > 0 ? q - 1 : null, calm: true });
+  } else if (name === "group-in") {
+    var gside = Math.random() < 0.5 ? R : L, gn = Math.random() < 0.5 ? 3 : 4;
+    for (var g = 0; g < gn; g++) plan.push({ start: "edge", from: gside, goal: pick([D, D, gside === R ? LEFT : RIGHT]),
+                                             born: g * rand(300, 700), calm: true });
+  } else if (name === "top-group") {
+    for (var u = 0; u < 3; u++) plan.push({ start: "top", goal: pick([D, D, LEFT, RIGHT]), born: u * rand(300, 900), calm: true });
   } else if (name === "left-hole") {
-    var n = Math.random() < 0.5 ? 2 : 3;
+    var n = Math.random() < 0.5 ? 3 : 4;
     for (var j = 0; j < n; j++) plan.push({ start: "hole", from: L, goal: pick([D, RIGHT, D]), born: j * rand(400, 900),
                                             back: rand(3500, 7000), calm: true });
   } else if (name === "to-left" || name === "to-right") {
     var toLeft = name === "to-left";
-    for (var m = 0; m < 2; m++) plan.push({ start: "hole", from: toLeft ? R : L, to: toLeft ? L : R, born: m * rand(500, 900), menu: true });
+    for (var m = 0; m < 3; m++) plan.push({ start: "hole", from: toLeft ? R : L, to: toLeft ? L : R, born: m * rand(500, 900), menu: true });
   } else if (name === "from-top") {
     plan.push({ start: "top", goal: pick([D, D, LEFT, RIGHT]), born: 0, calm: true });
   }
@@ -99,7 +113,7 @@
     }
     layer.appendChild(el);
     var a = { el: el, from: p.from, to: p.to, goal: p.goal, menu: p.menu, calm: p.calm, start: p.start,
-              born: START_DELAY + p.born, back: p.back, speed: 0, mode: "pause", until: 0,
+              born: START_DELAY + p.born, back: p.back, follow: p.follow, speed: 0, mode: "pause", until: 0,
               gone: false, out: false, entering: false,
               poseA: el.querySelector(".pose-a"), poseB: el.querySelector(".pose-b"), stepAt: 0, legs: 0 };
     if (p.start === "hole") {
@@ -115,6 +129,8 @@
     }
     return a;
   });
+  // Trail: each follower walks after the ant in front of it
+  ants.forEach(function (a) { if (a.follow !== null && a.follow !== undefined) a.lead = ants[a.follow]; });
   document.body.appendChild(layer);
 
   function inside(a, c) { var dx = a.x - c.x, dy = a.y - c.y; return dx * dx + dy * dy < c.r * c.r; }
@@ -156,6 +172,7 @@
           } else {
             a.heading += a.menu ? rand(-0.9, 0.9) : rand(-1.1, 1.1);
             if (a.to) steer(a, Math.atan2(a.to.y - a.y, a.to.x - a.x), a.back ? 0.7 : 0.55);
+            else if (a.lead && !a.lead.gone && t >= a.lead.born) steer(a, Math.atan2(a.lead.y - a.y, a.lead.x - a.x), 0.85);
             else steer(a, a.goal, a.calm ? 0.6 : 0.35);
           }
         }
