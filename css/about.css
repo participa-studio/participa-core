@@ -86,6 +86,8 @@
 
 .about__direction { margin-top: var(--space-6); }
 .about__contact a { color: inherit; text-underline-offset: 0.2em; }
+/* About: the contact line sits closer to the divider above it (24 px, was 48) */
+.about .case__facts { margin-bottom: var(--space-3); }
 
 /* Phones: panels stack */
 @media (max-width: 720px) {
