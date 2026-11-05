@@ -24,3 +24,13 @@ img {
   max-width: 100%;          /* images never overflow their container */
   height: auto;
 }
+
+/* Arriving from the sister site: the background colour shows at once,
+   the header, content and footer fade in over 0.4 s. Set in head.html. */
+html.is-arriving body > * {
+  animation: participa-arrive 0.4s ease-out both;
+}
+@keyframes participa-arrive {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

@@ -4,6 +4,17 @@
 {%- endcomment -%}
 {%- assign p = site.participa -%}
 <meta charset="utf-8">
+{%- if p.sister.url %}
+<script>
+  /* Arriving from the sister site: fade the page in (rule in base.css). */
+  (function () { try {
+    var sister = "{{ p.sister.url }}".split("/")[2];
+    var from = document.referrer.split("/")[2];
+    if (sister && from === sister && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("is-arriving");
+  } catch (e) {} })();
+</script>
+{%- endif %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% if page.title %}{{ page.title }} · {% endif %}{{ p.title }}</title>
 {%- if page.description or p.description %}
