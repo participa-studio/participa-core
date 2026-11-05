@@ -259,3 +259,7 @@
 @media (min-width: 721px) and (max-width: 840px) {
   .site-header__name .site-header__brand { display: none; }
 }
+
+/* Sister label: the dot of .STUDIO / .DESIGN. A dot is narrow, so it gets a small
+   extra gap to sit as far from the first letter as the letters sit from each other. */
+.site-header__dot { margin-right: 0.14em; }
