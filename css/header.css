@@ -237,7 +237,7 @@
      as the three lines of the icon (the content edge), so it reads as part of it */
   .site-header__nav {
     position: absolute;
-    top: calc(var(--header-height) / 2 + 1.25rem);   /* about 12 px under the icon */
+    top: calc(var(--header-height) / 2 + 1.75rem);   /* about 20 px under the icon, clear of the logo */
     left: var(--inset);
     width: var(--menu-width);
     margin: 0;
@@ -255,7 +255,7 @@
 
   .site-header__nav ul {
     flex-direction: column;
-    gap: var(--space-3);
+    gap: 1.125rem;               /* 18 px between the links */
   }
 }
 
