@@ -10,7 +10,7 @@
   --colour-accent: #FFE300;      /* Participa yellow */
   --colour-ink: #000000;         /* text and logos */
   --colour-paper: #FFFFFF;       /* light backgrounds */
-  --colour-hover-fill: #B97050; /* rust: home button hover fill on both sites, black text 5.5:1 (was sky blue #5B9CFF) */
+  --colour-hover-fill: #B97050; /* rust: not in use since 5 Nov (buttons now turn red on hover, no fill); kept for reference */
   --colour-here: #0050FF;     /* cobalt: menu hover and the page you are on, button hover (was #01B2FE) */
 
   /* Type */

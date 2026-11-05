@@ -39,13 +39,13 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-/* Hover and keyboard focus use the same blue as "you are here" in the menu;
-   the text stays black. All buttons are equal. */
+/* Hover and keyboard focus: no fill. The text and the outline turn the
+   highlight colour, the same way the menu links do. All buttons are equal. */
 .home__action:hover,
 .home__action:focus-visible {
-  background: var(--colour-hover-fill);   /* rust; the menu keeps its own text colour */
-  border-color: var(--colour-ink);
-  color: var(--colour-ink);
+  background: transparent;
+  border-color: var(--colour-here);
+  color: var(--colour-here);
 }
 
 /* ---------- Selected work ---------- */
