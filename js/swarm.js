@@ -1,21 +1,24 @@
 /* ==========================================================
    PARTICIPA CORE — ANTS (prototype)
    On the home page of a site that switches it on (swarm: true in
-   _config.yml), small dots walk in from outside the screen, level with one
-   of the two logos, pass under that logo and come out the other side, then
-   wander like ants: a short run, a pause, a turn, another run.
-   Nothing appears out of nowhere: every ant walks in from the edge.
+   _config.yml), small dots wander like ants: a short run, a pause, a turn,
+   another run. Both logos work as ant holes: an ant can come out from under
+   a logo (it stays hidden inside the logo's circle) and go back into one.
+   Some ants instead walk in from outside the screen, beside a logo or from
+   the top.
 
    Each visit picks one variation at random (weights in VARIANTS):
-     swarm-right   a dozen ants from the sister logo, scattering off-screen
-     swarm-left    the same from the own logo on the left
-     one-right     a single ant from the sister logo, heading down the page
-     one-left      a single ant from the own logo, heading down the page
-     menu-left     two ants walk along the header, up and down around the
-                   menu, from the sister logo to the own logo, and go under it
-     menu-right    the same, from the own logo to the sister logo
-     none          no ants this time
-   To see one on purpose, add ?ants=NAME to the address, e.g. ?ants=menu-left
+     swarm        a dozen ants come out of the Design logo (right) and scatter
+     walk-in      a single ant walks in from outside the screen, beside one of
+                  the logos, passes under it and heads down the page
+     left-hole    two or three ants come out of the Studio logo (left), look
+                  around for a while and go back into it
+     to-left      two ants come out of the Design logo, walk along the header
+                  and go into the Studio logo
+     to-right     the same, from the Studio logo into the Design logo
+     from-top     an ant drops in from the top of the screen and wanders off
+     none         no ants this time
+   To see one on purpose, add ?ants=NAME to the address, e.g. ?ants=left-hole
 
    The dots are stand-ins: the real insect drawings replace them later.
    They never block clicks or text selection, screen readers ignore them,
@@ -24,12 +27,12 @@
 (function () {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var header = document.querySelector(".site-header");
-  var right = document.querySelector(".site-header__sister img");
-  var left = document.querySelector(".site-header__home img");
-  if (!header || !right || !left || !window.requestAnimationFrame) return;
+  var rightImg = document.querySelector(".site-header__sister img");
+  var leftImg = document.querySelector(".site-header__home img");
+  if (!header || !rightImg || !leftImg || !window.requestAnimationFrame) return;
 
-  var VARIANTS = { "swarm-right": 2, "swarm-left": 1, "one-right": 2, "one-left": 1,
-                   "menu-left": 2, "menu-right": 1, "none": 1 };
+  var VARIANTS = { "swarm": 3, "walk-in": 2, "left-hole": 2, "to-left": 2, "to-right": 1,
+                   "from-top": 2, "none": 1 };
   var SIZE = 5;              // dot size in pixels
   var START_DELAY = 900;     // ms after load, so the page is settled first
   var MAX_LIFE = 25000;      // ms: anyone still on screen then fades away
@@ -50,33 +53,29 @@
     var r = img.getBoundingClientRect();
     return { x: r.left + r.width / 2, y: r.top + r.height / 2, r: r.width / 2 + 1 };
   }
-  var R = circle(right), Lc = circle(left);
+  var R = circle(rightImg), L = circle(leftImg);
   var VW = window.innerWidth;
-  // Where an ant enters: just outside the screen edge beside the logo
-  function entry(c) {
-    var fromRight = c === R;
-    return { x: fromRight ? VW + 8 : -8, y: c.y + rand(-4, 4), inward: fromRight ? Math.PI : 0 };
-  }
   var hb = header.getBoundingClientRect();
-  var band = { top: hb.top + 10, bottom: hb.bottom - 10, mid: (R.y + Lc.y) / 2 };
-
+  var band = { top: hb.top + 10, bottom: hb.bottom - 10 };
   var D = Math.PI / 2, LEFT = Math.PI, RIGHT = 0, UP = -Math.PI / 2;
 
-  // Build the ants for the chosen variation
+  // Build the ants for the chosen variation.
+  // start: "hole" (inside a logo), "edge" (outside the screen beside a logo) or "top"
   var plan = [];
-  if (name === "swarm-right" || name === "swarm-left") {
-    var fromRight = name === "swarm-right";
-    var exits = fromRight ? [D, D, D, LEFT, LEFT, LEFT, RIGHT, UP] : [D, D, D, RIGHT, RIGHT, RIGHT, LEFT, UP];
-    for (var i = 0; i < 12; i++) {
-      plan.push({ from: fromRight ? R : Lc, goal: pick(exits), born: (i / 12) * 1600 + rand(0, 200) });
-    }
-  } else if (name === "one-right" || name === "one-left") {
-    plan.push({ from: name === "one-right" ? R : Lc, goal: D, born: 0, calm: true });
-  } else {
-    var toLeft = name === "menu-left";
-    for (var j = 0; j < 2; j++) {
-      plan.push({ from: toLeft ? R : Lc, to: toLeft ? Lc : R, born: j * rand(500, 900), menu: true });
-    }
+  if (name === "swarm") {
+    var exits = [D, D, D, LEFT, LEFT, LEFT, RIGHT, UP];
+    for (var i = 0; i < 12; i++) plan.push({ start: "hole", from: R, goal: pick(exits), born: (i / 12) * 1600 + rand(0, 200) });
+  } else if (name === "walk-in") {
+    plan.push({ start: "edge", from: Math.random() < 0.5 ? R : L, goal: D, born: 0, calm: true });
+  } else if (name === "left-hole") {
+    var n = Math.random() < 0.5 ? 2 : 3;
+    for (var j = 0; j < n; j++) plan.push({ start: "hole", from: L, goal: pick([D, RIGHT, D]), born: j * rand(400, 900),
+                                            back: rand(3500, 7000), calm: true });
+  } else if (name === "to-left" || name === "to-right") {
+    var toLeft = name === "to-left";
+    for (var m = 0; m < 2; m++) plan.push({ start: "hole", from: toLeft ? R : L, to: toLeft ? L : R, born: m * rand(500, 900), menu: true });
+  } else if (name === "from-top") {
+    plan.push({ start: "top", goal: pick([D, D, LEFT, RIGHT]), born: 0, calm: true });
   }
 
   var layer = document.createElement("div");
@@ -89,10 +88,21 @@
     el.style.cssText = "position:absolute;left:0;top:0;width:" + SIZE + "px;height:" + SIZE +
       "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#000;opacity:0;will-change:transform;";
     layer.appendChild(el);
-    var e = entry(p.from);
-    return { el: el, x: e.x, y: e.y, inward: e.inward, entering: true, from: p.from, to: p.to, goal: p.goal,
-             menu: p.menu, calm: p.calm, heading: e.inward, speed: 0, born: START_DELAY + p.born,
-             mode: "pause", until: 0, gone: false, out: false };
+    var a = { el: el, from: p.from, to: p.to, goal: p.goal, menu: p.menu, calm: p.calm, start: p.start,
+              born: START_DELAY + p.born, back: p.back, speed: 0, mode: "pause", until: 0,
+              gone: false, out: false, entering: false };
+    if (p.start === "hole") {
+      a.x = p.from.x; a.y = p.from.y;
+      a.heading = p.to ? Math.atan2(p.to.y - p.from.y, p.to.x - p.from.x) : p.goal + rand(-1, 1);
+    } else if (p.start === "edge") {
+      var fromRight = p.from === R;
+      a.x = fromRight ? VW + 8 : -8; a.y = p.from.y + rand(-4, 4);
+      a.inward = fromRight ? LEFT : RIGHT; a.heading = a.inward; a.entering = true;
+    } else {                                         // top
+      a.x = rand(VW * 0.15, VW * 0.85); a.y = -8;
+      a.inward = D; a.heading = D; a.entering = true;
+    }
+    return a;
   });
   document.body.appendChild(layer);
 
@@ -100,6 +110,10 @@
   function steer(a, target, pull) {
     var diff = Math.atan2(Math.sin(target - a.heading), Math.cos(target - a.heading));
     a.heading += diff * pull;
+  }
+  function doneEntering(a) {
+    if (a.start === "top") return a.y > 24;
+    return a.inward === RIGHT ? a.x > a.from.x + a.from.r : a.x < a.from.x - a.from.r;
   }
 
   var t0 = null, last = null;
@@ -114,6 +128,9 @@
       alive++;
       if (t < a.born) return;
 
+      // Time to go home: head back to the hole it came out of
+      if (a.back && !a.to && t > a.born + a.back) a.to = a.from;
+
       // Ant rhythm: run, stop, turn, run again
       if (t >= a.until) {
         if (a.mode === "run") {
@@ -124,10 +141,10 @@
           a.speed = a.menu ? rand(90, 160) : a.calm ? rand(60, 120) : rand(70, 170);
           a.until = t + rand(250, 900);
           if (a.entering) {
-            a.heading = a.inward + rand(-0.2, 0.2);    // walking in, straight under the logo
+            a.heading = a.inward + rand(-0.2, 0.2);  // walking in, straight
           } else {
             a.heading += a.menu ? rand(-0.9, 0.9) : rand(-1.1, 1.1);
-            if (a.to) steer(a, Math.atan2(a.to.y - a.y, a.to.x - a.x), 0.55);
+            if (a.to) steer(a, Math.atan2(a.to.y - a.y, a.to.x - a.x), a.back ? 0.7 : 0.55);
             else steer(a, a.goal, a.calm ? 0.6 : 0.35);
           }
         }
@@ -142,17 +159,16 @@
         }
       }
 
-      // Past the logo it walked under: free to wander
-      if (a.entering && (a.inward === 0 ? a.x > a.from.x + a.from.r : a.x < a.from.x - a.from.r)) a.entering = false;
+      if (a.entering && doneEntering(a)) a.entering = false;
       // Hidden while under a logo
-      var under = inside(a, a.from) || (a.to && a.out && inside(a, a.to));
-      if (!a.entering) a.out = true;
+      var under = (a.from && inside(a, a.from)) || (a.to && a.out && inside(a, a.to));
+      if (!a.entering && !under) a.out = true;
       a.el.style.opacity = under ? "0" : "1";
       a.el.style.transform = "translate(" + a.x.toFixed(1) + "px," + a.y.toFixed(1) + "px)";
 
       var off = !a.entering && (a.x < -20 || a.x > W + 20 || a.y < -20 || a.y > H + 20);
-      var home = a.to && a.out && inside(a, a.to);   // went under the other logo
-      if (off || home || t > (a.menu ? MAX_LIFE * 1.6 : MAX_LIFE)) {
+      var home = a.to && a.out && inside(a, a.to);   // went into a logo
+      if (off || home || t > (a.menu || a.back ? MAX_LIFE * 1.6 : MAX_LIFE)) {
         a.gone = true;
         if (off || home) a.el.remove();
         else { a.el.style.transition = "opacity .8s"; a.el.style.opacity = "0"; }
