@@ -10,6 +10,11 @@
      then faded in evenly over 0.8 s once the page and its fonts are ready. */
   html.is-arriving body > * { opacity: 0; }
   html.is-arriving.is-revealing body > * { opacity: 1; transition: opacity 0.8s ease-in-out; }
+  /* Landing: the own logo starts upright (a quarter turn, continuing the
+     leftward roll) and turns back to horizontal in place, slowing to a stop
+     like a ball settling. Nothing else moves. */
+  html.is-arriving .site-header__home img { transform: rotate(90deg); }
+  html.is-arriving.is-revealing .site-header__home img { transform: rotate(0deg); transition: transform 1.6s cubic-bezier(.2,.7,.25,1); }
 </style>
 <script>
   (function () { try {
@@ -22,7 +27,7 @@
       if (shown) return; shown = true;
       requestAnimationFrame(function () { requestAnimationFrame(function () {
         root.classList.add("is-revealing");
-        setTimeout(function () { root.classList.remove("is-arriving", "is-revealing"); }, 900);
+        setTimeout(function () { root.classList.remove("is-arriving", "is-revealing"); }, 1700);
       }); });
     }
     document.addEventListener("DOMContentLoaded", function () {
