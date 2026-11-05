@@ -22,7 +22,7 @@ layout: default
   {%- if page.facts %}
   <dl class="case__facts">
     {%- for f in page.facts %}
-    <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+    <div><dt>{{ f.label }}</dt><dd>{{ f.value | markdownify | remove: "<p>" | remove: "</p>" | strip }}</dd></div>
     {%- endfor %}
   </dl>
   {%- endif %}
