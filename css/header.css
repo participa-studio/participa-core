@@ -122,10 +122,11 @@
   text-transform: uppercase;
 }
 
+/* Hover and keyboard focus: the text turns the "here" blue, as on the home buttons */
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
+  color: var(--colour-here, #01B2FE);
+  text-decoration: none;
 }
 
 /* Where you are: the current page (plain text, no link) and, on a case page,
