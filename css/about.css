@@ -84,7 +84,9 @@
   text-underline-offset: 0.25em;
 }
 
-.about__direction { margin-top: var(--space-6); }
+.about__practice-links { padding-top: var(--space-2); margin-bottom: var(--space-2); }
+.about__direction { margin-top: var(--space-4); }
+.about__throughline { margin-top: var(--space-2); }
 .about__contact a,
 .about .case__facts a { color: inherit; text-underline-offset: 0.2em; }
 /* About: the contact line sits closer to the divider above it (24 px, was 48) */
@@ -95,3 +97,4 @@
   .about__sides { grid-template-columns: 1fr; }
   .about__side { padding: var(--space-3); }
 }
+.about__practice-links + .about__throughline { margin-top: var(--space-4); }
