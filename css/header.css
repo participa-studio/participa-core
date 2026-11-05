@@ -240,7 +240,22 @@
     margin: 0;
     padding: var(--space-3) var(--inset);   /* links line up with the content edge */
     background: var(--colour-accent);
+    border: 1px solid var(--colour-ink);    /* the same thin line as the buttons */
     display: none;
+  }
+
+  /* Hard shadow, flat like print: an L-shaped line 2 px outside the bottom and
+     right edges, starting a little in from the corners. No blur. */
+  .site-header__nav::after {
+    content: "";
+    position: absolute;
+    right: -3px;                 /* touches the box: 1 px border + 2 px shadow */
+    bottom: -3px;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+    border-right: 2px solid var(--colour-ink);
+    border-bottom: 2px solid var(--colour-ink);
+    pointer-events: none;
   }
 
   .site-header.is-open .site-header__nav {

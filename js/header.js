@@ -8,6 +8,8 @@
    - tap or click anywhere outside the menu
    - choose a link in the menu (also for links within the page, like Work ↓)
    - press Escape (the keyboard focus goes back to the menu button)
+   - with a mouse: move the pointer away from both the button and the menu
+     (after a short pause, so there is time to move from the button to the menu)
    ========================================================== */
 
 document.querySelectorAll(".site-header").forEach(function (header) {
@@ -41,6 +43,21 @@ document.querySelectorAll(".site-header").forEach(function (header) {
       if (event.target.closest("a")) setOpen(false);
     });
   }
+
+  // Mouse leaves the button and the menu: close after a short pause.
+  // Touch screens have no hover, so this only applies to a mouse or trackpad.
+  var leaveTimer = null;
+  [button, nav].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener("pointerleave", function (event) {
+      if (event.pointerType !== "mouse" || !isOpen()) return;
+      clearTimeout(leaveTimer);
+      leaveTimer = setTimeout(function () { setOpen(false); }, 400);
+    });
+    el.addEventListener("pointerenter", function (event) {
+      if (event.pointerType === "mouse") clearTimeout(leaveTimer);
+    });
+  });
 
   // Escape: close and give the focus back to the button
   document.addEventListener("keydown", function (event) {
