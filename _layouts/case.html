@@ -8,6 +8,7 @@ layout: default
     title, lead, facts (label + value), photos (src + caption),
     challenge, approach, outcome,
     quote (text, name, role),
+    tag (optional: posts carrying this tag are listed under the case),
     artefacts (label, file, format = PDF, status; leave file out while in preparation),
     note
   Anything written below the fields appears after the three blocks.
@@ -59,6 +60,23 @@ layout: default
 
   {%- if page.quote %}
   <div class="case__quote">{% include quote.html q=page.quote %}</div>
+  {%- endif %}
+
+  {%- if page.tag %}
+  {%- assign related = site.posts | where_exp: "p", "p.tags contains page.tag" %}
+  {%- if related.size > 0 %}
+  <section class="case__writing" aria-labelledby="writing-title">
+    <h2 id="writing-title" class="cv__heading">Writing about this project</h2>
+    <ul class="blog__list">
+      {%- for post in related %}
+      <li><a class="blog__item" href="{{ post.url }}">
+        <time class="blog__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B %Y" }}</time>
+        <span class="blog__title">{{ post.title }}</span>
+      </a></li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
   {%- endif %}
 
   {%- if page.artefacts %}

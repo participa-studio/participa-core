@@ -3,13 +3,16 @@ layout: default
 ---
 {%- comment -%}
   PARTICIPA THEME — ONE POST
-  Fields: title, lead (optional, one or two lines), and the text below the fields.
+  Fields: title, lead (optional), tags (optional), image (optional), published, and the text.
+  Written in Pages CMS (.pages.yml in the site repository) or as a file in _posts/.
   The date comes from the file name (YYYY-MM-DD-title.md).
 {%- endcomment -%}
 <article class="post">
   <time class="blog__date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d %B %Y" }}</time>
   <h1 class="case__title">{{ page.title }}</h1>
   {%- if page.lead %}<p class="case__lead">{{ page.lead }}</p>{% endif %}
+  {% include tags.html tags=page.tags %}
+  {%- if page.image %}<img class="post__image" src="{{ page.image }}" alt="">{% endif %}
   <div class="post__body">
     {{ content }}
   </div>

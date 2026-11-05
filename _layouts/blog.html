@@ -19,6 +19,7 @@ layout: default
         <span class="blog__title">{{ post.title }}</span>
         {%- if post.lead %}<span class="blog__excerpt">{{ post.lead }}</span>{% endif %}
       </a>
+      {%- if post.tags.size > 0 %}<div class="blog__tags">{% include tags.html tags=post.tags %}</div>{% endif %}
     </li>
     {%- endfor %}
   </ul>

@@ -89,3 +89,36 @@
   .blog__item { grid-template-columns: 1fr; row-gap: var(--space-1); }
   .blog__excerpt { grid-column: 1; }
 }
+
+/* ---------- Tags: small outlined labels ---------- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--colour-ink);
+  font-size: 0.625rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.blog__list li { position: relative; }
+.blog__tags {
+  margin: calc(var(--space-3) * -1 + var(--space-1)) 0 var(--space-3) calc(10rem + var(--space-6));
+}
+.post__image { margin-top: var(--space-4); }
+
+/* ---------- On a project page: posts about the project ---------- */
+.case__writing { margin-top: var(--space-8); }
+.case__writing .blog__list { margin-top: 0; }
+.case__writing .blog__list li:first-child { border-top: 0; }   /* the heading already draws the top rule */
+
+@media (max-width: 720px) {
+  .blog__tags { margin-left: 0; }
+}
