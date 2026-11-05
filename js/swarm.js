@@ -20,8 +20,8 @@
      none         no ants this time
    To see one on purpose, add ?ants=NAME to the address, e.g. ?ants=left-hole
 
-   Each ant is a small drawing (12 x 16 px): an hourglass body like the
-   Participa logo, two leg poses that alternate while it runs, turned to face
+   Each ant is a small drawing (16 x 20 px): a large head and abdomen with a
+   thin middle, like the hourglass in the Participa logo, long spread legs, two leg poses that alternate while it runs, turned to face
    the way it walks. Add ?antshape=dot to see the earlier dots instead.
    They never block clicks or text selection, screen readers ignore them,
    and with "reduce motion" switched on nothing appears.
@@ -37,7 +37,7 @@
                    "from-top": 2, "none": 1 };
   var SIZE = 5;              // dot size in pixels (?antshape=dot)
   var DOTS = /[?&]antshape=dot/.test(location.search);
-  var ANT_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-12 -16 24 32\" width=\"12\" height=\"16\"><g class=\"pose-a\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-2.0 -5.2 L-4.6 -7.9 L-7.4 -12.4\"/><path d=\"M-2.0 -3.6 L-5.4 -2.5 L-9.0 -1.4\"/><path d=\"M-2.0 -2.0 L-4.8 0.5 L-7.6 4.2\"/><path d=\"M2.0 -5.2 L4.6 -6.5 L7.4 -9.6\"/><path d=\"M2.0 -3.6 L5.4 -3.9 L9.0 -4.2\"/><path d=\"M2.0 -2.0 L4.8 1.9 L7.6 7.0\"/><path d=\"M-0.9 -11.8 Q-2 -14.2 -3.6 -15.2\"/><path d=\"M0.9 -11.8 Q2 -14.2 3.6 -15.2\"/></g><g fill=\"#000\"><circle cx=\"0\" cy=\"-9.6\" r=\"2.6\"/><path d=\"M0 -6.8 C3.4 -6.8 3.6 -2.4 0.8 -0.6 C4.6 0.6 5.2 10.4 0 10.4 C-5.2 10.4 -4.6 0.6 -0.8 -0.6 C-3.6 -2.4 -3.4 -6.8 0 -6.8 Z\"/></g></g><g class=\"pose-b\" style=\"display:none\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-2.0 -5.2 L-4.6 -6.5 L-7.4 -9.6\"/><path d=\"M-2.0 -3.6 L-5.4 -3.9 L-9.0 -4.2\"/><path d=\"M-2.0 -2.0 L-4.8 1.9 L-7.6 7.0\"/><path d=\"M2.0 -5.2 L4.6 -7.9 L7.4 -12.4\"/><path d=\"M2.0 -3.6 L5.4 -2.5 L9.0 -1.4\"/><path d=\"M2.0 -2.0 L4.8 0.5 L7.6 4.2\"/><path d=\"M-0.9 -11.8 Q-2 -14.2 -3.6 -15.2\"/><path d=\"M0.9 -11.8 Q2 -14.2 3.6 -15.2\"/></g><g fill=\"#000\"><circle cx=\"0\" cy=\"-9.6\" r=\"2.6\"/><path d=\"M0 -6.8 C3.4 -6.8 3.6 -2.4 0.8 -0.6 C4.6 0.6 5.2 10.4 0 10.4 C-5.2 10.4 -4.6 0.6 -0.8 -0.6 C-3.6 -2.4 -3.4 -6.8 0 -6.8 Z\"/></g></g></svg>";
+  var ANT_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-16 -20 32 40\" width=\"16\" height=\"20\"><g class=\"pose-a\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-1.0 -5.0 L-5.2 -10.2 L-9.6 -18.2\"/><path d=\"M-1.0 -4.0 L-7.4 -4.2 L-14.6 -0.8\"/><path d=\"M-1.0 -3.0 L-6.4 0.4 L-12.4 11.6\"/><path d=\"M1.0 -5.0 L5.2 -8.6 L9.6 -15.0\"/><path d=\"M1.0 -4.0 L7.4 -5.8 L14.6 -4.0\"/><path d=\"M1.0 -3.0 L6.4 2.0 L12.4 14.8\"/><path d=\"M-1.3 -12.6 L-4.6 -15.4 L-5.0 -19.4\"/><path d=\"M1.3 -12.6 L4.6 -15.4 L5.0 -19.4\"/></g><g fill=\"#000\"><ellipse cx=\"0\" cy=\"-9.8\" rx=\"3.5\" ry=\"3.1\"/><ellipse cx=\"0\" cy=\"-4.2\" rx=\"1.6\" ry=\"2.5\"/><circle cx=\"0\" cy=\"-1.1\" r=\"0.95\"/><ellipse cx=\"0\" cy=\"5.0\" rx=\"4.3\" ry=\"5.4\"/></g></g><g class=\"pose-b\" style=\"display:none\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-1.0 -5.0 L-5.2 -8.6 L-9.6 -15.0\"/><path d=\"M-1.0 -4.0 L-7.4 -5.8 L-14.6 -4.0\"/><path d=\"M-1.0 -3.0 L-6.4 2.0 L-12.4 14.8\"/><path d=\"M1.0 -5.0 L5.2 -10.2 L9.6 -18.2\"/><path d=\"M1.0 -4.0 L7.4 -4.2 L14.6 -0.8\"/><path d=\"M1.0 -3.0 L6.4 0.4 L12.4 11.6\"/><path d=\"M-1.3 -12.6 L-4.6 -15.4 L-5.0 -19.4\"/><path d=\"M1.3 -12.6 L4.6 -15.4 L5.0 -19.4\"/></g><g fill=\"#000\"><ellipse cx=\"0\" cy=\"-9.8\" rx=\"3.5\" ry=\"3.1\"/><ellipse cx=\"0\" cy=\"-4.2\" rx=\"1.6\" ry=\"2.5\"/><circle cx=\"0\" cy=\"-1.1\" r=\"0.95\"/><ellipse cx=\"0\" cy=\"5.0\" rx=\"4.3\" ry=\"5.4\"/></g></g></svg>";
   var STEP_MS = 70;          // leg poses swap this often while running
   var START_DELAY = 900;     // ms after load, so the page is settled first
   var MAX_LIFE = 25000;      // ms: anyone still on screen then fades away
@@ -94,7 +94,7 @@
       el.style.cssText = "position:absolute;left:0;top:0;width:" + SIZE + "px;height:" + SIZE +
         "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#000;opacity:0;will-change:transform;";
     } else {
-      el.style.cssText = "position:absolute;left:0;top:0;width:12px;height:16px;margin:-8px 0 0 -6px;opacity:0;will-change:transform;";
+      el.style.cssText = "position:absolute;left:0;top:0;width:16px;height:20px;margin:-10px 0 0 -8px;opacity:0;will-change:transform;";
       el.innerHTML = ANT_SVG;
     }
     layer.appendChild(el);
