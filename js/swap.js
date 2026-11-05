@@ -1,14 +1,14 @@
 /* ==========================================================
-   PARTICIPA CORE — SWAP BETWEEN SISTER SITES
-   Two halves of one movement, because the browser cannot animate
-   across two domains:
-   1. Leaving: the sister logo rolls left across the header to the place
-      of the own logo, growing to its size; the rest of the header fades.
-      Then the sister site opens, with ?via=roll in its address.
-   2. Arriving: the own logo starts on the right, where the sister logo
-      was clicked, and rolls into its place; name and menu fade in.
+   PARTICIPA CORE — SWAP TO THE SISTER SITE (exit only)
+   When you click the sister logo, it rolls left across the header to the
+   place of the own logo, growing to its size, while the rest of the header
+   fades. Then the sister site opens normally: no second roll on arrival.
    A rolling logo turns by the distance it travels divided by its radius,
    so it looks like a wheel, not a spinning coin.
+   Kept short (half a second), because the next site only starts loading
+   once the roll ends.
+   Back button: browsers may show the page as it was left, frozen at the end
+   of the roll; the reset below puts the header back.
    With "reduce motion" switched on, nothing moves: the page simply changes.
    ========================================================== */
 (function () {
@@ -22,71 +22,53 @@
   var ownImg = home && home.querySelector("img");
   if (!sister || !sisterImg || !ownImg) return;
 
-  var DURATION = 900;
+  var DURATION = 500;
   var EASE = "cubic-bezier(.45,.05,.35,1)";
+  var running = [];
 
   function centre(el) {
     var r = el.getBoundingClientRect();
-    return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width };
-  }
-  function roll(distance, radius) {
-    return (distance / radius) * (180 / Math.PI);
-  }
-  // Everything in the header except the moving logo
-  function others(except) {
-    return Array.prototype.filter.call(header.querySelectorAll(
-      ".site-header__name, .site-header__nav, .site-header__toggle, .site-header__sister > span, .site-header__home img, .site-header__sister img"
-    ), function (el) { return el !== except; });
+    return { x: r.left + r.width / 2, w: r.width };
   }
 
-  /* ---------- 1. Leaving ---------- */
+  function reset() {
+    running.forEach(function (a) { a.cancel(); });
+    running = [];
+  }
+
   sister.addEventListener("click", function (event) {
+    // New tab or window: no roll, the browser handles it
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     event.preventDefault();
     var href = sister.href;
 
     var from = centre(sisterImg), to = centre(ownImg);
-    var dx = to.x - from.x;               // negative: rolling left
+    var dx = to.x - from.x;                       // negative: rolling left
     var scale = to.w / from.w;
-    var radius = (from.w + to.w) / 4;      // average radius while growing
+    var radius = (from.w + to.w) / 4;             // average radius while growing
+    var turn = (dx / radius) * (180 / Math.PI);
 
-    others(sisterImg).forEach(function (el) {
-      el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: DURATION * 0.4, fill: "forwards", easing: "ease-out" });
+    reset();
+    header.querySelectorAll(
+      ".site-header__name, .site-header__nav, .site-header__toggle, .site-header__sister > span, .site-header__home img"
+    ).forEach(function (el) {
+      running.push(el.animate([{ opacity: 1 }, { opacity: 0 }],
+        { duration: DURATION * 0.6, fill: "forwards", easing: "ease-out" }));
     });
-    var anim = sisterImg.animate([
+    var roll = sisterImg.animate([
       { transform: "translateX(0) rotate(0deg) scale(1)" },
-      { transform: "translateX(" + dx + "px) rotate(" + roll(dx, radius) + "deg) scale(" + scale + ")" }
+      { transform: "translateX(" + dx + "px) rotate(" + turn + "deg) scale(" + scale + ")" }
     ], { duration: DURATION, easing: EASE, fill: "forwards" });
+    running.push(roll);
 
-    var go = function () {
-      var url = new URL(href);
-      url.searchParams.set("via", "roll");
-      window.location.href = url.toString();
-    };
-    anim.onfinish = go;
-    setTimeout(go, DURATION + 400);       // in case the animation is interrupted
+    var gone = false;
+    var go = function () { if (!gone) { gone = true; window.location.href = href; } };
+    roll.onfinish = go;
+    setTimeout(go, DURATION + 300);               // in case the animation is interrupted
   });
 
-  /* ---------- 2. Arriving ---------- */
-  var params = new URLSearchParams(window.location.search);
-  if (params.get("via") === "roll") {
-    params.delete("via");
-    var clean = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + window.location.hash;
-    history.replaceState(null, "", clean);
-
-    var start = centre(sisterImg), end = centre(ownImg);
-    var dx2 = start.x - end.x;            // positive: starts on the right
-    var scale2 = start.w / end.w;
-    var radius2 = (start.w + end.w) / 4;
-
-    header.classList.add("is-arriving");
-    ownImg.animate([
-      { transform: "translateX(" + dx2 + "px) rotate(" + roll(dx2, radius2) + "deg) scale(" + scale2 + ")" },
-      { transform: "translateX(0) rotate(0deg) scale(1)" }
-    ], { duration: DURATION, easing: EASE, fill: "backwards" });
-    others(ownImg).forEach(function (el) {
-      el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: DURATION * 0.5, delay: DURATION * 0.6, fill: "backwards", easing: "ease-in" });
-    });
-    setTimeout(function () { header.classList.remove("is-arriving"); }, DURATION * 1.2);
-  }
+  // Coming back with the browser's back button: put the header back
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) reset();
+  });
 })();
