@@ -6,7 +6,7 @@
 
 /* ---------- Opening ---------- */
 .home__opening {
-  min-height: calc(70svh - var(--header-height));
+  min-height: calc(60svh - var(--header-height));   /* 60%: tightened from 70% on 5 Nov */
   display: flex;
   flex-direction: column;
   justify-content: center;
