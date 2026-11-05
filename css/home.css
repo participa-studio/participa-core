@@ -40,12 +40,12 @@
   text-transform: uppercase;
 }
 /* Hover and keyboard focus use the same blue as "you are here" in the menu;
-   the text turns white so it stays readable on cobalt. All buttons are equal. */
+   the text stays black. All buttons are equal. */
 .home__action:hover,
 .home__action:focus-visible {
   background: var(--colour-here);
   border-color: var(--colour-ink);
-  color: #fff;                 /* white on cobalt: 5.8:1 */
+  color: var(--colour-ink);    /* black on cobalt: 3.6:1, kept by choice */
 }
 
 /* ---------- Selected work ---------- */
