@@ -37,8 +37,9 @@
   var leftImg = document.querySelector(".site-header__home img");
   if (!header || !rightImg || !leftImg || !window.requestAnimationFrame) return;
 
-  var VARIANTS = { "swarm": 3, "trail": 3, "group-in": 2, "left-hole": 3, "to-left": 2,
-                   "to-right": 1, "top-group": 2, "walk-in": 1, "from-top": 1, "none": 1 };
+  // Shares out of 50 visits: groups of 3-4 ants 30, swarm 8, a single ant 10, none 2
+  var VARIANTS = { "trail": 7, "left-hole": 7, "group-in": 5, "to-left": 4, "top-group": 4, "to-right": 3,
+                   "swarm": 8, "walk-in": 5, "from-top": 5, "none": 2 };
   var SIZE = 5;              // dot size in pixels (?antshape=dot)
   var DOTS = /[?&]antshape=dot/.test(location.search);
   var ANT_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-16 -20 32 40\" width=\"16\" height=\"20\"><g class=\"pose-a\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-1.0 -5.0 L-5.2 -10.2 L-9.6 -18.2\"/><path d=\"M-1.0 -4.0 L-7.4 -4.2 L-14.6 -0.8\"/><path d=\"M-1.0 -3.0 L-6.4 0.4 L-12.4 11.6\"/><path d=\"M1.0 -5.0 L5.2 -8.6 L9.6 -15.0\"/><path d=\"M1.0 -4.0 L7.4 -5.8 L14.6 -4.0\"/><path d=\"M1.0 -3.0 L6.4 2.0 L12.4 14.8\"/><path d=\"M-1.3 -12.6 L-4.6 -15.4 L-5.0 -19.4\"/><path d=\"M1.3 -12.6 L4.6 -15.4 L5.0 -19.4\"/></g><g fill=\"#000\"><ellipse cx=\"0\" cy=\"-9.8\" rx=\"3.5\" ry=\"3.1\"/><ellipse cx=\"0\" cy=\"-4.2\" rx=\"1.6\" ry=\"2.5\"/><circle cx=\"0\" cy=\"-1.1\" r=\"0.95\"/><ellipse cx=\"0\" cy=\"5.0\" rx=\"4.3\" ry=\"5.4\"/></g></g><g class=\"pose-b\" style=\"display:none\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-1.0 -5.0 L-5.2 -8.6 L-9.6 -15.0\"/><path d=\"M-1.0 -4.0 L-7.4 -5.8 L-14.6 -4.0\"/><path d=\"M-1.0 -3.0 L-6.4 2.0 L-12.4 14.8\"/><path d=\"M1.0 -5.0 L5.2 -10.2 L9.6 -18.2\"/><path d=\"M1.0 -4.0 L7.4 -4.2 L14.6 -0.8\"/><path d=\"M1.0 -3.0 L6.4 0.4 L12.4 11.6\"/><path d=\"M-1.3 -12.6 L-4.6 -15.4 L-5.0 -19.4\"/><path d=\"M1.3 -12.6 L4.6 -15.4 L5.0 -19.4\"/></g><g fill=\"#000\"><ellipse cx=\"0\" cy=\"-9.8\" rx=\"3.5\" ry=\"3.1\"/><ellipse cx=\"0\" cy=\"-4.2\" rx=\"1.6\" ry=\"2.5\"/><circle cx=\"0\" cy=\"-1.1\" r=\"0.95\"/><ellipse cx=\"0\" cy=\"5.0\" rx=\"4.3\" ry=\"5.4\"/></g></g></svg>";
