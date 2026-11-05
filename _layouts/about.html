@@ -14,11 +14,11 @@ layout: default
   {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
   {%- if page.throughline %}<p class="about__text">{{ page.throughline }}</p>{% endif %}
 
+  {%- if page.direction %}<p class="about__text about__direction">{{ page.direction }}</p>{% endif %}
   {%- if page.sides %}
   {% include sides.html sides=page.sides %}
   {%- endif %}
 
-  {%- if page.direction %}<p class="about__text about__direction">{{ page.direction }}</p>{% endif %}
 
   {%- if page.facts %}
   <dl class="case__facts">

@@ -24,13 +24,13 @@ layout: default
     {%- if page.pdf %}
     {%- if page.pdf.file %}
     <a class="cv__download" href="{{ page.pdf.file }}" download>
-      <span class="cv__download-label">CV · PDF</span>
+      <span class="cv__download-label">Curriculum vitae (PDF)</span>
       <span class="cv__download-action">Download ↓</span>
       {%- if page.pdf.updated %}<span class="cv__download-meta">Updated {{ page.pdf.updated }}</span>{% endif %}
     </a>
     {%- else %}
     <div class="cv__download cv__download--pending">
-      <span class="cv__download-label">CV · PDF</span>
+      <span class="cv__download-label">Curriculum vitae (PDF)</span>
       <span class="cv__download-action">In preparation</span>
     </div>
     {%- endif %}
