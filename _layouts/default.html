@@ -23,6 +23,9 @@
 <script src="{{ p.core }}/js/quotes.js?v={{ p.version }}" defer></script>
 <script src="{{ p.core }}/js/shuffle.js?v={{ p.version }}" defer></script>
 <script src="{{ p.core }}/js/actions.js?v={{ p.version }}" defer></script>
+{%- if p.swarm and page.layout == "home" %}
+<script src="{{ p.core }}/js/swarm.js?v={{ p.version }}" defer></script>
+{%- endif %}
 <script src="{{ p.core }}/js/year.js?v={{ p.version }}" defer></script>
 </body>
 </html>
