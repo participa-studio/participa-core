@@ -17,7 +17,9 @@
      Sized on the longest menu word across both sites
      ("PROJECTS", about 86 px) plus the side margin each side. */
   --menu-word-max: 7.5rem;            /* longest menu word: EXPERIMENTS (about 115 px) */
-  --menu-width: calc(var(--menu-word-max) + 2 * var(--inset));
+  --menu-width: calc(var(--menu-word-max) + 2 * var(--menu-pad-x));
+  --menu-pad-x: 1.25rem;       /* phone menu: space left and right of the links */
+  --menu-shadow: 4px;          /* phone menu: hard shadow offset */
 }
 
 .site-header {
@@ -231,31 +233,20 @@
     margin-left: -0.375rem;    /* icon lines up with the content edge */
   }
 
-  /* Panel: fixed width, opens under the button on the left */
+  /* Panel: opens just under the menu button, its left edge on the same line
+     as the three lines of the icon (the content edge), so it reads as part of it */
   .site-header__nav {
     position: absolute;
-    top: var(--header-height);
-    left: 0;
+    top: calc(var(--header-height) / 2 + 1.25rem);   /* about 12 px under the icon */
+    left: var(--inset);
     width: var(--menu-width);
     margin: 0;
-    padding: var(--space-3) var(--inset);   /* links line up with the content edge */
+    padding: var(--space-2) var(--menu-pad-x);
     background: var(--colour-accent);
     border: 1px solid var(--colour-ink);    /* the same thin line as the buttons */
+    /* Hard shadow, the mechanical way: the same box, shifted down and right, no blur */
+    box-shadow: var(--menu-shadow) var(--menu-shadow) 0 0 var(--colour-ink);
     display: none;
-  }
-
-  /* Hard shadow, flat like print: an L-shaped line 2 px outside the bottom and
-     right edges, starting a little in from the corners. No blur. */
-  .site-header__nav::after {
-    content: "";
-    position: absolute;
-    right: -3px;                 /* touches the box: 1 px border + 2 px shadow */
-    bottom: -3px;
-    width: calc(100% - 6px);
-    height: calc(100% - 6px);
-    border-right: 2px solid var(--colour-ink);
-    border-bottom: 2px solid var(--colour-ink);
-    pointer-events: none;
   }
 
   .site-header.is-open .site-header__nav {
