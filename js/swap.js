@@ -1,12 +1,12 @@
 /* ==========================================================
-   PARTICIPA CORE — SWAP TO THE SISTER SITE (exit only)
-   When you click the sister logo, it rolls left across the header to the
-   place of the own logo, growing to its size, while the rest of the header
-   fades. Then the sister site opens normally: no second roll on arrival.
+   PARTICIPA CORE — SWAP TO THE SISTER SITE (a hint of a roll)
+   When you click the sister logo, it starts rolling left and fades out
+   partway, while the rest of the header fades. It never reaches the other
+   end, so there is no landing to match: the movement only points the way.
+   Then the sister site opens normally: no second roll on arrival.
    A rolling logo turns by the distance it travels divided by its radius,
    so it looks like a wheel, not a spinning coin.
-   Kept short (half a second), because the next site only starts loading
-   once the roll ends.
+   Short (0.35 s), because the next site only starts loading once it ends.
    Back button: browsers may show the page as it was left, frozen at the end
    of the roll; the reset below puts the header back.
    With "reduce motion" switched on, nothing moves: the page simply changes.
@@ -22,8 +22,10 @@
   var ownImg = home && home.querySelector("img");
   if (!sister || !sisterImg || !ownImg) return;
 
-  var DURATION = 500;
-  var EASE = "cubic-bezier(.45,.05,.35,1)";
+  var DURATION = 350;
+  var EASE = "cubic-bezier(.4,0,.7,1)";           // starts gently, keeps going
+  var SHARE = 0.35;                               // part of the way it travels
+  var MAX_TRAVEL = 160;                           // pixels, so wide screens do not overdo it
   var running = [];
 
   function centre(el) {
@@ -43,9 +45,8 @@
     var href = sister.href;
 
     var from = centre(sisterImg), to = centre(ownImg);
-    var dx = to.x - from.x;                       // negative: rolling left
-    var scale = to.w / from.w;
-    var radius = (from.w + to.w) / 4;             // average radius while growing
+    var dx = Math.max((to.x - from.x) * SHARE, -MAX_TRAVEL);   // negative: rolling left
+    var radius = from.w / 2;
     var turn = (dx / radius) * (180 / Math.PI);
 
     reset();
@@ -56,8 +57,9 @@
         { duration: DURATION * 0.6, fill: "forwards", easing: "ease-out" }));
     });
     var roll = sisterImg.animate([
-      { transform: "translateX(0) rotate(0deg) scale(1)" },
-      { transform: "translateX(" + dx + "px) rotate(" + turn + "deg) scale(" + scale + ")" }
+      { transform: "translateX(0) rotate(0deg)", opacity: 1 },
+      { transform: "translateX(" + (dx * 0.4) + "px) rotate(" + (turn * 0.4) + "deg)", opacity: 1, offset: 0.4 },
+      { transform: "translateX(" + dx + "px) rotate(" + turn + "deg)", opacity: 0 }
     ], { duration: DURATION, easing: EASE, fill: "forwards" });
     running.push(roll);
 
