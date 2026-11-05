@@ -122,3 +122,12 @@
 @media (max-width: 720px) {
   .blog__tags { margin-left: 0; }
 }
+
+/* Post lead: in the quote face, italic, like the home quotes */
+.post__lead {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.45;
+}
