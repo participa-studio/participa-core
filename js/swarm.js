@@ -20,7 +20,9 @@
      none         no ants this time
    To see one on purpose, add ?ants=NAME to the address, e.g. ?ants=left-hole
 
-   The dots are stand-ins: the real insect drawings replace them later.
+   Each ant is a small drawing (12 x 16 px): an hourglass body like the
+   Participa logo, two leg poses that alternate while it runs, turned to face
+   the way it walks. Add ?antshape=dot to see the earlier dots instead.
    They never block clicks or text selection, screen readers ignore them,
    and with "reduce motion" switched on nothing appears.
    ========================================================== */
@@ -33,7 +35,10 @@
 
   var VARIANTS = { "swarm": 3, "walk-in": 2, "left-hole": 2, "to-left": 2, "to-right": 1,
                    "from-top": 2, "none": 1 };
-  var SIZE = 5;              // dot size in pixels
+  var SIZE = 5;              // dot size in pixels (?antshape=dot)
+  var DOTS = /[?&]antshape=dot/.test(location.search);
+  var ANT_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-12 -16 24 32\" width=\"12\" height=\"16\"><g class=\"pose-a\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-2.0 -5.2 L-4.6 -7.9 L-7.4 -12.4\"/><path d=\"M-2.0 -3.6 L-5.4 -2.5 L-9.0 -1.4\"/><path d=\"M-2.0 -2.0 L-4.8 0.5 L-7.6 4.2\"/><path d=\"M2.0 -5.2 L4.6 -6.5 L7.4 -9.6\"/><path d=\"M2.0 -3.6 L5.4 -3.9 L9.0 -4.2\"/><path d=\"M2.0 -2.0 L4.8 1.9 L7.6 7.0\"/><path d=\"M-0.9 -11.8 Q-2 -14.2 -3.6 -15.2\"/><path d=\"M0.9 -11.8 Q2 -14.2 3.6 -15.2\"/></g><g fill=\"#000\"><circle cx=\"0\" cy=\"-9.6\" r=\"2.6\"/><path d=\"M0 -6.8 C3.4 -6.8 3.6 -2.4 0.8 -0.6 C4.6 0.6 5.2 10.4 0 10.4 C-5.2 10.4 -4.6 0.6 -0.8 -0.6 C-3.6 -2.4 -3.4 -6.8 0 -6.8 Z\"/></g></g><g class=\"pose-b\" style=\"display:none\"><g fill=\"none\" stroke=\"#000\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-2.0 -5.2 L-4.6 -6.5 L-7.4 -9.6\"/><path d=\"M-2.0 -3.6 L-5.4 -3.9 L-9.0 -4.2\"/><path d=\"M-2.0 -2.0 L-4.8 1.9 L-7.6 7.0\"/><path d=\"M2.0 -5.2 L4.6 -7.9 L7.4 -12.4\"/><path d=\"M2.0 -3.6 L5.4 -2.5 L9.0 -1.4\"/><path d=\"M2.0 -2.0 L4.8 0.5 L7.6 4.2\"/><path d=\"M-0.9 -11.8 Q-2 -14.2 -3.6 -15.2\"/><path d=\"M0.9 -11.8 Q2 -14.2 3.6 -15.2\"/></g><g fill=\"#000\"><circle cx=\"0\" cy=\"-9.6\" r=\"2.6\"/><path d=\"M0 -6.8 C3.4 -6.8 3.6 -2.4 0.8 -0.6 C4.6 0.6 5.2 10.4 0 10.4 C-5.2 10.4 -4.6 0.6 -0.8 -0.6 C-3.6 -2.4 -3.4 -6.8 0 -6.8 Z\"/></g></g></svg>";
+  var STEP_MS = 70;          // leg poses swap this often while running
   var START_DELAY = 900;     // ms after load, so the page is settled first
   var MAX_LIFE = 25000;      // ms: anyone still on screen then fades away
 
@@ -85,12 +90,18 @@
 
   var ants = plan.map(function (p) {
     var el = document.createElement("div");
-    el.style.cssText = "position:absolute;left:0;top:0;width:" + SIZE + "px;height:" + SIZE +
-      "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#000;opacity:0;will-change:transform;";
+    if (DOTS) {
+      el.style.cssText = "position:absolute;left:0;top:0;width:" + SIZE + "px;height:" + SIZE +
+        "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#000;opacity:0;will-change:transform;";
+    } else {
+      el.style.cssText = "position:absolute;left:0;top:0;width:12px;height:16px;margin:-8px 0 0 -6px;opacity:0;will-change:transform;";
+      el.innerHTML = ANT_SVG;
+    }
     layer.appendChild(el);
     var a = { el: el, from: p.from, to: p.to, goal: p.goal, menu: p.menu, calm: p.calm, start: p.start,
               born: START_DELAY + p.born, back: p.back, speed: 0, mode: "pause", until: 0,
-              gone: false, out: false, entering: false };
+              gone: false, out: false, entering: false,
+              poseA: el.querySelector(".pose-a"), poseB: el.querySelector(".pose-b"), stepAt: 0, legs: 0 };
     if (p.start === "hole") {
       a.x = p.from.x; a.y = p.from.y;
       a.heading = p.to ? Math.atan2(p.to.y - p.from.y, p.to.x - p.from.x) : p.goal + rand(-1, 1);
@@ -164,7 +175,14 @@
       var under = (a.from && inside(a, a.from)) || (a.to && a.out && inside(a, a.to));
       if (!a.entering && !under) a.out = true;
       a.el.style.opacity = under ? "0" : "1";
-      a.el.style.transform = "translate(" + a.x.toFixed(1) + "px," + a.y.toFixed(1) + "px)";
+      var turn = DOTS ? "" : " rotate(" + (a.heading * 180 / Math.PI + 90).toFixed(1) + "deg)";
+      a.el.style.transform = "translate(" + a.x.toFixed(1) + "px," + a.y.toFixed(1) + "px)" + turn;
+      // Legs: swap poses while running, stand still while pausing
+      if (a.poseA && a.mode === "run" && t - a.stepAt > STEP_MS) {
+        a.stepAt = t; a.legs = 1 - a.legs;
+        a.poseA.style.display = a.legs ? "none" : "";
+        a.poseB.style.display = a.legs ? "" : "none";
+      }
 
       var off = !a.entering && (a.x < -20 || a.x > W + 20 || a.y < -20 || a.y > H + 20);
       var home = a.to && a.out && inside(a, a.to);   // went into a logo
