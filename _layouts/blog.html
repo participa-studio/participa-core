@@ -16,6 +16,7 @@ layout: default
     <li>
       <a class="blog__item" href="{{ post.url }}">
         <time class="blog__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B %Y" }}</time>
+        {%- if post.image %}<img class="blog__thumb" src="{{ post.image }}" alt="{{ post.image_alt }}" loading="lazy">{% endif %}
         <span class="blog__title">{{ post.title }}</span>
         {%- if post.lead %}<span class="blog__excerpt">{{ post.lead }}</span>{% endif %}
       </a>

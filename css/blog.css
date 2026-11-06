@@ -48,9 +48,22 @@
   grid-column: 2;
   margin-top: var(--space-1);
   max-width: 40rem;
-  font-size: 1rem;
-  line-height: 1.55;
+  font-family: var(--font-quote);   /* lead in the quote face, italic, as on the post */
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
+/* Post photo in the list: a right-hand column, only on posts that have one */
+.blog__item:has(.blog__thumb) { grid-template-columns: 10rem minmax(0, 1fr) 16rem; }
+.blog__thumb {
+  grid-column: 3;
+  grid-row: 1 / span 3;
+  width: 100%;
+  height: auto;
+}
+.blog__date { grid-column: 1; grid-row: 1; }
+.blog__title { grid-column: 2; grid-row: 1; }
+.blog__excerpt { grid-row: 2; }
 .blog__item:hover .blog__title,
 .blog__item:focus-visible .blog__title {
   text-decoration: underline;
@@ -88,6 +101,9 @@
 @media (max-width: 720px) {
   .blog__item { grid-template-columns: 1fr; row-gap: var(--space-1); }
   .blog__excerpt { grid-column: 1; }
+  .blog__date, .blog__title, .blog__excerpt, .blog__thumb { grid-column: 1; grid-row: auto; }
+  .blog__item:has(.blog__thumb) { grid-template-columns: 1fr; }
+  .blog__thumb { margin-top: var(--space-1); }
 }
 
 /* ---------- Tags: small outlined labels ---------- */
