@@ -11,8 +11,8 @@ layout: default
   <time class="blog__date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d %B %Y" }}</time>
   <h1 class="case__title">{{ page.title }}</h1>
   {%- if page.lead %}<p class="case__lead post__lead">{{ page.lead }}</p>{% endif %}
-  {% include tags.html tags=page.tags %}
   {%- if page.image %}<img class="post__image" src="{{ page.image }}" alt="{{ page.image_alt }}">{% endif %}
+  {% include tags.html tags=page.tags %}
   <div class="post__body">
     {{ content }}
   </div>

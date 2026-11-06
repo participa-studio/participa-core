@@ -104,10 +104,10 @@
   .blog__date, .blog__title, .blog__excerpt, .blog__thumb { grid-column: 1; grid-row: auto; }
   .blog__item:has(.blog__thumb) { grid-template-columns: 1fr; }
   .blog__thumb { margin-top: var(--space-1); }
-  /* order on phones: date, title, photo, lead */
+  /* order on phones: date, title, lead, photo (tags follow) */
   .blog__title { order: 1; }
-  .blog__thumb { order: 2; }
-  .blog__excerpt { order: 3; }
+  .blog__excerpt { order: 2; }
+  .blog__thumb { order: 3; margin-top: var(--space-2); }
 }
 
 /* ---------- Tags: small outlined labels ---------- */
@@ -132,7 +132,7 @@
 .blog__tags {
   margin: calc(var(--space-3) * -1 + var(--space-1)) 0 var(--space-3) calc(10rem + var(--space-6));
 }
-.post__image { display: block; width: 100%; max-width: 40rem; height: auto; margin-top: var(--space-4); }   /* no wider than the text */
+.post__image { display: block; width: 100%; max-width: 40rem; height: auto; margin: var(--space-4) 0 var(--space-3); }   /* no wider than the text */
 
 /* ---------- On a project page: posts about the project ---------- */
 .case__writing { margin-top: var(--space-8); }
