@@ -104,6 +104,10 @@
   .blog__date, .blog__title, .blog__excerpt, .blog__thumb { grid-column: 1; grid-row: auto; }
   .blog__item:has(.blog__thumb) { grid-template-columns: 1fr; }
   .blog__thumb { margin-top: var(--space-1); }
+  /* order on phones: date, title, photo, lead */
+  .blog__title { order: 1; }
+  .blog__thumb { order: 2; }
+  .blog__excerpt { order: 3; }
 }
 
 /* ---------- Tags: small outlined labels ---------- */
