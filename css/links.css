@@ -1,0 +1,46 @@
+/* ==========================================================
+   PARTICIPA CORE — LINK BEHAVIOUR (one rule for both sites, 7 Nov 2026)
+   At rest: an underline (links in sentences) or an arrow (standalone links)
+   shows that something is a link. On hover and keyboard focus: the text turns
+   the "here" colour (red #BD483D, set in each site.css), everywhere.
+   Exceptions: home buttons fill with white (they are buttons, not links);
+   the CV download box is still under review.
+   Loaded last, so these rules win over the older per-component hovers.
+   ========================================================== */
+
+/* Links in sentences: underlined at rest, red on hover (the underline stays) */
+.post__body a:hover, .post__body a:focus-visible,
+.about__text a:hover, .about__text a:focus-visible,
+.about .case__lead a:hover, .about .case__lead a:focus-visible,
+.about__side p a:hover, .about__side p a:focus-visible,
+.about__contact a:hover, .about__contact a:focus-visible,
+.case__facts a:hover, .case__facts a:focus-visible,
+.case__note a:hover, .case__note a:focus-visible,
+.cv__entry-org h3 a:hover, .cv__entry-org h3 a:focus-visible {
+  color: var(--colour-here);
+}
+
+/* Standalone links with an arrow: no underline, red on hover */
+.about__side-links a:hover, .about__side-links a:focus-visible,
+.home__more a:hover, .home__more a:focus-visible,
+.quote__project:hover, .quote__project:focus-visible,
+.home__cases--hero .home__case:hover .home__case-more,
+.home__cases--hero .home__case:focus-visible .home__case-more,
+.case__artefacts a:hover .case__artefact-name,
+.case__artefacts a:focus-visible .case__artefact-name {
+  color: var(--colour-here);
+  text-decoration: none;
+}
+
+/* Card titles (cases, writing) and the sister panel name: red on hover; the image still lifts */
+.home__case:hover .home__case-title, .home__case:focus-visible .home__case-title,
+.blog__item:hover .blog__title, .blog__item:focus-visible .blog__title,
+.about__side-head:hover h2, .about__side-head:focus-visible h2 {
+  color: var(--colour-here);
+  text-decoration: none;
+}
+
+/* Sister label in the header: red on hover, like the menu; the logo still turns */
+.site-header__sister:hover span, .site-header__sister:focus-visible span {
+  color: var(--colour-here);
+}
