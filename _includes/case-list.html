@@ -2,7 +2,8 @@
   PARTICIPA THEME — CASE CARDS
   Builds the list from the case pages themselves (layout: case),
   newest first by their "order" field. Each case page carries:
-    short_title (optional), org, years, cover (image, optional), cover_alt
+    short_title (optional), org, years, cover (image, optional), cover_alt,
+    summary (optional: one plain line on the card, shown instead of org and years)
   {% include case-list.html %}                → every case
   {% include case-list.html random=3 %}       → every case in the page; on each visit
       js/shuffle.js shows 3 of them, picked and ordered at random. Without the script,
@@ -26,7 +27,11 @@
       <span class="home__case-image" aria-hidden="true"></span>
       {%- endif %}
       <span class="home__case-title">{{ c.short_title | default: c.title }}</span>
+      {%- if c.summary %}
+      <span class="home__case-summary">{{ c.summary }}</span>
+      {%- else %}
       <span class="home__case-meta">{{ c.org }}{% if c.years %} · {{ c.years }}{% endif %}</span>
+      {%- endif %}
       {%- if include.hero %}
       {%- if c.lead %}<span class="home__case-lead">{{ c.lead }}</span>{% endif %}
       <span class="home__case-more">See the case →</span>
