@@ -98,6 +98,32 @@
     plan.push({ start: "top", goal: pick([D, D, LEFT, RIGHT]), born: 0, calm: true });
   }
 
+  // Easter egg: click an ant and it says something. The ant keeps walking.
+  // Lines come from the site (participa.ants_say in _config.yml); one is picked at random.
+  var LINES = window.PARTICIPA_ANTS_SAY || ["A garden nothing eats is not an ecosystem."];
+  if (typeof LINES === "string") LINES = [LINES];
+  var HIT = '<span style="position:absolute;inset:-14px;"></span>';   // a bigger target than the drawing
+  var bubble = null, bubbleTimer = 0;
+  function say(e) {
+    if (bubble) bubble.remove();
+    clearTimeout(bubbleTimer);
+    bubble = document.createElement("div");
+    bubble.setAttribute("role", "status");
+    bubble.textContent = LINES[Math.floor(Math.random() * LINES.length)];
+    var x = Math.min(Math.max(e.clientX, 16), window.innerWidth - 16), y = e.clientY;
+    var below = y < 120;
+    bubble.style.cssText = "position:fixed;z-index:70;left:" + x + "px;top:" + y + "px;" +
+      "transform:translate(-50%," + (below ? "24px" : "calc(-100% - 24px)") + ");max-width:min(22rem,calc(100vw - 32px));" +
+      "padding:.6em .8em;background:var(--colour-paper,#fff);color:var(--colour-ink,#1A1A1A);" +
+      "font-size:.8125rem;line-height:1.4;font-weight:var(--weight-display,700);letter-spacing:.04em;" +
+      "box-shadow:4px 4px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
+      "opacity:0;transition:opacity .3s ease;pointer-events:none;";
+    document.body.appendChild(bubble);
+    requestAnimationFrame(function () { bubble.style.opacity = "1"; });
+    var b = bubble;
+    bubbleTimer = setTimeout(function () { b.style.opacity = "0"; setTimeout(function () { b.remove(); }, 400); }, 3200);
+  }
+
   var layer = document.createElement("div");
   layer.setAttribute("aria-hidden", "true");
   layer.setAttribute("data-ants", name);
@@ -107,11 +133,13 @@
     var el = document.createElement("div");
     if (DOTS) {
       el.style.cssText = "position:absolute;left:0;top:0;width:" + SIZE + "px;height:" + SIZE +
-        "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#1A1A1A;opacity:0;will-change:transform;";
+        "px;margin:-" + SIZE / 2 + "px 0 0 -" + SIZE / 2 + "px;border-radius:50%;background:#1A1A1A;opacity:0;will-change:transform;pointer-events:auto;cursor:pointer;";
+      el.innerHTML = HIT;
     } else {
-      el.style.cssText = "position:absolute;left:0;top:0;width:16px;height:20px;margin:-10px 0 0 -8px;opacity:0;will-change:transform;";
-      el.innerHTML = ANT_SVG;
+      el.style.cssText = "position:absolute;left:0;top:0;width:16px;height:20px;margin:-10px 0 0 -8px;opacity:0;will-change:transform;pointer-events:auto;cursor:pointer;";
+      el.innerHTML = ANT_SVG + HIT;
     }
+    el.addEventListener("click", say);
     layer.appendChild(el);
     var a = { el: el, from: p.from, to: p.to, goal: p.goal, menu: p.menu, calm: p.calm, start: p.start,
               born: START_DELAY + p.born, back: p.back, follow: p.follow, speed: 0, mode: "pause", until: 0,
