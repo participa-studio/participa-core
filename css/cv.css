@@ -64,10 +64,11 @@
   font-size: 1.75rem;
   line-height: 1.1;
 }
+/* Hover: fills with white, like the home buttons (7 Nov 2026; was a black fill) */
 a.cv__download:hover,
 a.cv__download:focus-visible {
-  background: var(--colour-ink);
-  color: var(--colour-accent);
+  background: var(--colour-paper, #FFFFFF);
+  color: var(--colour-ink);
 }
 .cv__download--pending { border-style: dashed; }
 .cv__download--pending .cv__download-action { font-size: 1.25rem; }

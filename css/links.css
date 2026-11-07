@@ -3,8 +3,8 @@
    At rest: an underline (links in sentences) or an arrow (standalone links)
    shows that something is a link. On hover and keyboard focus: the text turns
    the "here" colour (red #BD483D, set in each site.css), everywhere.
-   Exceptions: home buttons fill with white (they are buttons, not links);
-   the CV download box is still under review.
+   Exceptions: home buttons and the CV download box fill with white
+   (they are buttons, not links).
    Loaded last, so these rules win over the older per-component hovers.
    ========================================================== */
 
