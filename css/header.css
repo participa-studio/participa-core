@@ -132,11 +132,17 @@
 }
 
 /* Where you are: the current page (plain text, no link) and, on a case page,
-   the Work link are shown in the "here" colour. Same font and size as the other items. */
+   the section link sit on a solid white block (after the Holon reference, 7 Nov 2026).
+   Padding and an equal negative margin keep the menu from shifting. */
 .site-header__current,
 .site-header__nav a.is-section {
-  color: var(--colour-here, #0050FF);
+  color: var(--colour-ink);
+  background: var(--colour-paper, #FFFFFF);
+  padding: 0.4em 0.35em 0.4em 0.51em;   /* extra left: balances the letter spacing on the right */
+  margin: -0.4em -0.35em -0.4em -0.51em;
 }
+.site-header__nav a.is-section:hover,
+.site-header__nav a.is-section:focus-visible { color: var(--colour-here, #0050FF); }
 .site-header__current { cursor: default; }
 
 /* Sister logo + label, far right */
