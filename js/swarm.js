@@ -119,15 +119,20 @@
       bubble.appendChild(call);
     }
     bubble.appendChild(document.createTextNode(line.text));
-    var x = Math.min(Math.max(e.clientX, 16), window.innerWidth - 16), y = e.clientY;
-    var below = y < 120;
-    bubble.style.cssText = "position:fixed;z-index:70;left:" + x + "px;top:" + y + "px;" +
-      "transform:translate(-50%," + (below ? "20px" : "calc(-100% - 20px)") + ");max-width:min(18rem,calc(100vw - 32px));" +
+    // Place it centred on the click, then pull it back inside the screen. The box keeps its
+    // natural width (up to 18rem), so it never squeezes into one word per line near an edge.
+    var y = e.clientY, below = y < 120, EDGE = 16;
+    bubble.style.cssText = "position:fixed;z-index:70;left:0;top:" + y + "px;" +
+      "transform:translateY(" + (below ? "20px" : "calc(-100% - 20px)") + ");" +
+      "width:max-content;max-width:min(18rem,calc(100vw - 32px));" +
       "padding:.4em .6em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);" +
       "font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;text-wrap:balance;" +
       "box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
       "opacity:0;transition:opacity .3s ease;pointer-events:none;";
     document.body.appendChild(bubble);
+    var w = bubble.offsetWidth;
+    var left = Math.min(Math.max(e.clientX - w / 2, EDGE), window.innerWidth - w - EDGE);
+    bubble.style.left = left + "px";
     requestAnimationFrame(function () { bubble.style.opacity = "1"; });
     var b = bubble;
     bubbleTimer = setTimeout(function () { b.style.opacity = "0"; setTimeout(function () { b.remove(); }, 400); }, 3200);
