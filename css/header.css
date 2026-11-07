@@ -124,7 +124,7 @@
   text-transform: uppercase;
 }
 
-/* Hover and keyboard focus: the text turns the "here" blue, as on the home buttons */
+/* Hover and keyboard focus: the text turns the "here" colour (red #BD483D on both sites, set in each site.css) */
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
   color: var(--colour-here, #0050FF);
