@@ -100,7 +100,8 @@
 
   // Easter egg: click an ant and it says something. The ant keeps walking.
   // Lines come from the site (participa.ants_say in _config.yml); one is picked at random.
-  // Each line is a text, or { call: "Try", text: "..." } with a call to action shown above it.
+  // Each line is a text, or { call: "Try", text: "..." } with a call to action shown above it,
+  // or { text: "...", later: true } for a line that never comes on the first click of a visit.
   var LINES = window.PARTICIPA_ANTS_SAY || ["A garden nothing eats is not an ecosystem."];
   if (typeof LINES === "string") LINES = [LINES];
   var HIT = '<span style="position:absolute;inset:-14px;"></span>';   // a bigger target than the drawing
@@ -120,8 +121,15 @@
     if (order.length > 1 && order[0] === last) { order.push(order.shift()); }   // never the same line twice in a row
     pos = 0;
   }
+  var clicks = 0;                                     // clicks on this page load
+  function isLater(i) { var l = LINES[i]; return l && typeof l === "object" && l.later; }
   function nextLine() {
     if (!order.length || pos >= order.length) reshuffle();
+    // A line marked "later" (e.g. "You again?") never comes on the first click of a visit
+    if (clicks === 0 && isLater(order[pos]) && pos + 1 < order.length) {
+      var t = order[pos]; order[pos] = order[pos + 1]; order[pos + 1] = t;
+    }
+    clicks++;
     var line = LINES[order[pos++]];
     try { sessionStorage.setItem(KEY, JSON.stringify({ n: LINES.length, order: order, pos: pos })); } catch (err) {}
     return line;
