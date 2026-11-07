@@ -124,7 +124,7 @@
     bubble.style.cssText = "position:fixed;z-index:70;left:" + x + "px;top:" + y + "px;" +
       "transform:translate(-50%," + (below ? "20px" : "calc(-100% - 20px)") + ");max-width:min(18rem,calc(100vw - 32px));" +
       "padding:.4em .6em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);" +
-      "font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;" +
+      "font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;text-wrap:balance;" +
       "box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
       "opacity:0;transition:opacity .3s ease;pointer-events:none;";
     document.body.appendChild(bubble);
