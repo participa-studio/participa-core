@@ -113,10 +113,10 @@
     var x = Math.min(Math.max(e.clientX, 16), window.innerWidth - 16), y = e.clientY;
     var below = y < 120;
     bubble.style.cssText = "position:fixed;z-index:70;left:" + x + "px;top:" + y + "px;" +
-      "transform:translate(-50%," + (below ? "24px" : "calc(-100% - 24px)") + ");max-width:min(22rem,calc(100vw - 32px));" +
-      "padding:.6em .8em;background:var(--colour-paper,#fff);color:var(--colour-ink,#1A1A1A);" +
-      "font-size:.8125rem;line-height:1.4;font-weight:var(--weight-display,700);letter-spacing:.04em;" +
-      "box-shadow:4px 4px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
+      "transform:translate(-50%," + (below ? "20px" : "calc(-100% - 20px)") + ");max-width:min(18rem,calc(100vw - 32px));" +
+      "padding:.45em .65em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);" +
+      "font-size:.75rem;line-height:1.4;font-weight:500;letter-spacing:.02em;" +
+      "box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
       "opacity:0;transition:opacity .3s ease;pointer-events:none;";
     document.body.appendChild(bubble);
     requestAnimationFrame(function () { bubble.style.opacity = "1"; });
