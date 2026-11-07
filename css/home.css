@@ -39,13 +39,13 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-/* Hover and keyboard focus: no fill. The text and the outline turn the
-   highlight colour, the same way the menu links do. All buttons are equal. */
+/* Hover and keyboard focus: the button fills with white, the same way the menu
+   marks the page you are on (7 Nov 2026). All buttons are equal. */
 .home__action:hover,
 .home__action:focus-visible {
-  background: transparent;
-  border-color: var(--colour-here);
-  color: var(--colour-here);
+  background: var(--colour-paper, #FFFFFF);
+  border-color: var(--colour-ink);
+  color: var(--colour-ink);
 }
 
 /* ---------- Selected work ---------- */
