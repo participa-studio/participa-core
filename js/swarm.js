@@ -105,12 +105,33 @@
   if (typeof LINES === "string") LINES = [LINES];
   var HIT = '<span style="position:absolute;inset:-14px;"></span>';   // a bigger target than the drawing
   var bubble = null, bubbleTimer = 0;
+  // No repeats: the lines are shuffled once, then shown one after another until all have been
+  // seen; then a new shuffle starts. The place in the order is kept for the browser session,
+  // so the next visit carries on where this one stopped.
+  var order = [], pos = 0, KEY = "participa-ants-say";
+  try {
+    var saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
+    if (saved && saved.n === LINES.length && saved.order && saved.order.length === LINES.length) { order = saved.order; pos = saved.pos; }
+  } catch (err) {}
+  function reshuffle() {
+    var last = order[order.length - 1];
+    order = LINES.map(function (_, i) { return i; });
+    for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    if (order.length > 1 && order[0] === last) { order.push(order.shift()); }   // never the same line twice in a row
+    pos = 0;
+  }
+  function nextLine() {
+    if (!order.length || pos >= order.length) reshuffle();
+    var line = LINES[order[pos++]];
+    try { sessionStorage.setItem(KEY, JSON.stringify({ n: LINES.length, order: order, pos: pos })); } catch (err) {}
+    return line;
+  }
   function say(e) {
     if (bubble) bubble.remove();
     clearTimeout(bubbleTimer);
     bubble = document.createElement("div");
     bubble.setAttribute("role", "status");
-    var line = LINES[Math.floor(Math.random() * LINES.length)];
+    var line = nextLine();
     if (typeof line === "string") line = { text: line };
     if (line.call) {                                 // the call to action: small capitals above the line
       var call = document.createElement("span");
