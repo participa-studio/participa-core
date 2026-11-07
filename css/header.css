@@ -138,8 +138,9 @@
 .site-header__nav a.is-section {
   color: var(--colour-ink);
   background: var(--colour-paper, #FFFFFF);
-  padding: 0.4em 0.35em 0.4em 0.51em;   /* extra left: balances the letter spacing on the right */
-  margin: -0.4em -0.35em -0.4em -0.51em;
+  display: inline-block;                /* paints the full padding on every browser */
+  padding: 0.45em 0.55em 0.45em 0.71em;  /* extra left: balances the letter spacing on the right */
+  margin: -0.45em -0.55em -0.45em -0.71em;
 }
 .site-header__nav a.is-section:hover,
 .site-header__nav a.is-section:focus-visible { color: var(--colour-here, #0050FF); }
