@@ -95,6 +95,7 @@
   font-size: 0.9375rem;
   line-height: 1.45;
 }
+.home__case-summary + .home__case-meta { margin-top: 0.5rem; }
 .home__case-meta {
   display: block;
   margin-top: 0.25rem;
