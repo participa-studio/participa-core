@@ -12,16 +12,16 @@ layout: default
 {%- endcomment -%}
 <article class="about">
   <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
-  {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
-  {%- if page.practice %}<p class="about__text about__practice">{{ page.practice }}</p>{% endif %}
+  {%- if page.intro %}<p class="case__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  {%- if page.practice %}<p class="about__text about__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.practice_links %}
   <ul class="about__side-links about__practice-links">
     {%- for l in page.practice_links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
   </ul>
   {%- endif %}
 
-  {%- if page.direction %}<p class="about__text about__direction">{{ page.direction }}</p>{% endif %}
-  {%- if page.throughline %}<p class="about__text about__throughline">{{ page.throughline }}</p>{% endif %}
+  {%- if page.direction %}<p class="about__text about__direction">{{ page.direction | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  {%- if page.throughline %}<p class="about__text about__throughline">{{ page.throughline | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.sides %}
   {% include sides.html sides=page.sides %}
   {%- endif %}

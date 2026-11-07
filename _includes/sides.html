@@ -12,7 +12,7 @@
         <h2>{{ s.name }}</h2>
       </span>
     </a>
-    {%- if s.text %}<p>{{ s.text }}</p>{% endif %}
+    {%- if s.text %}<p>{{ s.text | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
     {%- if s.links %}
     <ul class="about__side-links">
       {%- for l in s.links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
