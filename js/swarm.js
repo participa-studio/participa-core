@@ -100,6 +100,7 @@
 
   // Easter egg: click an ant and it says something. The ant keeps walking.
   // Lines come from the site (participa.ants_say in _config.yml); one is picked at random.
+  // Each line is a text, or { call: "Try", text: "..." } with a call to action shown above it.
   var LINES = window.PARTICIPA_ANTS_SAY || ["A garden nothing eats is not an ecosystem."];
   if (typeof LINES === "string") LINES = [LINES];
   var HIT = '<span style="position:absolute;inset:-14px;"></span>';   // a bigger target than the drawing
@@ -109,7 +110,15 @@
     clearTimeout(bubbleTimer);
     bubble = document.createElement("div");
     bubble.setAttribute("role", "status");
-    bubble.textContent = LINES[Math.floor(Math.random() * LINES.length)];
+    var line = LINES[Math.floor(Math.random() * LINES.length)];
+    if (typeof line === "string") line = { text: line };
+    if (line.call) {                                 // the call to action: small capitals above the line
+      var call = document.createElement("span");
+      call.textContent = line.call;
+      call.style.cssText = "display:block;margin-bottom:.3em;font-size:.625rem;font-weight:var(--weight-display,700);letter-spacing:.16em;text-transform:uppercase;";
+      bubble.appendChild(call);
+    }
+    bubble.appendChild(document.createTextNode(line.text));
     var x = Math.min(Math.max(e.clientX, 16), window.innerWidth - 16), y = e.clientY;
     var below = y < 120;
     bubble.style.cssText = "position:fixed;z-index:70;left:" + x + "px;top:" + y + "px;" +
