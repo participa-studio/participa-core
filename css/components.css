@@ -57,3 +57,13 @@ body.holding:has(.site-footer) {
 .stage .soon {
   font-size: min(64cqw, 58cqh);
 }
+
+/* Marker: a solid block behind one key word (after the Holon reference, 7 Nov 2026).
+   Write <mark>word</mark> in a heading. The colour is set per site with --colour-marker. */
+mark {
+  background: var(--colour-marker, var(--colour-paper, #FFFFFF));
+  color: inherit;
+  padding: 0 0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
