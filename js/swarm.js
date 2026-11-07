@@ -115,7 +115,7 @@
     if (line.call) {                                 // the call to action: small capitals above the line
       var call = document.createElement("span");
       call.textContent = line.call;
-      call.style.cssText = "display:block;margin-bottom:.3em;font-size:.625rem;font-weight:var(--weight-display,700);letter-spacing:.16em;text-transform:uppercase;";
+      call.style.cssText = "display:block;margin-bottom:.15em;line-height:1.2;font-size:.625rem;font-weight:var(--weight-display,700);letter-spacing:.16em;text-transform:uppercase;";
       bubble.appendChild(call);
     }
     bubble.appendChild(document.createTextNode(line.text));
@@ -123,8 +123,8 @@
     var below = y < 120;
     bubble.style.cssText = "position:fixed;z-index:70;left:" + x + "px;top:" + y + "px;" +
       "transform:translate(-50%," + (below ? "20px" : "calc(-100% - 20px)") + ");max-width:min(18rem,calc(100vw - 32px));" +
-      "padding:.45em .65em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);" +
-      "font-size:.75rem;line-height:1.4;font-weight:500;letter-spacing:.02em;" +
+      "padding:.4em .6em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);" +
+      "font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;" +
       "box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
       "opacity:0;transition:opacity .3s ease;pointer-events:none;";
     document.body.appendChild(bubble);
