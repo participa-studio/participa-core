@@ -8,7 +8,7 @@
 :root {
   /* Colour */
   --colour-accent: #FFE300;      /* Participa yellow */
-  --colour-ink: #000000;         /* text and logos */
+  --colour-ink: #1A1A1A;         /* text, lines and ants (soft black, 7 Nov; logos stay pure black images) */
   --colour-paper: #FFFFFF;       /* light backgrounds */
   --colour-hover-fill: #B97050; /* rust: not in use since 5 Nov (buttons now turn red on hover, no fill); kept for reference */
   --colour-here: #0050FF;     /* cobalt: menu hover and the page you are on, button hover (was #01B2FE) */
