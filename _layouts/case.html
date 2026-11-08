@@ -9,6 +9,7 @@ layout: default
     challenge, approach, outcome,
     quote (text, name, role, place) — or quotes: a list of them, which rotate,
     tag (optional: posts carrying this tag are listed under the case),
+    video (youtube = the video id, caption; optional),
     artefacts (label, file, format = PDF, status; leave file out while in preparation),
     note
   Anything written below the fields appears after the three blocks.
@@ -42,6 +43,16 @@ layout: default
       {%- endfor %}
     </div>
   </div>
+  {%- endif %}
+
+  {%- if page.video and page.video.youtube %}
+  {%- comment -%} A YouTube video, from the privacy-enhanced address: nothing loads from YouTube until play is pressed. {%- endcomment -%}
+  <figure class="case__video">
+    <div class="case__video-frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/{{ page.video.youtube }}?rel=0" title="{{ page.video.caption | default: 'Video' | escape }}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    {%- if page.video.caption %}<figcaption>{{ page.video.caption | markdownify | remove: "<p>" | remove: "</p>" | strip }}</figcaption>{% endif %}
+  </figure>
   {%- endif %}
 
   <div class="case__blocks">
