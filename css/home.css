@@ -227,11 +227,20 @@
   .home__cases--hero .home__case-title { margin-top: var(--space-2); }
 }
 
-/* ---------- Connected dots over case images (.design, 11 Nov 2026; js/goo.js draws on a canvas) ---------- */
+/* ---------- Connected dots over case images (.design, 11 Nov 2026, simple version; js/goo.js) ---------- */
 .goo-card { position: relative; display: block; overflow: hidden; transition: transform 0.3s ease; }
-.goo-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: url(#goo-threshold); opacity: 0.4; }   /* white at 40% */
+.goo-card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .goo-card img { transform: none !important; }                       /* the frame lifts on hover, not the image inside it */
 .home__case:hover .goo-card,
 .home__case:focus-visible .goo-card { transform: translateY(-4px); }
 .home__cases--hero .goo-card { grid-row: 1 / -1; }
-@media (prefers-reduced-motion: reduce) { .goo-card canvas { display: none; } }
+/* Each 8 fades in fully on its own, stays briefly and fades out on its own: never half a shape */
+.goo-card use { fill: #fff; opacity: 0; animation: goo-dot 24s linear infinite; }
+@keyframes goo-dot {
+  0%   { opacity: 0; }
+  2%   { opacity: 0.4; }     /* white at 40% */
+  11%  { opacity: 0.4; }     /* a short stay: the wave passes as a hint */
+  14%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .goo-card svg { display: none; } }
