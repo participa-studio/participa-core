@@ -9,7 +9,7 @@
   <style>
     /* ==========================================================
        PREVIEW (11 Nov 2026): Studio hover, a graded dot field.
-       Plain round dots in the Studio yellow over the card photo: large near one corner
+       Plain round dots in white at 40% over the card photo: large near one corner
        (almost touching), smaller and smaller towards the opposite corner, after a halftone gradient.
        Computer: on hover the field grows in from that corner, dot after dot; when the pointer leaves,
        it shrinks back. Phone (no hover): it grows once as the card scrolls into view.
@@ -27,8 +27,8 @@
     .sdots img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .sdots svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
     .sdots circle {
-      fill: #F6DF5B;                       /* the Studio yellow */
-      opacity: 0.85;
+      fill: #fff;                          /* a white shade, the same as the markers and caption bands */
+      opacity: 0.4;
       transform-box: fill-box; transform-origin: center;
       transform: scale(0);
       transition: transform 0.45s cubic-bezier(.3, 1.35, .5, 1) var(--d, 0ms);   /* a small overshoot */
@@ -41,7 +41,7 @@
 <body>
 <section class="sheet">
   <h2>.studio · graded dots (test)</h2>
-  <p>Hover over a card: yellow dots grow in from a corner, large there and smaller towards the far side, like a halftone. On a phone they grow once as each card scrolls into view.</p>
+  <p>Hover over a card: white dots grow in from a corner, large there and smaller towards the far side, like a halftone. On a phone they grow once as each card scrolls into view.</p>
   <div class="cards">
     <a class="sdots" href="#" data-corner="tr"><img src="https://participa.studio/images/placeholders/placeholder-05.jpg" alt=""></a>
     <a class="sdots" href="#" data-corner="bl"><img src="https://participa.studio/images/placeholders/placeholder-04.jpg" alt=""></a>
