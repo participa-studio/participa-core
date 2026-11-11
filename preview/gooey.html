@@ -49,7 +49,7 @@
 
 <section class="sheet sheet--design">
   <h2>.design · test (scroll)</h2>
-  <p>Scroll down: as each card moves up the screen, a band of connected dots in white at 40% grows in from a corner, travels across the image and leaves on the other side. Scrolling back reverses it. Hover over a card: the band sweeps across the whole image and clears it on the other side.</p>
+  <p>Scroll down: on each card, connected dots in white at 40% grow from one of the four corners (a new corner on every visit). Before they overpower the photo, the tail starts to clear from the starting corner and follows the front, until the image is clean. Scrolling back reverses it. Hover over a card: the same cycle plays in 1.6 s.</p>
   <div class="cards">
     <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="goo-card" href="#" data-corner="tr"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
@@ -66,18 +66,19 @@
 /* Builds the dot pattern inside every .goo-card and lets the scroll drive it.
    Units (two dots side by side, the Participa symbol) sit on a diagonal grid over the whole image.
    Each unit has a threshold: its distance from the chosen corner. As the card moves up the screen,
-   a band travels from the corner across the image and out at the opposite side: units swell and merge
-   (gooey filter) as the band reaches them, then shrink away behind it. The image is never fully covered.
+   the pattern grows organically from one of the four corners (random on every visit): dense in the corner,
+   smaller dots towards the front. Before it overpowers the photo, the tail clears from the corner and follows.
    Scrolling back reverses it.
    Progress: each card starts clear; the band crosses it over 2.5 card heights of scrolling. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
-  var W = 300, H = 200, STEP_X = 44, STEP_Y = 22, GAP = 20, R = 13, HALF = 0.22;   // HALF: half the width of the travelling band (share of the diagonal)
+  var W = 300, H = 200, STEP_X = 44, STEP_Y = 22, GAP = 20, R = 13, EDGE = 0.12, FRONT = 0.35;   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var cards = [];
 
   document.querySelectorAll(".goo-card").forEach(function (card) {
-    var corner = card.getAttribute("data-corner") || "bl";
+    var corner = new URLSearchParams(location.search).get("corner") ||          // test switch: ?corner=tl
+                 ["tl", "tr", "bl", "br"][Math.floor(Math.random() * 4)];   // one of the four corners, new on every visit
     var cx = corner.indexOf("r") > -1 ? W : 0, cy = corner.indexOf("b") > -1 ? H : 0;
     var maxD = Math.hypot(W, H);
     var svg = document.createElementNS(NS, "svg");
@@ -101,10 +102,10 @@
       for (var x = -STEP_X + shift; x <= W + STEP_X; x += STEP_X) {
         var y = row * STEP_Y;
         // threshold: distance share, with a little irregularity so the front is organic
-        var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD) + ((row * 13 + Math.round(x)) % 7) / 7 * 0.06;
+        var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD) + (Math.random() - 0.5) * 0.14;   // an irregular, organic front
         [x - GAP / 2, x + GAP / 2].forEach(function (dx, i) {
           var c = document.createElementNS(NS, "circle");
-          c.setAttribute("cx", dx.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", R);
+          c.setAttribute("cx", dx.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", (R * (0.85 + Math.random() * 0.3)).toFixed(1));
           g.appendChild(c); dots.push({ el: c, t: t + i * 0.015, s: -1 });
         });
       }
@@ -129,17 +130,23 @@
     if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows the wave halfway
     p = Math.max(0, Math.min(1, p));
     c.p = p;
-    // the band's centre travels from just outside the start corner to just past the opposite corner
-    var front = -HALF + p * (1 + 2 * HALF + 0.06);
+    // Life cycle along the diagonal (0 = start corner, 1 = opposite corner), after the first version:
+    // dense and merged near the corner, dots getting smaller towards the front, where they break into pairs.
+    // The solid part never grows past about half the diagonal: from p = 0.5 the tail clears from the corner
+    // and follows the front, cleaning the image, so the pattern never overpowers the photo.
+    var front = -0.05 + p * 1.3;                                   // the front's leading dots
+    var tail = p < 0.5 ? -1 : -0.1 + (p - 0.5) / 0.5 * 1.6;        // clears everything by p = 1
     c.dots.forEach(function (d) {
-      var s = 1 - Math.abs(front - d.t) / HALF;          // grows as the band arrives, shrinks as it moves on
-      s = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s); // smooth start and stop
+      var a = (front - d.t) / FRONT;                              // long soft front: small dots ahead, large behind
+      var b = (d.t - tail) / EDGE;                                // short soft tail
+      var s = Math.min(a, b);
+      s = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s);
       s = Math.round(s * 50) / 50;
       if (s !== d.s) { d.s = s; d.el.style.transform = "scale(" + s + ")"; }
     });
   }
 
-  // Hover (computer): the band sweeps across the whole image and clears it on the other side (1.2 s).
+  // Hover (computer): the whole cycle plays: growth from the corner, then the tail clears the image (1.6 s).
   // On leaving, the pattern eases back to where the scroll has it (0.6 s).
   function animate(c, to, dur) {
     c.anim = { from: c.p || 0, to: to, t0: performance.now(), dur: dur };
@@ -164,7 +171,7 @@
     cards.forEach(function (c) {
       c.card.addEventListener("pointerenter", function () {
         c.hovering = true;
-        c.p = 0; animate(c, 1, 1200);                    // start from the corner each time
+        c.p = 0; animate(c, 1, 1600);                    // start from the corner each time
       });
       c.card.addEventListener("pointerleave", function () {
         c.hovering = false;
