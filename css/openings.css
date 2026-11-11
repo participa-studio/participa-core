@@ -20,9 +20,9 @@
   margin: var(--space-4) 0 0;
   max-width: 40rem;            /* the width of the text column */
   line-height: 0;
-  color: var(--colour-ink);
+  color: #000000;              /* pure black at full strength (11 Nov 2026): the soft ink and fading made it almost invisible */
 }
-.opening-mark svg { display: block; height: 10px; width: auto; margin: 0 auto; overflow: visible; }   /* 10 px tall, width in proportion (about 31 px), centred */
+.opening-mark svg { display: block; height: 15px; width: auto; margin: 0 auto; overflow: visible; }   /* 15 px tall, width in proportion (about 45 px), centred */
 /* Optical centring (11 Nov 2026): the text is left-aligned with a ragged right edge, so its visual centre
    sits left of the column's middle. The mark moves left by 2.5% of the column: about 16 px on desktop, 9 px on phones. */
 .opening-mark svg { position: relative; left: -2.5%; }
@@ -40,9 +40,9 @@
    The paper grain and the wobbly edge come from the SVG filter in opening-mark.html.
    The hand is uneven: faster on the straight crossings, slower around the curves. One run every 11 s. */
 .opening-mark__trace { animation: opening-mark-snake 11s infinite; animation-timing-function: linear; }
-.opening-mark__tail { stroke-width: 2.2; opacity: 0.4;  stroke-dasharray: 55 45; --lead: 0; }
-.opening-mark__body { stroke-width: 2.8; opacity: 0.65; stroke-dasharray: 28 72; --lead: -27; }
-.opening-mark__head { stroke-width: 3.4; opacity: 0.9;  stroke-dasharray: 7 93;  --lead: -48; }
+.opening-mark__tail { stroke-width: 2.6; opacity: 1;    stroke-dasharray: 55 45; --lead: 0; }
+.opening-mark__body { stroke-width: 3.2; opacity: 1;    stroke-dasharray: 28 72; --lead: -27; }
+.opening-mark__head { stroke-width: 3.8; opacity: 1;    stroke-dasharray: 7 93;  --lead: -48; }
 @keyframes opening-mark-snake {
   0%   { stroke-dashoffset: calc(0   + var(--lead)); }
   9%   { stroke-dashoffset: calc(-7  + var(--lead)); }

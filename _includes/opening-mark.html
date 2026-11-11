@@ -13,7 +13,7 @@
       <filter id="opening-mark-pencil" x="-10%" y="-30%" width="120%" height="160%">
         <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="grain"/>
         <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="wobble"/>
-        <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 -0.25" result="paper"/>
+        <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 2.4 0.15" result="paper"/>
         <feComposite in="wobble" in2="paper" operator="in"/>
       </filter>
     </defs>
