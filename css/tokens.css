@@ -19,6 +19,9 @@
   --font-body: "Inter", Helvetica, Arial, sans-serif;
   --weight-display: 700;
   --weight-body: 400;
+  /* Body text: one size for running text on both sites.
+     Raised one step on 11 Nov 2026, from 16 px to 17 px (the size posts already used). */
+  --text-body: 1.0625rem;   /* 17 px */
 
   /* Spacing scale (multiples of 8 px) */
   --space-1: 0.5rem;   /*  8 px */

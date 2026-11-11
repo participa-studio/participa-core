@@ -18,7 +18,7 @@
 .profile__name-line {
   margin: var(--space-2) 0 0;
   max-width: 40rem;
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.6;
 }
 .profile__name-line a, .profile__earlier a, .profile .cv__lead a { color: inherit; text-underline-offset: 0.2em; }
@@ -55,7 +55,7 @@
 .profile__earlier {
   margin: var(--space-3) 0 0;
   max-width: 40rem;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   line-height: 1.55;
 }
 
@@ -91,7 +91,7 @@
 }
 .contact__offer p {
   margin: var(--space-2) 0 0;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   line-height: 1.55;
   flex: 1;
 }
@@ -130,7 +130,7 @@
 }
 .contact__other {
   margin: var(--space-2) 0 0;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   line-height: 1.55;
 }
 .contact__other a { color: inherit; text-underline-offset: 0.2em; }

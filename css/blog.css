@@ -75,7 +75,7 @@
 .post__body {
   max-width: 40rem;
   margin-top: var(--space-6);
-  font-size: 1.0625rem;
+  font-size: var(--text-body);
   line-height: 1.65;
 }
 .post__body h2 {

@@ -8,7 +8,7 @@
 .about__text {
   margin: var(--space-3) 0 0;
   max-width: 40rem;
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.6;
 }
 
@@ -59,7 +59,7 @@
 }
 .about__side p {
   margin: var(--space-3) 0 0;
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.55;
 }
 .about__side-links {

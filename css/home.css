@@ -202,7 +202,7 @@
 .home__case-lead {
   display: block;
   margin-top: var(--space-3);
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.55;
 }
 .home__case-more {
