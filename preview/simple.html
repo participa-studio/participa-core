@@ -9,11 +9,10 @@
   <style>
     /* ==========================================================
        PREVIEW (11 Nov 2026): the simplest version of the connected dots.
-       No drawing script: one tiny tile of diagonal Participa 8s, repeated over the card in white at 40%,
-       and a soft-edged gradient mask that slides diagonally across the card, revealing a band of 8s
-       and hiding it again behind. Only the mask moves, which the graphics card does almost for free.
-       Each card starts from its own corner and at its own moment. Hover makes it run faster
-       (a three-line script; without it the page still works, just without the speed-up).
+       Diagonal Participa 8s in white at 40%, close together, set up once per card (one shared shape, reused).
+       Each 8 fades in fully on its own, holds and fades out on its own, delayed by its distance from a corner,
+       so a wave of whole shapes crosses the card. The browser runs the timing; no script runs while it plays.
+       Each card starts from its own corner and at its own moment. Hover makes it run faster.
        Reduced motion: no pattern.
        ========================================================== */
     body { margin: 0; font-family: var(--font-body); color: var(--colour-ink); background: #75D5DC; }
@@ -25,39 +24,28 @@
 
     .dots-card { position: relative; display: block; overflow: hidden; aspect-ratio: 3 / 2; }
     .dots-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    /* The pattern: one 32 px tile with a diagonal 8 (two dots and a neck), white */
-    .dots-card::after {
-      content: "";
-      position: absolute; inset: 0;
-      pointer-events: none;
-      opacity: 0.4;                                   /* white at 40% */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cg fill='white'%3E%3Ccircle cx='10' cy='10' r='6.5'/%3E%3Ccircle cx='22' cy='22' r='6.5'/%3E%3C/g%3E%3Cpath d='M10 10 L22 22' stroke='white' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-size: 32px 32px;
-      /* the travelling band: clear, then the 8s, then clear again, with soft edges */
-      -webkit-mask-image: linear-gradient(var(--dir, 135deg), transparent 40%, #000 46%, #000 52%, transparent 58%);
-              mask-image: linear-gradient(var(--dir, 135deg), transparent 40%, #000 46%, #000 52%, transparent 58%);
-      -webkit-mask-size: 300% 300%; mask-size: 300% 300%;
-      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-      animation: dots-band var(--dur, 24s) linear infinite;
-      animation-delay: var(--delay, 0s);
+    .dots-card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    /* Each 8 fades in fully on its own, holds, and fades out on its own: never half a shape.
+       Its delay comes from its distance to the start corner, so they appear one after the other. */
+    .dots-card use {
+      fill: #fff;
+      opacity: 0;
+      animation: dots-one var(--dur, 24s) linear infinite;
     }
-    /* from which corner the band starts */
-    .dots-card[data-corner="tl"] { --dir: 135deg; }
-    .dots-card[data-corner="br"] { --dir: 315deg; }
-    .dots-card[data-corner="tr"] { --dir: 225deg; }
-    .dots-card[data-corner="bl"] { --dir: 45deg; }
-    @keyframes dots-band {
-      from { -webkit-mask-position: 100% 100%; mask-position: 100% 100%; }
-      to   { -webkit-mask-position: 0% 0%;     mask-position: 0% 0%; }
+    @keyframes dots-one {
+      0%   { opacity: 0; }
+      2%   { opacity: 0.4; }     /* white at 40% */
+      26%  { opacity: 0.4; }
+      28%  { opacity: 0; }
+      100% { opacity: 0; }
     }
-    @media (prefers-reduced-motion: reduce) { .dots-card::after { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .dots-card svg { display: none; } }
   </style>
 </head>
 <body>
 <section class="sheet">
   <h2>.design · simple version (test)</h2>
-  <p>No drawing script: a tile of diagonal 8s in white at 40%, revealed by a soft band that slides across each card from a corner, about every 24 s. Hover makes it run faster.</p>
+  <p>Diagonal 8s in white at 40%, close together. Each 8 fades in on its own, one after the other from a corner, holds, and fades out again, so a wave of whole shapes crosses the card about every 24 s. The shapes are set up once; the browser runs the timing, nothing is computed while it plays. Hover makes it run faster.</p>
   <div class="cards">
     <a class="dots-card" href="#" data-corner="bl" style="--delay:-3s"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="dots-card" href="#" data-corner="tr" style="--delay:-11s"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
@@ -67,12 +55,39 @@
   </div>
 </section>
 <script>
-  /* Hover: the band runs 6 times faster (no jump, it keeps its place) */
-  document.querySelectorAll(".dots-card").forEach(function (card) {
-    function rate(r) { card.getAnimations({ subtree: true }).forEach(function (a) { a.playbackRate = r; }); }
-    card.addEventListener("pointerenter", function () { rate(6); });
-    card.addEventListener("pointerleave", function () { rate(1); });
-  });
+  /* Set up once per card: a grid of diagonal 8s (one shared shape, reused), each with its own delay
+     from its distance to the start corner. After this, the browser runs the timing on its own. */
+  (function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 18, DUR = 24, SWEEP = 0.5;   // SWEEP: share of the cycle the wave takes to cross
+    document.querySelectorAll(".dots-card").forEach(function (card) {
+      var corner = card.getAttribute("data-corner") || "tl";
+      var cx = corner.indexOf("r") > -1 ? W : 0, cy = corner.indexOf("b") > -1 ? H : 0;
+      var dir = (cx === 0) === (cy === 0) ? "M-4.5 -4.5" : "M4.5 -4.5";                 // the 8 lies along the diagonal it grows on
+      var svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); svg.setAttribute("aria-hidden", "true");
+      var a = dir === "M-4.5 -4.5" ? [-4.5, -4.5, 4.5, 4.5] : [4.5, -4.5, -4.5, 4.5];
+      svg.innerHTML = '<defs><path id="e-' + corner + '" d="M' + a[0] + ' ' + a[1] + ' L' + a[2] + ' ' + a[3] + '" stroke="#fff" stroke-width="5" stroke-linecap="round"/>' +
+        '<g id="u-' + corner + '"><circle cx="' + a[0] + '" cy="' + a[1] + '" r="4.6"/><circle cx="' + a[2] + '" cy="' + a[3] + '" r="4.6"/><use href="#e-' + corner + '"/></g></defs>';
+      var start = parseFloat(getComputedStyle(card).getPropertyValue("--delay")) || 0;
+      var maxD = Math.hypot(W, H), html = "";
+      for (var y = STEP / 2; y < H + STEP; y += STEP) {
+        for (var x = STEP / 2; x < W + STEP; x += STEP) {
+          var t = Math.hypot(x - cx, y - cy) / maxD + (Math.random() - 0.5) * 0.04;   // a little irregular
+          var delay = start + t * SWEEP * DUR - DUR;                                   // nearer the corner = earlier
+          html += '<use href="#u-' + corner + '" x="' + x + '" y="' + y + '" style="animation-delay:' + delay.toFixed(2) + 's"/>';
+        }
+      }
+      svg.insertAdjacentHTML("beforeend", html);
+      card.appendChild(svg);
+    });
+    /* Hover: the wave runs 6 times faster (no jump, it keeps its place) */
+    document.querySelectorAll(".dots-card").forEach(function (card) {
+      function rate(r) { card.getAnimations({ subtree: true }).forEach(function (an) { an.playbackRate = r; }); }
+      card.addEventListener("pointerenter", function () { rate(6); });
+      card.addEventListener("pointerleave", function () { rate(1); });
+    });
+  })();
 </script>
 </body>
 </html>
