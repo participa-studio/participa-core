@@ -1,0 +1,91 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — PROFILE LAYOUT
+  One page for the person: who, what changed because of the work, and the CV.
+  The CV download sits next to the name, under the portrait when there is one (11 Nov 2026).
+  The page is a text file with these fields:
+    person, headline, location,
+    portrait (image, upright 4:5), portrait_square (optional: a square crop on the face, used as a small circle on phones), portrait_alt
+    (no portrait = no frame drawn)
+    intro (first person), name_line (where the name Participa comes from; Markdown allowed),
+    practice (longer text; Markdown allowed),
+    experience_heading, experience (org, role, years, result, link),
+    earlier (one line under the list; Markdown allowed),
+    pdf (file, updated; leave file out while in preparation),
+    sides (the sister panel, as on About), contact (one line, Markdown allowed)
+{%- endcomment -%}
+<article class="cv profile">
+
+  <h1 class="cv__name">{{ page.person }}</h1>
+  {%- if page.headline %}<p class="cv__headline">{{ page.headline }}</p>{% endif %}
+  {%- comment -%} Name and headline run full width; the CV box aligns with the text below them. {%- endcomment -%}
+  <header class="cv__top profile__top">
+    <div class="cv__intro">
+      {%- if page.intro %}<p class="cv__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+      {%- if page.name_line %}<p class="profile__name-line">{{ page.name_line | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+      {%- if page.location %}<p class="cv__location">{{ page.location }}</p>{% endif %}
+      {%- if page.practice %}
+      <p class="about__text profile__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+      {%- endif %}
+    </div>
+    {%- if page.portrait or page.pdf %}
+    <div class="profile__side">
+      {%- if page.portrait %}
+      <picture>
+        {%- if page.portrait_square %}<source media="(max-width: 720px)" srcset="{{ page.portrait_square }}">{% endif %}
+        <img class="profile__portrait" src="{{ page.portrait }}" alt="{{ page.portrait_alt | default: page.person }}">
+      </picture>
+      {%- endif %}
+      {%- if page.pdf %}
+      {%- if page.pdf.file %}
+      <a class="cv__download" href="{{ page.pdf.file }}" download>
+        <span class="cv__download-label">Curriculum vitae (PDF)</span>
+        <span class="cv__download-action">Download ↓</span>
+        {%- if page.pdf.updated %}<span class="cv__download-meta">Updated {{ page.pdf.updated }}</span>{% endif %}
+      </a>
+      {%- else %}
+      <div class="cv__download cv__download--pending">
+        <span class="cv__download-label">Curriculum vitae (PDF)</span>
+        <span class="cv__download-action">In preparation</span>
+      </div>
+      {%- endif %}
+      {%- if page.pdf.note %}<p class="profile__cv-note">{{ page.pdf.note }}</p>{% endif %}
+      {%- endif %}
+    </div>
+    {%- endif %}
+  </header>
+
+
+  {%- if page.experience %}
+  <section class="cv__section">
+    <h2 class="cv__heading">{{ page.experience_heading | default: "Experience" }}</h2>
+    {%- for e in page.experience %}
+    <div class="cv__entry profile__entry">
+      <div class="cv__entry-org">
+        <h3>{{ e.org }}</h3>
+        {%- if e.years %}<p class="cv__dates">{{ e.years }}</p>{% endif %}
+      </div>
+      <div class="cv__entry-body">
+        {%- if e.role %}<p class="profile__role">{{ e.role }}</p>{% endif %}
+        {%- if e.result %}<p class="profile__result">{{ e.result }}</p>{% endif %}
+        {%- if e.link %}<a class="profile__link" href="{{ e.link }}">See the case →</a>{% endif %}
+      </div>
+    </div>
+    {%- endfor %}
+    {%- if page.earlier %}<p class="profile__earlier">{{ page.earlier | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  </section>
+  {%- endif %}
+
+
+  {%- if page.sides %}
+  <div class="about profile__sides">{% include sides.html sides=page.sides %}</div>
+  {%- endif %}
+
+  {%- if page.contact %}
+  <p class="about__text about__contact">{{ page.contact | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+  {%- endif %}
+
+  {{ content }}
+</article>

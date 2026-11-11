@@ -3,7 +3,7 @@
    At rest: an underline (links in sentences) or an arrow (standalone links)
    shows that something is a link. On hover and keyboard focus: the text turns
    the "here" colour (red #BD483D, set in each site.css), everywhere.
-   Exceptions: home buttons and the CV download box fill with white
+   Exceptions: home buttons, Contact buttons and the CV download box fill with white
    (they are buttons, not links).
    Loaded last, so these rules win over the older per-component hovers.
    ========================================================== */
@@ -16,12 +16,19 @@
 .about__contact a:hover, .about__contact a:focus-visible,
 .case__facts a:hover, .case__facts a:focus-visible,
 .case__note a:hover, .case__note a:focus-visible,
-.cv__entry-org h3 a:hover, .cv__entry-org h3 a:focus-visible {
+.cv__entry-org h3 a:hover, .cv__entry-org h3 a:focus-visible,
+.profile__name-line a:hover, .profile__name-line a:focus-visible,
+.profile__earlier a:hover, .profile__earlier a:focus-visible,
+.profile .cv__lead a:hover, .profile .cv__lead a:focus-visible,
+.contact__other a:hover, .contact__other a:focus-visible {
   color: var(--colour-here);
 }
 
 /* Standalone links with an arrow: no underline, red on hover */
 .about__side-links a:hover, .about__side-links a:focus-visible,
+.profile__link:hover, .profile__link:focus-visible,
+.home__highlights-more a:hover, .home__highlights-more a:focus-visible,
+a.home__highlight-org:hover, a.home__highlight-org:focus-visible,
 .home__more a:hover, .home__more a:focus-visible,
 .quote__project:hover, .quote__project:focus-visible,
 .home__cases--hero .home__case:hover .home__case-more,

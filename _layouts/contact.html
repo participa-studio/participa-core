@@ -1,0 +1,38 @@
+---
+layout: default
+---
+{%- comment -%}
+  PARTICIPA THEME — CONTACT LAYOUT
+  Offers, each a button that opens an email with the subject already written.
+  The email address comes from the site settings (participa.email) and is not shown as text.
+  The page is a text file with these fields:
+    heading, intro,
+    offers (title, text, subject, button),
+    other_heading (big closing line), other (the line under it; Markdown allowed)
+{%- endcomment -%}
+{%- assign p = site.participa -%}
+<article class="contact">
+  <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
+  {%- if page.intro %}<p class="case__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+
+  {%- if page.offers %}
+  <ul class="contact__offers">
+    {%- for o in page.offers %}
+    <li class="contact__offer">
+      <h2>{{ o.title }}</h2>
+      {%- if o.text %}<p>{{ o.text }}</p>{% endif %}
+      <a class="contact__button" href="mailto:{{ p.email }}?subject={{ o.subject | default: o.title | uri_escape }}">{{ o.button | default: "Write to me" }} →</a>
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+
+  {%- if page.other or page.other_heading %}
+  <section class="contact__close">
+    {%- if page.other_heading %}<h2 class="contact__close-heading">{{ page.other_heading }}</h2>{% endif %}
+    {%- if page.other %}<p class="contact__other">{{ page.other | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  </section>
+  {%- endif %}
+
+  {{ content }}
+</article>

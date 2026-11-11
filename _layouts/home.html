@@ -6,6 +6,7 @@ layout: default
   The page is a text file with these fields:
     statement (the large opening line), intro,
     actions (title + url; the first is the main one),
+    highlights (org, role, link: one short line per company, beside the opening on wide screens), highlights_link (title + url),
     work_heading, work_link (title + url),
     (one case, shown large, picked at random on each visit; see case-list.html)
     quotes: taken from the case pages (quote or quotes). Only the quotes of the
@@ -14,7 +15,8 @@ layout: default
 {%- endcomment -%}
 <article class="home">
 
-  <section class="home__opening">
+  <section class="home__opening{% if page.highlights %} home__opening--highlights{% endif %}">
+    <div class="home__opening-main">
     <h1 class="home__statement">{{ page.statement }}</h1>
     {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
     {%- if page.actions %}
@@ -23,6 +25,18 @@ layout: default
       <li><a class="home__action{% if forloop.first %} home__action--main{% endif %}" href="{{ a.url }}">{{ a.title }}</a></li>
       {%- endfor %}
     </ul>
+    {%- endif %}
+    </div>
+    {%- if page.highlights %}
+    {%- comment -%} One short line per company: name and role. Only the company name links to its case. {%- endcomment -%}
+    <aside class="home__highlights" aria-label="{{ page.highlights_label | default: 'Highlights' }}">
+      <ul>
+        {%- for h in page.highlights %}
+        <li><span class="home__highlight-arrow" aria-hidden="true">→</span> {% if h.link %}<a class="home__highlight-org" href="{{ h.link }}">{{ h.org }}</a>{% else %}<span class="home__highlight-org">{{ h.org }}</span>{% endif %} <span class="home__highlight-role">· {{ h.role }}</span></li>
+        {%- endfor %}
+      </ul>
+      {%- if page.highlights_link %}<p class="home__highlights-more"><a href="{{ page.highlights_link.url }}">{{ page.highlights_link.title }} →</a></p>{% endif %}
+    </aside>
     {%- endif %}
   </section>
 
