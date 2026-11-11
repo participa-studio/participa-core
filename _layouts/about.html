@@ -25,6 +25,7 @@ layout: default
 
   {%- if page.direction %}<p class="about__text about__direction">{{ page.direction | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.sides %}
+  {%- include opening-mark.html %}
   {% include sides.html sides=page.sides %}
   {%- endif %}
 

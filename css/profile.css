@@ -170,3 +170,12 @@
   }
   .contact__offers { grid-template-columns: 1fr; gap: var(--space-6); }
 }
+
+/* The loop divider above the sister panel, on Profile and About (12 Nov 2026): equal space above and below it */
+.opening-mark:has(+ .profile__sides),
+.opening-mark:has(+ .about__sides) {
+  margin-top: var(--space-6);
+  max-width: calc((100% - var(--space-4)) / 2);    /* centred over the panel, which takes one of two columns */
+}
+@media (max-width: 720px) { .opening-mark:has(+ .profile__sides), .opening-mark:has(+ .about__sides) { max-width: none; } }
+.opening-mark + .profile__sides { margin-top: 0; }                       /* the panel already carries 48 px of space above it */

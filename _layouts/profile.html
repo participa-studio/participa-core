@@ -81,6 +81,7 @@ layout: default
 
 
   {%- if page.sides %}
+  {%- include opening-mark.html %}
   <div class="about profile__sides">{% include sides.html sides=page.sides %}</div>
   {%- endif %}
 
