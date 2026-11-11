@@ -14,7 +14,7 @@
    ========================================================== */
 (function () {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 20, RMAX = 9.5, RMIN = 0.6, SWEEP = 900;
+  var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 20, RMAX = 8, RMIN = 0.6, SWEEP = 900;
   var params = new URLSearchParams(location.search), FORCE = params.get("on") !== null, FIXED = params.get("corner");
   var hoverable = window.matchMedia("(hover: hover)").matches;
 
