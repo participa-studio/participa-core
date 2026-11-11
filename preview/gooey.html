@@ -64,7 +64,8 @@
 
 <script>
 /* Builds the dot pattern inside every .goo-card and lets the scroll drive it.
-   Units (two dots side by side, the Participa symbol) sit on a diagonal grid over the whole image.
+   Units (two dots joined by a neck: the Participa 8) sit on a diagonal grid over the whole image,
+   spaced so each unit keeps its 8 shape; near the corner the 8s just touch their neighbours.
    Each unit has a threshold: its distance from the chosen corner. As the card moves up the screen,
    the pattern grows organically from one of the four corners (random on every visit): dense in the corner,
    smaller dots towards the front. Before it overpowers the photo, the tail clears from the corner and follows.
@@ -72,7 +73,7 @@
    Progress: each card starts clear; the band crosses it over 2.5 card heights of scrolling. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
-  var W = 300, H = 200, STEP_X = 44, STEP_Y = 22, GAP = 20, R = 13, EDGE = 0.12, FRONT = 0.35;   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
+  var W = 300, H = 200, STEP_X = 58, STEP_Y = 30, GAP = 21, R = 11.5, EDGE = 0.12, FRONT = 0.35;   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var cards = [];
 
@@ -90,8 +91,8 @@
     var defs = document.createElementNS(NS, "defs");
     defs.innerHTML =
       '<filter id="' + id + '" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
-      '<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>' +
-      '<feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 22 -10" result="shape"/>' +
+      '<feGaussianBlur in="SourceAlpha" stdDeviation="3.2" result="blur"/>' +   // a tighter melt: the two dots of a unit join, neighbours only just touch
+      '<feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 20 -9" result="shape"/>' +
       '<feFlood flood-color="' + colour + '"/><feComposite in2="shape" operator="in"/></filter>';
     svg.appendChild(defs);
     var g = document.createElementNS(NS, "g");
@@ -105,7 +106,7 @@
         var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD) + (Math.random() - 0.5) * 0.14;   // an irregular, organic front
         [x - GAP / 2, x + GAP / 2].forEach(function (dx, i) {
           var c = document.createElementNS(NS, "circle");
-          c.setAttribute("cx", dx.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", (R * (0.85 + Math.random() * 0.3)).toFixed(1));
+          c.setAttribute("cx", dx.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", (R * (0.92 + Math.random() * 0.16)).toFixed(1));
           g.appendChild(c); dots.push({ el: c, t: t + i * 0.015, s: -1 });
         });
       }
