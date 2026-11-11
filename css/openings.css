@@ -15,7 +15,7 @@
 /* ---------- Opening mark (11 Nov 2026) ----------
    A thin sketch line between the opening and the body text (Profile, About):
    a figure eight looped three times, centred in the text column (loops only, no lines out).
-   A short darker stroke travels along the line, once every 14 seconds. */
+   A pencil line-snake runs along it: the head draws, the tail fades away. */
 .opening-mark {
   margin: var(--space-4) 0 0;
   max-width: 40rem;            /* the width of the text column */
@@ -26,22 +26,38 @@
 .opening-mark path {
   fill: none;
   stroke: currentColor;
-  stroke-width: 0.7;
-  vector-effect: non-scaling-stroke;   /* the line stays this thin on every screen */
+  stroke-width: 3;                     /* in drawing units: about 0.75 px at 10 px tall */
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.opening-mark__base { opacity: 0.55; }
-.opening-mark__trace {
-  stroke-width: 0.9;
-  stroke-dasharray: 8 92;
-  animation: opening-mark-trace 14s linear infinite;
-}
-@keyframes opening-mark-trace {
-  to { stroke-dashoffset: -100; }
+/* Line-snake like a pencil on paper (11 Nov 2026).
+   Three layers move together along the loops, each a different length from the same head.
+   The snake is about half the drawing long, so loops overlap like a scribble in a notepad:
+   the whole snake (light and thin: the tail), the front half (medium) and the tip (darkest, heaviest).
+   The paper grain and the wobbly edge come from the SVG filter in opening-mark.html.
+   The hand is uneven: faster on the straight crossings, slower around the curves. One run every 11 s. */
+.opening-mark__trace { animation: opening-mark-snake 11s infinite; animation-timing-function: linear; }
+.opening-mark__tail { stroke-width: 2.2; opacity: 0.4;  stroke-dasharray: 55 45; --lead: 0; }
+.opening-mark__body { stroke-width: 2.8; opacity: 0.65; stroke-dasharray: 28 72; --lead: -27; }
+.opening-mark__head { stroke-width: 3.4; opacity: 0.9;  stroke-dasharray: 7 93;  --lead: -48; }
+@keyframes opening-mark-snake {
+  0%   { stroke-dashoffset: calc(0   + var(--lead)); }
+  9%   { stroke-dashoffset: calc(-7  + var(--lead)); }
+  17%  { stroke-dashoffset: calc(-16 + var(--lead)); }
+  28%  { stroke-dashoffset: calc(-25 + var(--lead)); }
+  36%  { stroke-dashoffset: calc(-35 + var(--lead)); }
+  47%  { stroke-dashoffset: calc(-42 + var(--lead)); }
+  55%  { stroke-dashoffset: calc(-52 + var(--lead)); }
+  63%  { stroke-dashoffset: calc(-60 + var(--lead)); }
+  74%  { stroke-dashoffset: calc(-68 + var(--lead)); }
+  83%  { stroke-dashoffset: calc(-79 + var(--lead)); }
+  92%  { stroke-dashoffset: calc(-89 + var(--lead)); }
+  100% { stroke-dashoffset: calc(-100 + var(--lead)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .opening-mark__trace { display: none; }
+  .opening-mark__trace { animation: none; }
+  .opening-mark__tail { stroke-dasharray: none; }          /* the whole sketch, still */
+  .opening-mark__body, .opening-mark__head { display: none; }
 }
 /* Equal space above and below the mark */
 .opening-mark + .about__text,
