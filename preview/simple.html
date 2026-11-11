@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>PREVIEW · Connected dots, simple version</title>
+  <link rel="stylesheet" href="../core.css?v=20261111-23">
+  <style>
+    /* ==========================================================
+       PREVIEW (11 Nov 2026): the simplest version of the connected dots.
+       No drawing script: one tiny tile of diagonal Participa 8s, repeated over the card in white at 40%,
+       and a soft-edged gradient mask that slides diagonally across the card, revealing a band of 8s
+       and hiding it again behind. Only the mask moves, which the graphics card does almost for free.
+       Each card starts from its own corner and at its own moment. Hover makes it run faster
+       (a three-line script; without it the page still works, just without the speed-up).
+       Reduced motion: no pattern.
+       ========================================================== */
+    body { margin: 0; font-family: var(--font-body); color: var(--colour-ink); background: #75D5DC; }
+    .sheet { padding: 3rem var(--inset); }
+    .sheet h2 { margin: 0 0 0.5rem; font-size: 0.8125rem; letter-spacing: 0.16em; text-transform: uppercase; }
+    .sheet p { margin: 0 0 1.5rem; max-width: 40rem; font-size: 1rem; line-height: 1.5; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+    @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+
+    .dots-card { position: relative; display: block; overflow: hidden; aspect-ratio: 3 / 2; }
+    .dots-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* The pattern: one 32 px tile with a diagonal 8 (two dots and a neck), white */
+    .dots-card::after {
+      content: "";
+      position: absolute; inset: 0;
+      pointer-events: none;
+      opacity: 0.4;                                   /* white at 40% */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cg fill='white'%3E%3Ccircle cx='10' cy='10' r='6.5'/%3E%3Ccircle cx='22' cy='22' r='6.5'/%3E%3C/g%3E%3Cpath d='M10 10 L22 22' stroke='white' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: 32px 32px;
+      /* the travelling band: clear, then the 8s, then clear again, with soft edges */
+      -webkit-mask-image: linear-gradient(var(--dir, 135deg), transparent 40%, #000 46%, #000 52%, transparent 58%);
+              mask-image: linear-gradient(var(--dir, 135deg), transparent 40%, #000 46%, #000 52%, transparent 58%);
+      -webkit-mask-size: 300% 300%; mask-size: 300% 300%;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      animation: dots-band var(--dur, 24s) linear infinite;
+      animation-delay: var(--delay, 0s);
+    }
+    /* from which corner the band starts */
+    .dots-card[data-corner="tl"] { --dir: 135deg; }
+    .dots-card[data-corner="br"] { --dir: 315deg; }
+    .dots-card[data-corner="tr"] { --dir: 225deg; }
+    .dots-card[data-corner="bl"] { --dir: 45deg; }
+    @keyframes dots-band {
+      from { -webkit-mask-position: 100% 100%; mask-position: 100% 100%; }
+      to   { -webkit-mask-position: 0% 0%;     mask-position: 0% 0%; }
+    }
+    @media (prefers-reduced-motion: reduce) { .dots-card::after { display: none; } }
+  </style>
+</head>
+<body>
+<section class="sheet">
+  <h2>.design · simple version (test)</h2>
+  <p>No drawing script: a tile of diagonal 8s in white at 40%, revealed by a soft band that slides across each card from a corner, about every 24 s. Hover makes it run faster.</p>
+  <div class="cards">
+    <a class="dots-card" href="#" data-corner="bl" style="--delay:-3s"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
+    <a class="dots-card" href="#" data-corner="tr" style="--delay:-11s"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
+    <a class="dots-card" href="#" data-corner="tl" style="--delay:-17s"><img src="https://participa.design/images/placeholders/placeholder-03.jpg" alt=""></a>
+    <a class="dots-card" href="#" data-corner="br" style="--delay:-7s"><img src="https://participa.design/images/placeholders/placeholder-07.jpg" alt=""></a>
+    <a class="dots-card" href="#" data-corner="tl" style="--delay:-20s"><img src="https://participa.design/images/placeholders/placeholder-06.jpg" alt=""></a>
+  </div>
+</section>
+<script>
+  /* Hover: the band runs 6 times faster (no jump, it keeps its place) */
+  document.querySelectorAll(".dots-card").forEach(function (card) {
+    function rate(r) { card.getAnimations({ subtree: true }).forEach(function (a) { a.playbackRate = r; }); }
+    card.addEventListener("pointerenter", function () { rate(6); });
+    card.addEventListener("pointerleave", function () { rate(1); });
+  });
+</script>
+</body>
+</html>
