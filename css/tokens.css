@@ -9,6 +9,7 @@
   /* Colour */
   --colour-accent: #FFE300;      /* Participa yellow */
   --colour-ink: #1A1A1A;         /* text, lines and ants (soft black, 7 Nov; logos stay pure black images) */
+  --colour-quote: rgba(26, 26, 26, 0.65);   /* quotes: soft black at 65% (11 Nov 2026); contrast 4.3:1 on teal, 4.8:1 on yellow */
   --colour-paper: #FFFFFF;       /* light backgrounds */
   --colour-hover-fill: #B97050; /* rust: not in use since 5 Nov (buttons now turn red on hover, no fill); kept for reference */
   --colour-here: #0050FF;     /* default only; both sites set red #BD483D for menu hover */

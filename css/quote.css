@@ -27,7 +27,8 @@
   margin: 0;
   font-family: var(--font-quote);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 600;                        /* semibold in a softer ink, so quotes differ from the regular italic openings (11 Nov 2026) */
+  color: var(--colour-quote);
   font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px */
   line-height: 1.45;
   text-wrap: balance;
