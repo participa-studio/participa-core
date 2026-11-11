@@ -27,6 +27,9 @@
 {%- if p.ants_say %}<script>window.PARTICIPA_ANTS_SAY = {{ p.ants_say | jsonify }};</script>{% endif %}
 <script src="{{ p.core }}/js/swarm.js?v={{ p.version }}" defer></script>
 {%- endif %}
+{%- if p.goo %}
+<script src="{{ p.core }}/js/goo.js?v={{ p.version }}" defer></script>
+{%- endif %}
 <script src="{{ p.core }}/js/year.js?v={{ p.version }}" defer></script>
 </body>
 </html>

@@ -1,0 +1,215 @@
+/* ==========================================================
+   PARTICIPA CORE — CONNECTED DOTS OVER CASE IMAGES (11 Nov 2026)
+   .design only: switched on with participa.goo: true in the site's _config.yml.
+   Over every case card image (Work page and home page), Participa 8s in white at 40%
+   grow from one of the four corners (random on every visit) along branching threads, like mycelium,
+   swell into white areas in the middle of the cycle, then thin out from the corner and fade away.
+   Scroll drives the cycle (scrolling back reverses it); hovering a card plays the full cycle in about 4 s.
+   Phones: scroll only. Reduced motion: no pattern.
+   Developed in preview/gooey.html (test switches ?p= and ?corner= work there and here).
+   ========================================================== */
+(function () {
+  // Wrap each card image in a frame that holds the image and the pattern
+  document.querySelectorAll(".home__case > img").forEach(function (img) {
+    var frame = document.createElement("span");
+    frame.className = "goo-card";
+    img.parentNode.insertBefore(frame, img);
+    frame.appendChild(img);
+  });
+})();
+/* Builds the dot pattern inside every .goo-card (the frame around each case image) and lets the scroll drive it.
+   Units (two dots joined by a neck: the Participa 8) sit on a diagonal grid over the whole image,
+   spaced so each keeps its 8 shape, each lying along the diagonal it grows on. The 8s appear one by one
+   along branching threads from the corner, like mycelium, and die back from the corner along the same threads.
+   Each unit has a threshold: its distance from the chosen corner. As the card moves up the screen,
+   the pattern grows organically from one of the four corners (random on every visit): dense in the corner,
+   smaller dots towards the front. Before it overpowers the photo, the tail clears from the corner and follows.
+   Scrolling back reverses it.
+   Progress: each card starts clear; the band crosses it over 2.5 card heights of scrolling. */
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  var W = 300, H = 200, STEP_X = 40, STEP_Y = 22, GAP = 17, R = 9, EDGE = 0.25, FRONT = 0.06;   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var cards = [];
+
+  document.querySelectorAll(".goo-card").forEach(function (card) {
+    var corner = new URLSearchParams(location.search).get("corner") ||          // test switch: ?corner=tl
+                 ["tl", "tr", "bl", "br"][Math.floor(Math.random() * 4)];   // one of the four corners, new on every visit
+    var cx = corner.indexOf("r") > -1 ? W : 0, cy = corner.indexOf("b") > -1 ? H : 0;
+    var maxD = Math.hypot(W, H);
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+    svg.setAttribute("aria-hidden", "true");
+    var id = "goo-" + Math.random().toString(36).slice(2, 8);
+    var colour = getComputedStyle(card).getPropertyValue("--goo").trim() || "#ffffff";
+    var defs = document.createElementNS(NS, "defs");
+    defs.innerHTML =
+      '<filter id="' + id + '" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
+      '<feGaussianBlur in="SourceAlpha" stdDeviation="3.2" result="blur"/>' +   // a tighter melt: the two dots of a unit join, neighbours only just touch
+      '<feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 20 -9" result="shape"/>' +
+      '<feFlood flood-color="' + colour + '"/><feComposite in2="shape" operator="in"/></filter>';
+    svg.appendChild(defs);
+    var g = document.createElementNS(NS, "g");
+    g.setAttribute("filter", "url(#" + id + ")");
+    var dots = [];
+    // the 8 lies along the diagonal it grows on (from the start corner towards the opposite one)
+    var ax = (cx === 0 ? 1 : -1) / Math.SQRT2, ay = (cy === 0 ? 1 : -1) / Math.SQRT2;
+
+    // 1. The grid of possible units
+    var units = [];
+    for (var row = -1; row * STEP_Y <= H + STEP_Y; row++) {
+      var shift = (row % 2) ? STEP_X / 2 : 0;
+      for (var x = -STEP_X + shift; x <= W + STEP_X; x += STEP_X) units.push({ x: x, y: row * STEP_Y, row: row });
+    }
+    // neighbours: the units around each one on the diagonal grid
+    units.forEach(function (u) {
+      u.nb = units.filter(function (v) {
+        return v !== u && Math.abs(v.row - u.row) <= 1 && Math.abs(v.x - u.x) <= STEP_X + 1;
+      });
+    });
+
+    // 2. Mycelium-like growth order: from the unit nearest the corner, the network spreads along
+    //    branching threads. A frontier unit is more likely to grow next when it touches only one grown
+    //    unit (a thread tip, not a filled patch) and when it leads away from the corner.
+    var start = units.reduce(function (a, b) { return Math.hypot(a.x - cx, a.y - cy) < Math.hypot(b.x - cx, b.y - cy) ? a : b; });
+    var order = 0; start.order = order++;
+    var grown = [start];
+    while (true) {
+      var frontier = [];
+      grown.forEach(function (u) { u.nb.forEach(function (v) { if (v.order === undefined && frontier.indexOf(v) < 0) frontier.push(v); }); });
+      if (!frontier.length) break;
+      var best = null, bestScore = -1;
+      frontier.forEach(function (v) {
+        var grownNb = v.nb.filter(function (w) { return w.order !== undefined; });
+        var touching = grownNb.length;
+        var youngest = Math.max.apply(null, grownNb.map(function (w) { return w.order; })) / Math.max(1, order);
+        var away = Math.hypot(v.x - cx, v.y - cy) / maxD;          // 0 at the corner, 1 at the far corner
+        // thread tips (one grown neighbour) and young tips grow on; now and then an older point branches
+        var score = Math.random() * (touching === 1 ? 3 : 0.15) * (0.25 + Math.pow(youngest, 3) * 2) * (0.6 + away);
+        if (score > bestScore) { bestScore = score; best = v; }
+      });
+      best.order = order++;
+      // the unit it grows out of: the youngest grown neighbour
+      best.parent = best.nb.filter(function (w) { return w.order !== undefined && w !== best; })
+        .reduce(function (a, b) { return a.order > b.order ? a : b; });
+      grown.push(best);
+    }
+    var total = order;
+
+    // 3. Draw each unit as an 8: two dots along the diagonal
+    units.forEach(function (u) {
+      // when it grows in the cycle (0 to 1): its place along the threads, held back by its distance from
+      // the corner, so the network travels across the photo from the corner instead of appearing everywhere
+      var t = 0.4 * u.order / total + 0.6 * Math.min(1, Math.hypot(u.x - cx, u.y - cy) / maxD);
+      var px = u.parent ? u.parent.x - u.x : 0, py = u.parent ? u.parent.y - u.y : 0;   // where it slides out from
+      [-1, 1].forEach(function (side, i) {
+        var c = document.createElementNS(NS, "circle");
+        c.setAttribute("cx", (u.x + side * ax * GAP / 2).toFixed(1));
+        c.setAttribute("cy", (u.y + side * ay * GAP / 2).toFixed(1));
+        c.setAttribute("r", (R * (0.9 + Math.random() * 0.2)).toFixed(1));
+        g.appendChild(c); dots.push({ el: c, t: t + i * 0.004, g: 0, s: 0, px: px, py: py });
+      });
+    });
+    svg.appendChild(g); card.appendChild(svg);
+    cards.push({ card: card, dots: dots, g: g });
+  });
+
+  var FORCED = new URLSearchParams(location.search).get("p"); FORCED = FORCED === null ? null : parseFloat(FORCED);
+  var ticking = false;
+
+  // Scroll position -> progress for one card (0 = clear before the band, 1 = the band has left)
+  function scrollProgress(c) {
+    var vh = window.innerHeight, sy = window.scrollY;
+    var r = c.card.getBoundingClientRect();
+    var s0 = Math.max(0, r.top + sy - vh * 0.9);
+    return Math.max(0, Math.min(1, (sy - s0) / (r.height * 4)));   // the full cycle over 4 card heights of scrolling
+  }
+  function ease(k) { return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; }
+
+  function draw(c, p) {
+    if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows a fixed stage
+    p = Math.max(0, Math.min(1, p));
+    c.p = p;
+    // Life cycle, like mycelium, in three phases (t = each 8's place in the growth order along the threads):
+    // 1. threads grow from the corner (p 0 to 0.45);
+    // 2. in the middle, mature threads swell and melt into each other, covering areas of the image in white;
+    // 3. from p = 0.65 the oldest parts thin out from the corner while the whole pattern fades away.
+    var front = p < 0.45 ? p / 0.45 * 0.5 : 0.5 + (p - 0.45) / 0.55 * 0.4;
+    var tail = p < 0.65 ? -1 : -0.1 + (p - 0.65) / 0.35 * 1.1;
+    var swell = p < 0.3 ? 0 : p < 0.55 ? (p - 0.3) / 0.25 : 1;          // how far the middle phase has gone
+    c.dots.forEach(function (d) {
+      var a = (front - d.t) / FRONT, b = (d.t - tail) / EDGE;
+      var grow = a <= 0 ? 0 : a >= 1 ? 1 : a * a * (3 - 2 * a);
+      var thin = b <= 0 ? 0 : b >= 1 ? 1 : b * b * (3 - 2 * b);
+      var age = Math.max(0, Math.min(1, (front - d.t) / 0.3));         // older threads swell more
+      d.g = grow * thin * (1 + 0.9 * swell * age);
+      if (FORCED !== null) { d.s = d.g; d.q = -1; }      // fixed stages render without easing
+    });
+    // the whole pattern fades out during the last phase (white at 40% at most)
+    var fade = p < 0.65 ? 1 : Math.max(0, 1 - (p - 0.65) / 0.35);
+    c.g.style.opacity = (0.4 * fade).toFixed(3);
+    wake();
+  }
+
+  // Each dot eases towards its target, so growth and clearing lag a little, like something living.
+  var looping = false;
+  function wake() { if (!looping) { looping = true; requestAnimationFrame(tick); } }
+  function tick() {
+    var moving = false;
+    cards.forEach(function (c) {
+      c.dots.forEach(function (d) {
+        var diff = d.g - d.s;
+        if (Math.abs(diff) > 0.004) { d.s += diff * 0.06; moving = true; } else d.s = d.g;
+        var q = Math.round(d.s * 100) / 100;
+        if (q !== d.q) {
+          d.q = q;
+          // while it grows, the 8 slides out of the unit it grew from to its own place
+          var k = Math.min(1, q), m = 1 - k;
+          d.el.style.transform = "translate(" + (d.px * m).toFixed(1) + "px," + (d.py * m).toFixed(1) + "px) scale(" + q + ")";
+        }
+      });
+    });
+    if (moving) requestAnimationFrame(tick); else looping = false;
+  }
+
+  // Hover (computer): the whole cycle plays slowly: growth from the corner, a pause, then the tail clears the image (4 s).
+  // On leaving, the pattern eases back to where the scroll has it (1.5 s).
+  function animate(c, to, dur) {
+    c.anim = { from: c.p || 0, to: to, t0: performance.now(), dur: dur };
+    if (!c.running) { c.running = true; requestAnimationFrame(function step(now) {
+      var a = c.anim; if (!a) { c.running = false; return; }
+      var k = Math.min(1, (now - a.t0) / a.dur);
+      draw(c, a.from + (a.to - a.from) * ease(k));
+      if (k < 1) requestAnimationFrame(step);
+      else { c.running = false; c.anim = null; }
+    }); }
+  }
+
+  function update() {
+    ticking = false;
+    cards.forEach(function (c) {
+      if (c.hovering || c.anim) return;                  // hover owns the card until it has settled
+      draw(c, scrollProgress(c));
+    });
+  }
+
+  if (window.matchMedia("(hover: hover)").matches) {
+    cards.forEach(function (c) {
+      var link = c.card.closest(".home__case") || c.card;
+      link.addEventListener("pointerenter", function () {
+        c.hovering = true;
+        c.p = 0; animate(c, 1, 4000);                    // start from the corner each time
+      });
+      link.addEventListener("pointerleave", function () {
+        c.hovering = false;
+        animate(c, scrollProgress(c), 1500);
+      });
+    });
+  }
+
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  update();
+})();
