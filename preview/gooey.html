@@ -29,7 +29,7 @@
     .goo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .goo-card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
     .goo-card svg g { fill: var(--goo); }
-    .goo-card svg g { opacity: 0.4; }               /* white at 40% over the image */
+    .goo-card svg g { opacity: 0.4; transition: opacity 0.6s ease; }   /* white at 40% over the image; fades in the last phase */
     .goo-card circle { transform-box: fill-box; transform-origin: center; transform: scale(0); }
     .goo-card__label { margin-top: 0.75rem; font-weight: 700; font-size: 1.125rem; }
     @media (prefers-reduced-motion: reduce) { .goo-card svg { display: none; } }
@@ -49,7 +49,7 @@
 
 <section class="sheet sheet--design">
   <h2>.design · test (scroll)</h2>
-  <p>Scroll down: on each card, Participa 8s in white at 40% grow from one of the four corners (a new corner on every visit) along branching threads, like mycelium. Before they overpower the photo, the oldest parts die back from the corner along the same threads, until the image is clean. Scrolling back reverses it. Hover over a card: the same cycle plays slowly, in about 4 s.</p>
+  <p>Scroll down: on each card, Participa 8s in white at 40% grow from one of the four corners (a new corner on every visit) along branching threads, like mycelium. In the middle, mature threads swell and melt together, covering areas in white; then the oldest parts thin out from the corner while the whole pattern fades away. Scrolling back reverses it. Hover over a card: the same cycle plays slowly, in about 4 s.</p>
   <div class="cards">
     <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="goo-card" href="#" data-corner="tr"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
@@ -74,7 +74,7 @@
    Progress: each card starts clear; the band crosses it over 2.5 card heights of scrolling. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
-  var W = 300, H = 200, STEP_X = 40, STEP_Y = 22, GAP = 17, R = 9, EDGE = 0.06, FRONT = 0.06;   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
+  var W = 300, H = 200, STEP_X = 40, STEP_Y = 22, GAP = 17, R = 9, EDGE = 0.25, FRONT = 0.06;   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var cards = [];
 
@@ -152,7 +152,7 @@
       });
     });
     svg.appendChild(g); card.appendChild(svg);
-    cards.push({ card: card, dots: dots });
+    cards.push({ card: card, dots: dots, g: g });
   });
 
   var FORCED = new URLSearchParams(location.search).get("p"); FORCED = FORCED === null ? null : parseFloat(FORCED);
@@ -171,17 +171,24 @@
     if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows a fixed stage
     p = Math.max(0, Math.min(1, p));
     c.p = p;
-    // Life cycle, like mycelium: t is each 8's place in the growth order along the threads.
-    // The network grows to about half of all units (p 0 to 0.5), keeps reaching out slowly,
-    // and from p = 0.6 the oldest parts, near the corner, die back along the same threads.
-    var front = p < 0.5 ? p / 0.5 * 0.5 : 0.5 + (p - 0.5) / 0.5 * 0.55;
-    var tail = p < 0.6 ? -1 : -0.05 + (p - 0.6) / 0.4 * 1.15;
+    // Life cycle, like mycelium, in three phases (t = each 8's place in the growth order along the threads):
+    // 1. threads grow from the corner (p 0 to 0.45);
+    // 2. in the middle, mature threads swell and melt into each other, covering areas of the image in white;
+    // 3. from p = 0.65 the oldest parts thin out from the corner while the whole pattern fades away.
+    var front = p < 0.45 ? p / 0.45 * 0.5 : 0.5 + (p - 0.45) / 0.55 * 0.4;
+    var tail = p < 0.65 ? -1 : -0.1 + (p - 0.65) / 0.35 * 1.1;
+    var swell = p < 0.3 ? 0 : p < 0.55 ? (p - 0.3) / 0.25 : 1;          // how far the middle phase has gone
     c.dots.forEach(function (d) {
       var a = (front - d.t) / FRONT, b = (d.t - tail) / EDGE;
-      var s = Math.min(a, b);
-      d.g = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s);
+      var grow = a <= 0 ? 0 : a >= 1 ? 1 : a * a * (3 - 2 * a);
+      var thin = b <= 0 ? 0 : b >= 1 ? 1 : b * b * (3 - 2 * b);
+      var age = Math.max(0, Math.min(1, (front - d.t) / 0.3));         // older threads swell more
+      d.g = grow * thin * (1 + 0.9 * swell * age);
       if (FORCED !== null) d.s = d.g;                    // fixed stages render without easing
     });
+    // the whole pattern fades out during the last phase (white at 40% at most)
+    var fade = p < 0.65 ? 1 : Math.max(0, 1 - (p - 0.65) / 0.35);
+    c.g.style.opacity = (0.4 * fade).toFixed(3);
     wake();
   }
 
