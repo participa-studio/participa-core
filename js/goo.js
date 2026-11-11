@@ -17,6 +17,7 @@
    ========================================================== */
 (function () {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (new URLSearchParams(location.search).get("shape") === "8") return;   // trial: js/sdots.js draws the graded 8s instead
   var NS = "http://www.w3.org/2000/svg";
   var W = 300, H = 200;          // drawing units; the pattern covers the card like "object-fit: cover"
   var STEP = 18;                 // grid spacing of the 8s

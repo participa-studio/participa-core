@@ -16,6 +16,10 @@
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 20, RMAX = 8, RMIN = 0.6, SWEEP = 900;
   var params = new URLSearchParams(location.search), FORCE = params.get("on") !== null, FIXED = params.get("corner");
+  // .design trial (11 Nov 2026): the diagonal 8 instead of the dot. On a site with sdots: "trial" the field runs only
+  // with ?shape=8 in the address (goo.js then stands aside); on Studio, ?shape=8 shows the 8 too.
+  var MODE = document.documentElement.getAttribute("data-sdots"), EIGHT = params.get("shape") === "8" || MODE === "8";
+  if (MODE === "trial" && !EIGHT) return;
   var hoverable = window.matchMedia("(hover: hover)").matches;
 
   document.querySelectorAll(".home__case > img").forEach(function (img) {
@@ -27,13 +31,23 @@
     var corner = FIXED || ["tl", "tr", "bl", "br"][Math.floor(Math.random() * 4)];
     var cx = corner.indexOf("r") > -1 ? W : 0, cy = corner.indexOf("b") > -1 ? H : 0;
     var maxD = Math.hypot(W, H), html = "";
+    if (EIGHT) {
+      // the 8 lies along the diagonal the wave travels on: two dots and a neck, drawn round (0,0)
+      var a = (cx === 0) === (cy === 0) ? [-4.5, -4.5, 4.5, 4.5] : [4.5, -4.5, -4.5, 4.5];
+      var sx = Math.sign(a[0] - a[2]), sy = Math.sign(a[1] - a[3]), n = 2.6 / Math.SQRT2;
+      var neck = [[a[0] - n * sy, a[1] + n * sx], [a[2] - n * sy, a[3] + n * sx], [a[2] + n * sy, a[3] - n * sx], [a[0] + n * sy, a[1] - n * sx]]
+        .map(function (q) { return q[0].toFixed(2) + "," + q[1].toFixed(2); }).join(" ");
+      var mark = '<circle cx="' + a[0] + '" cy="' + a[1] + '" r="4.6"/><circle cx="' + a[2] + '" cy="' + a[3] + '" r="4.6"/><polygon points="' + neck + '"/>';
+    }
     for (var y = STEP / 2; y < H + STEP; y += STEP) {
       for (var x = STEP / 2; x < W + STEP; x += STEP) {
         var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD);           // 0 at the corner, 1 at the far corner
         var r = RMIN + (RMAX - RMIN) * Math.pow(1 - t, 1.6);             // large near the corner, tiny far away
         if (r < 0.7) continue;
         // drawn at full size; the wave grows each dot to full size, then it settles to its graded size (--s)
-        html += '<circle cx="' + x + '" cy="' + y + '" r="' + RMAX + '" style="--d:' + Math.round(t * SWEEP) + 'ms;--s:' + (r / RMAX).toFixed(3) + '"/>';
+        var style = 'style="--d:' + Math.round(t * SWEEP) + 'ms;--s:' + (r / RMAX).toFixed(3) + '"';
+        html += EIGHT ? '<g transform="translate(' + x + ' ' + y + ')"><g ' + style + '>' + mark + '</g></g>'
+                      : '<circle cx="' + x + '" cy="' + y + '" r="' + RMAX + '" ' + style + '/>';
       }
     }
     var svg = document.createElementNS(NS, "svg");

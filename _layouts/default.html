@@ -4,7 +4,7 @@
   Header + content + footer. Every page on both sites builds on this.
 {%- endcomment -%}
 {%- assign p = site.participa %}
-<html lang="en-GB">
+<html lang="en-GB"{% if site.participa.sdots %} data-sdots="{{ site.participa.sdots }}"{% endif %}>
 <head>
 {% include head.html %}
 </head>
