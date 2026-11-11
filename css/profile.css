@@ -6,7 +6,14 @@
    ========================================================== */
 
 /* ---------- Profile ---------- */
-.profile__top { margin-top: var(--space-3); }
+.profile__top {
+  margin-top: var(--space-3);
+  /* The photo sits next to the text (11 Nov 2026): the text column stops at its reading width (40rem),
+     so the portrait no longer drifts to the far right on wide screens. */
+  grid-template-columns: minmax(0, 40rem) 16rem;
+  justify-content: start;
+  column-gap: var(--space-8);
+}
 .profile__top .cv__lead { margin-top: 0; }
 /* The opening: name line and intro use .page__opening (components.css). */
 /* Location as a label under the headline, so it no longer floats between the opening and the body */
@@ -152,6 +159,7 @@
 @media (max-width: 720px) {
   /* Phones: the portrait moves above the introduction as a small circle (option B, 11 Nov) */
   .profile { display: flex; flex-direction: column; }
+  .profile__top { grid-template-columns: 1fr; }   /* one column on phones, as before */
   .profile .profile__side { display: contents; }
   .profile__side picture { order: -1; }
   .profile__portrait {
