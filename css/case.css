@@ -138,15 +138,16 @@ body.page main {
 }
 
 /* ---------- Note at the end (sources, confidentiality) ---------- */
+/* The note: a small line at the end of the case, no divider of its own (11 Nov 2026).
+   After the artefacts it sits right under their closing line. */
 .case__note {
-  margin: var(--space-8) 0 0;
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--colour-ink);
+  margin: var(--space-6) 0 0;
   max-width: 40rem;
   font-size: 0.75rem;
   line-height: 1.5;
 }
 .case__note a { color: inherit; }
+.case__artefacts + .case__note { margin-top: var(--space-2); }
 
 /* Phones: blocks stack */
 @media (max-width: 720px) {
