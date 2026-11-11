@@ -4,8 +4,9 @@
    Over every case card image (Work page and home page), Participa 8s in white at 40%
    grow from one of the four corners (random on every visit) along branching threads, like mycelium,
    swell into white areas in the middle of the cycle, then thin out from the corner and fade away.
-   Scroll drives the cycle (scrolling back reverses it); hovering a card plays the full cycle in about 4 s.
-   Phones: scroll only. Reduced motion: no pattern.
+   It moves on its own, very slowly, like a lava lamp (one cycle in about 45 s per card, each card at its own point);
+   scrolling pushes the clock along (back when scrolling up), and hovering a card makes its time run 6 times faster.
+   Cards off screen pause. Reduced motion: no pattern.
    Developed in preview/gooey.html (test switches ?p= and ?corner= work there and here).
    ========================================================== */
 (function () {
@@ -118,15 +119,6 @@
   var FORCED = new URLSearchParams(location.search).get("p"); FORCED = FORCED === null ? null : parseFloat(FORCED);
   var ticking = false;
 
-  // Scroll position -> progress for one card (0 = clear before the band, 1 = the band has left)
-  function scrollProgress(c) {
-    var vh = window.innerHeight, sy = window.scrollY;
-    var r = c.card.getBoundingClientRect();
-    var s0 = Math.max(0, r.top + sy - vh * 0.9);
-    return Math.max(0, Math.min(1, (sy - s0) / (r.height * 4)));   // the full cycle over 4 card heights of scrolling
-  }
-  function ease(k) { return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; }
-
   function draw(c, p) {
     if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows a fixed stage
     p = Math.max(0, Math.min(1, p));
@@ -149,18 +141,15 @@
     // the whole pattern fades out during the last phase (white at 40% at most)
     var fade = p < 0.65 ? 1 : Math.max(0, 1 - (p - 0.65) / 0.35);
     c.g.style.opacity = (0.4 * fade).toFixed(3);
-    wake();
   }
 
   // Each dot eases towards its target, so growth and clearing lag a little, like something living.
-  var looping = false;
-  function wake() { if (!looping) { looping = true; requestAnimationFrame(tick); } }
-  function tick() {
-    var moving = false;
+  function ease_dots() {
     cards.forEach(function (c) {
+      if (!c.visible && FORCED === null) return;
       c.dots.forEach(function (d) {
         var diff = d.g - d.s;
-        if (Math.abs(diff) > 0.004) { d.s += diff * 0.06; moving = true; } else d.s = d.g;
+        if (Math.abs(diff) > 0.004) d.s += diff * 0.06; else d.s = d.g;
         var q = Math.round(d.s * 100) / 100;
         if (q !== d.q) {
           d.q = q;
@@ -170,46 +159,54 @@
         }
       });
     });
-    if (moving) requestAnimationFrame(tick); else looping = false;
   }
 
-  // Hover (computer): the whole cycle plays slowly: growth from the corner, a pause, then the tail clears the image (4 s).
-  // On leaving, the pattern eases back to where the scroll has it (1.5 s).
-  function animate(c, to, dur) {
-    c.anim = { from: c.p || 0, to: to, t0: performance.now(), dur: dur };
-    if (!c.running) { c.running = true; requestAnimationFrame(function step(now) {
-      var a = c.anim; if (!a) { c.running = false; return; }
-      var k = Math.min(1, (now - a.t0) / a.dur);
-      draw(c, a.from + (a.to - a.from) * ease(k));
-      if (k < 1) requestAnimationFrame(step);
-      else { c.running = false; c.anim = null; }
-    }); }
-  }
+  // ---------- The clock: a slow lava lamp that the scroll and the pointer push along ----------
+  // Every card runs its own cycle (grow, swell, fade) over CYCLE seconds, starting at a random point,
+  // so the cards never move in step. Scrolling adds to the clock: four card heights of scrolling
+  // make one full cycle (back when scrolling up). Hovering a card makes its time run 6 times faster.
+  // When a cycle ends the image is clean; the next one grows from another corner (the pattern is mirrored).
+  var CYCLE = 45;                                                    // seconds for one cycle on its own
+  var hoverable = window.matchMedia("(hover: hover)").matches;
+  var lastSy = window.scrollY, lastT = performance.now();
 
-  function update() {
-    ticking = false;
-    cards.forEach(function (c) {
-      if (c.hovering || c.anim) return;                  // hover owns the card until it has settled
-      draw(c, scrollProgress(c));
-    });
-  }
-
-  if (window.matchMedia("(hover: hover)").matches) {
-    cards.forEach(function (c) {
+  cards.forEach(function (c) {
+    c.clock = Math.random() * CYCLE;
+    c.speed = 1; c.target = 1; c.round = Math.floor(c.clock / CYCLE);
+    c.visible = true;
+    c.svg = c.card.querySelector("svg");
+    if (hoverable) {
       var link = c.card.closest(".home__case") || c.card;
-      link.addEventListener("pointerenter", function () {
-        c.hovering = true;
-        c.p = 0; animate(c, 1, 4000);                    // start from the corner each time
-      });
-      link.addEventListener("pointerleave", function () {
-        c.hovering = false;
-        animate(c, scrollProgress(c), 1500);
-      });
+      link.addEventListener("pointerenter", function () { c.target = 6; });
+      link.addEventListener("pointerleave", function () { c.target = 1; });
+    }
+  });
+  if ("IntersectionObserver" in window) {                            // pause cards that are off screen
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { cards.forEach(function (c) { if (c.card === e.target) c.visible = e.isIntersecting; }); });
     });
+    cards.forEach(function (c) { io.observe(c.card); });
   }
 
-  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  update();
+  function frame(now) {
+    var dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
+    var sy = window.scrollY, dy = sy - lastSy; lastSy = sy;
+    cards.forEach(function (c) {
+      c.speed += (c.target - c.speed) * 0.05;                        // hover speeds up and slows down gently
+      var h = c.card.getBoundingClientRect().height || 1;
+      c.clock += dt * c.speed + dy / (h * 4) * CYCLE;
+      var round = Math.floor(c.clock / CYCLE);
+      if (round !== c.round) {                                       // a new cycle: grow from another corner
+        c.round = round;
+        var fx = Math.random() < 0.5 ? -1 : 1, fy = Math.random() < 0.5 ? -1 : 1;
+        c.svg.style.transform = "scale(" + fx + "," + fy + ")";
+      }
+      if (c.visible) draw(c, c.clock / CYCLE - round);
+    });
+    ease_dots();
+    requestAnimationFrame(frame);
+  }
+
+  if (FORCED !== null) { cards.forEach(function (c) { draw(c, FORCED); }); ease_dots(); }
+  else requestAnimationFrame(frame);
 })();
