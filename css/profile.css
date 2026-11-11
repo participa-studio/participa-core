@@ -8,15 +8,7 @@
 /* ---------- Profile ---------- */
 .profile__top { margin-top: var(--space-3); }
 .profile__top .cv__lead { margin-top: 0; }
-/* The opening (11 Nov 2026): the intro in the quote face, italic, as the entrance to the page.
-   Everything after it is body text. */
-.profile .cv__lead,
-.profile .profile__name-line {
-  font-family: var(--font-quote);
-  font-style: italic;
-  font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px, as the quotes */
-  line-height: 1.4;
-}
+/* The opening: name line and intro use .page__opening (components.css). */
 /* Location as a label under the headline, so it no longer floats between the opening and the body */
 .profile__location {
   margin: var(--space-1) 0 0;

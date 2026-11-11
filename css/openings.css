@@ -1,0 +1,13 @@
+/* ==========================================================
+   PARTICIPA CORE — PAGE OPENINGS (11 Nov 2026)
+   The single rule for every opening line on both sites: the sentence under the heading
+   on Home, Work, Writing, Contact, About and Profile. Change it here to change them all.
+   Loaded last in core.css, so it wins over the older lead styles. Case leads stay in Inter.
+   ========================================================== */
+
+.page__opening {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px, as the quotes */
+  line-height: 1.4;
+}

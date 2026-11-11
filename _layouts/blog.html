@@ -8,7 +8,7 @@ layout: default
 {%- endcomment -%}
 <article class="blog">
   <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
-  {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
+  {%- if page.intro %}<p class="case__lead page__opening">{{ page.intro }}</p>{% endif %}
 
   {%- if site.posts.size > 0 %}
   <ul class="blog__list">

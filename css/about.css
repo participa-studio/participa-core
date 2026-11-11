@@ -12,14 +12,10 @@
   line-height: 1.6;
 }
 
-/* The one idea, under the heading, in the quote face (11 Nov 2026), as the Profile opening */
+/* The one idea, under the heading; type from .page__opening (components.css) */
 .about__opening {
   margin: var(--space-3) 0 0;
   max-width: 40rem;
-  font-family: var(--font-quote);
-  font-style: italic;
-  font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px */
-  line-height: 1.4;
   text-wrap: balance;
 }
 

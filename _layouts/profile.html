@@ -24,8 +24,8 @@ layout: default
   {%- comment -%} Name and headline run full width; the CV box aligns with the text below them. {%- endcomment -%}
   <header class="cv__top profile__top">
     <div class="cv__intro">
-      {%- if page.name_line %}<p class="profile__name-line">{{ page.name_line | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
-      {%- if page.intro %}<p class="cv__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+      {%- if page.name_line %}<p class="profile__name-line page__opening">{{ page.name_line | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+      {%- if page.intro %}<p class="cv__lead page__opening">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
       {%- if page.practice %}
       <p class="about__text profile__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
       {%- endif %}
