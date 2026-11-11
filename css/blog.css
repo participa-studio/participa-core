@@ -110,8 +110,8 @@
   .blog__item { grid-template-columns: 1fr; row-gap: var(--space-1); }
   .blog__excerpt { grid-column: 1; }
   .blog__date, .blog__title, .blog__excerpt, .blog__thumb { grid-column: 1; grid-row: auto; }
-  /* phones (12 Nov 2026): a small circle on the left, the date, title and lead beside it */
-  .blog__item:has(.blog__thumb) { grid-template-columns: 4.5rem minmax(0, 1fr); column-gap: 1.25rem; }
+  /* phones (12 Nov 2026): a small circle (88 px) on the left, the date, title and lead beside it */
+  .blog__item:has(.blog__thumb) { grid-template-columns: 5.5rem minmax(0, 1fr); column-gap: 1.25rem; }   /* circle 88 px */
   .blog__item:has(.blog__thumb) > * { grid-column: 2; }
   .blog__item:has(.blog__thumb) .blog__thumb { grid-column: 1; grid-row: 1 / span 3; margin-top: 0.25rem; }
 }
