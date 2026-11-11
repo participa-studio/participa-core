@@ -18,7 +18,7 @@ layout: default
   <section class="home__opening{% if page.highlights %} home__opening--highlights{% endif %}">
     <div class="home__opening-main">
     <h1 class="home__statement">{{ page.statement }}</h1>
-    {%- if page.intro %}<p class="case__lead">{{ page.intro }}</p>{% endif %}
+    {%- if page.intro %}<p class="case__lead page__opening">{{ page.intro }}</p>{% endif %}
     {%- if page.actions %}
     <ul class="home__actions">
       {%- for a in page.actions %}

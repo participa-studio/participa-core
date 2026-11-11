@@ -44,6 +44,14 @@ body.page main {
   font-size: 1.125rem;
   line-height: 1.5;
 }
+/* Page openings in the quote face (11 Nov 2026): the line under the heading on Home, Work and Contact,
+   as on Profile and About. Case leads stay in Inter. */
+.page__opening {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px */
+  line-height: 1.4;
+}
 
 /* Key facts: label above value, in a row that wraps */
 .case__facts {
