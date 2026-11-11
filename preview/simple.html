@@ -35,8 +35,8 @@
     @keyframes dots-one {
       0%   { opacity: 0; }
       2%   { opacity: 0.4; }     /* white at 40% */
-      26%  { opacity: 0.4; }
-      28%  { opacity: 0; }
+      11%  { opacity: 0.4; }     /* a short stay: the wave passes as a hint */
+      14%  { opacity: 0; }
       100% { opacity: 0; }
     }
     @media (prefers-reduced-motion: reduce) { .dots-card svg { display: none; } }
@@ -45,7 +45,7 @@
 <body>
 <section class="sheet">
   <h2>.design · simple version (test)</h2>
-  <p>Diagonal 8s in white at 40%, close together. Each 8 fades in on its own, one after the other from a corner, holds, and fades out again, so a wave of whole shapes crosses the card about every 24 s. The shapes are set up once; the browser runs the timing, nothing is computed while it plays. Hover makes it run faster.</p>
+  <p>Diagonal 8s in white at 40%, only along the edges of the photo, thinning towards the middle. Each 8 fades in on its own, one after the other from a corner, stays briefly and fades out again, so a short wave passes around the card about every 24 s, as a hint. The shapes are set up once; the browser runs the timing, nothing is computed while it plays. Hover makes it run faster.</p>
   <div class="cards">
     <a class="dots-card" href="#" data-corner="bl" style="--delay:-3s"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="dots-card" href="#" data-corner="tr" style="--delay:-11s"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
@@ -78,6 +78,9 @@
       var maxD = Math.hypot(W, H), html = "";
       for (var y = STEP / 2; y < H + STEP; y += STEP) {
         for (var x = STEP / 2; x < W + STEP; x += STEP) {
+          // only near the edges: certain within a narrow margin, thinning out towards the middle, so the photo stays clear
+          var edge = Math.min(x, W - x, y, H - y);
+          if (Math.random() > Math.max(0, Math.min(1, 1.4 - edge / 26))) continue;
           var t = Math.hypot(x - cx, y - cy) / maxD + (Math.random() - 0.5) * 0.04;   // a little irregular
           var delay = start + t * SWEEP * DUR - DUR;                                   // nearer the corner = earlier
           html += '<use href="#' + id + '" x="' + x + '" y="' + y + '" style="animation-delay:' + delay.toFixed(2) + 's"/>';
