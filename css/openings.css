@@ -23,6 +23,9 @@
   color: var(--colour-ink);
 }
 .opening-mark svg { display: block; height: 10px; width: auto; margin: 0 auto; overflow: visible; }   /* 10 px tall, width in proportion (about 31 px), centred */
+/* Optical centring (11 Nov 2026): the text is left-aligned with a ragged right edge, so its visual centre
+   sits left of the column's middle. The mark moves left by 2.5% of the column: about 16 px on desktop, 9 px on phones. */
+.opening-mark svg { position: relative; left: -2.5%; }
 .opening-mark path {
   fill: none;
   stroke: currentColor;
