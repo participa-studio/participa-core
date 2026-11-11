@@ -1,8 +1,8 @@
 /* ==========================================================
    PARTICIPA CORE — PAGE OPENINGS (11 Nov 2026)
    The single rule for every opening line on both sites: the sentence under the heading
-   on Home, Work, Writing, Contact, About and Profile. Change it here to change them all.
-   Loaded last in core.css, so it wins over the older lead styles. Case leads stay in Inter.
+   on Home, Work, Writing, Contact, About, Profile and every case page (case leads since 11 Nov 2026). Change it here to change them all.
+   Loaded last in core.css, so it wins over the older lead styles.
    ========================================================== */
 
 .page__opening {
