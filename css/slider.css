@@ -62,10 +62,25 @@
   text-align: center;
 }
 
+/* Caption as a label (option A, 11 Nov 2026): the slide number, then the caption in small bold capitals,
+   in the style of the facts labels */
+.slider__track { counter-reset: slide; }
+.slider__slide { counter-increment: slide; }
 .slider__slide figcaption {
-  margin-top: var(--space-1);
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  margin-top: 0.75rem;
+  font-size: 0.6875rem;          /* 11 px */
+  font-weight: var(--weight-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+.slider__slide figcaption::before {
+  content: counter(slide, decimal-leading-zero);
+  font-weight: var(--weight-body);
+  opacity: 0.65;
 }
 
 /* Controls row: dots in the middle, arrows at the sides */
