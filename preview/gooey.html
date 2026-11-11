@@ -49,7 +49,7 @@
 
 <section class="sheet sheet--design">
   <h2>.design · test (scroll)</h2>
-  <p>Scroll down. As each card moves up the screen, the pattern grows from a corner and merges until it covers the whole image in white at 40%. Scrolling back reverses it.</p>
+  <p>Scroll down. As each card moves up the screen, a band of connected dots in white at 40% grows in from a corner, travels across the image and leaves on the other side. Scrolling back reverses it.</p>
   <div class="cards">
     <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="goo-card" href="#" data-corner="tr"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
@@ -66,12 +66,13 @@
 /* Builds the dot pattern inside every .goo-card and lets the scroll drive it.
    Units (two dots side by side, the Participa symbol) sit on a diagonal grid over the whole image.
    Each unit has a threshold: its distance from the chosen corner. As the card moves up the screen,
-   a growth front travels from the corner across the image; units behind the front swell and merge
-   (gooey filter), so the texture morphs into a full white veil at 40%. Scrolling back reverses it.
-   Progress: each card starts clear and is fully covered after scrolling 2 card heights from its starting point. */
+   a band travels from the corner across the image and out at the opposite side: units swell and merge
+   (gooey filter) as the band reaches them, then shrink away behind it. The image is never fully covered.
+   Scrolling back reverses it.
+   Progress: each card starts clear; the band crosses it over 2.5 card heights of scrolling. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
-  var W = 300, H = 200, STEP_X = 44, STEP_Y = 22, GAP = 20, R = 13, BAND = 0.6;   // BAND: how wide the growth front is (share of the run)
+  var W = 300, H = 200, STEP_X = 44, STEP_Y = 22, GAP = 20, R = 13, HALF = 0.22;   // HALF: half the width of the travelling band (share of the diagonal)
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var cards = [];
 
@@ -100,7 +101,7 @@
       for (var x = -STEP_X + shift; x <= W + STEP_X; x += STEP_X) {
         var y = row * STEP_Y;
         // threshold: distance share, with a little irregularity so the front is organic
-        var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD) * (1 - BAND) + ((row * 13 + Math.round(x)) % 7) / 7 * 0.08;
+        var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD) + ((row * 13 + Math.round(x)) % 7) / 7 * 0.06;
         [x - GAP / 2, x + GAP / 2].forEach(function (dx, i) {
           var c = document.createElementNS(NS, "circle");
           c.setAttribute("cx", dx.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", R);
@@ -112,10 +113,11 @@
     cards.push({ card: card, dots: dots });
   });
 
+  var FORCED = new URLSearchParams(location.search).get("p"); FORCED = FORCED === null ? null : parseFloat(FORCED);
   var ticking = false;
   // Each card starts clear and grows from its own starting point:
   // from the moment its top passes 90% of the screen height (or from the top of the page for cards
-  // already visible on arrival), until it is fully covered after scrolling 2 card heights.
+  // already visible on arrival); the band has crossed the card after 2.5 card heights of scrolling.
   function update() {
     ticking = false;
     var vh = window.innerHeight, sy = window.scrollY;
@@ -123,10 +125,13 @@
       var r = c.card.getBoundingClientRect();
       var topAbs = r.top + sy;
       var s0 = Math.max(0, topAbs - vh * 0.9);
-      var p = (sy - s0) / (r.height * 2);
+      var p = (sy - s0) / (r.height * 2.5);
+      if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows the wave halfway
       p = Math.max(0, Math.min(1, p));
+      // the band's centre travels from just outside the start corner to just past the opposite corner
+      var front = -HALF + p * (1 + 2 * HALF + 0.06);
       c.dots.forEach(function (d) {
-        var s = (p - d.t) / BAND;                            // each unit swells over a short stretch behind the front
+        var s = 1 - Math.abs(front - d.t) / HALF;            // grows as the band arrives, shrinks as it moves on
         s = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s);   // smooth start and stop
         s = Math.round(s * 50) / 50;
         if (s !== d.s) { d.s = s; d.el.style.transform = "scale(" + s + ")"; }
