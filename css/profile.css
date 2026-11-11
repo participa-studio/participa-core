@@ -40,6 +40,9 @@
   line-height: 1.6;
   text-wrap: balance;   /* no single word left alone on the last line */
 }
+/* The Participa line opens the page, the intro follows (option B, 11 Nov 2026) */
+.profile__top .profile__name-line { margin-top: 0; }
+.profile__name-line + .cv__lead { margin-top: var(--space-2); }
 .profile__name-line a, .profile__earlier a, .profile .cv__lead a { color: inherit; text-underline-offset: 0.2em; }
 .profile__practice { margin-top: var(--space-4); }
 

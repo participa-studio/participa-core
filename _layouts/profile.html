@@ -9,7 +9,7 @@ layout: default
     person, headline, location,
     portrait (image, upright 4:5), portrait_square (optional: a square crop on the face, used as a small circle on phones), portrait_alt
     (no portrait = no frame drawn)
-    intro (first person), name_line (where the name Participa comes from; Markdown allowed),
+    name_line (where the name Participa comes from; Markdown allowed; shown first, 11 Nov 2026), intro (first person),
     practice (longer text; Markdown allowed),
     experience_heading, experience (org, role, years, result, link),
     earlier (one line under the list; Markdown allowed),
@@ -24,8 +24,8 @@ layout: default
   {%- comment -%} Name and headline run full width; the CV box aligns with the text below them. {%- endcomment -%}
   <header class="cv__top profile__top">
     <div class="cv__intro">
-      {%- if page.intro %}<p class="cv__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
       {%- if page.name_line %}<p class="profile__name-line">{{ page.name_line | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+      {%- if page.intro %}<p class="cv__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
       {%- if page.practice %}
       <p class="about__text profile__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
       {%- endif %}

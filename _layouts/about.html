@@ -6,13 +6,15 @@ layout: default
   The page is a text file with these fields:
     heading, intro,
     practice (what this site offers) + practice_links (title + url),
-    direction, throughline (leads into the sister panel),
+    throughline (the one idea; shown under the heading in the quote face, 11 Nov 2026),
+    direction,
     sides (the sister site only: own = design or studio, name, tag, url, text, links), facts (label + value; links allowed as [text](url), e.g. a Contact fact), contact (optional line, Markdown allowed)
   Written once; each site fills it with its own text.
 {%- endcomment -%}
 <article class="about">
   <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
-  {%- if page.intro %}<p class="case__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  {%- if page.throughline %}<p class="about__opening">{{ page.throughline | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  {%- if page.intro %}<p class="about__text about__intro">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.practice %}<p class="about__text about__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.practice_links %}
   <ul class="about__side-links about__practice-links">
@@ -21,7 +23,6 @@ layout: default
   {%- endif %}
 
   {%- if page.direction %}<p class="about__text about__direction">{{ page.direction | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
-  {%- if page.throughline %}<p class="about__text about__throughline">{{ page.throughline | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.sides %}
   {% include sides.html sides=page.sides %}
   {%- endif %}
