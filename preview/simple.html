@@ -67,15 +67,20 @@
       var svg = document.createElementNS(NS, "svg");
       svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); svg.setAttribute("aria-hidden", "true");
       var a = dir === "M-4.5 -4.5" ? [-4.5, -4.5, 4.5, 4.5] : [4.5, -4.5, -4.5, 4.5];
-      svg.innerHTML = '<defs><path id="e-' + corner + '" d="M' + a[0] + ' ' + a[1] + ' L' + a[2] + ' ' + a[3] + '" stroke="#fff" stroke-width="5" stroke-linecap="round"/>' +
-        '<g id="u-' + corner + '"><circle cx="' + a[0] + '" cy="' + a[1] + '" r="4.6"/><circle cx="' + a[2] + '" cy="' + a[3] + '" r="4.6"/><use href="#e-' + corner + '"/></g></defs>';
+      // the 8: two dots and a solid neck, all plain filled shapes (no strokes, no nested references)
+      var n = 2.6 / Math.SQRT2;                                                       // half the neck width, across the diagonal
+      var neck = [[a[0] + n * Math.sign(a[1] - a[3]) * -1, a[1] + n * Math.sign(a[0] - a[2])], [a[2] + n * Math.sign(a[1] - a[3]) * -1, a[3] + n * Math.sign(a[0] - a[2])],
+                  [a[2] - n * Math.sign(a[1] - a[3]) * -1, a[3] - n * Math.sign(a[0] - a[2])], [a[0] - n * Math.sign(a[1] - a[3]) * -1, a[1] - n * Math.sign(a[0] - a[2])]];
+      var id = "u-" + corner + "-" + Math.random().toString(36).slice(2, 7);
+      svg.innerHTML = '<defs><g id="' + id + '"><circle cx="' + a[0] + '" cy="' + a[1] + '" r="4.6"/><circle cx="' + a[2] + '" cy="' + a[3] + '" r="4.6"/>' +
+        '<polygon points="' + neck.map(function (q) { return q[0].toFixed(2) + "," + q[1].toFixed(2); }).join(" ") + '"/></g></defs>';
       var start = parseFloat(getComputedStyle(card).getPropertyValue("--delay")) || 0;
       var maxD = Math.hypot(W, H), html = "";
       for (var y = STEP / 2; y < H + STEP; y += STEP) {
         for (var x = STEP / 2; x < W + STEP; x += STEP) {
           var t = Math.hypot(x - cx, y - cy) / maxD + (Math.random() - 0.5) * 0.04;   // a little irregular
           var delay = start + t * SWEEP * DUR - DUR;                                   // nearer the corner = earlier
-          html += '<use href="#u-' + corner + '" x="' + x + '" y="' + y + '" style="animation-delay:' + delay.toFixed(2) + 's"/>';
+          html += '<use href="#' + id + '" x="' + x + '" y="' + y + '" style="animation-delay:' + delay.toFixed(2) + 's"/>';
         }
       }
       svg.insertAdjacentHTML("beforeend", html);
