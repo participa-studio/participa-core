@@ -19,9 +19,8 @@
        ========================================================== */
     body { margin: 0; font-family: var(--font-body); color: var(--colour-ink); }
     .sheet { padding: 3rem var(--inset); }
-    .sheet--design { background: #75D5DC; --goo: #75D5DC; }
-    .sheet--studio { background: #F6DF5B; --goo: #F6DF5B; }
-    .sheet h2 { margin: 0 0 0.5rem; font-size: 0.8125rem; letter-spacing: 0.16em; text-transform: uppercase; }
+    .sheet--design { background: #75D5DC; --goo: #FFFFFF; }
+        .sheet h2 { margin: 0 0 0.5rem; font-size: 0.8125rem; letter-spacing: 0.16em; text-transform: uppercase; }
     .sheet p { margin: 0 0 1.5rem; max-width: 40rem; font-size: 1rem; line-height: 1.5; }
     .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
     @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
@@ -30,15 +29,8 @@
     .goo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .goo-card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
     .goo-card svg g { fill: var(--goo); }
-    .goo-card circle {
-      transform-box: fill-box;
-      transform-origin: center;
-      transform: scale(0);
-      transition: transform 0.45s cubic-bezier(.3,1.5,.5,1);   /* a small overshoot, like a drop settling */
-      transition-delay: var(--d, 0ms);
-    }
-    .goo-card.is-on circle { transform: scale(1); }
-    .goo-card.is-leaving circle { transition-timing-function: cubic-bezier(.5,0,.7,.4); transition-duration: 0.35s; }
+    .goo-card svg g { opacity: 0.4; }               /* white at 40% over the image */
+    .goo-card circle { transform-box: fill-box; transform-origin: center; transform: scale(0); }
     .goo-card__label { margin-top: 0.75rem; font-weight: 700; font-size: 1.125rem; }
     @media (prefers-reduced-motion: reduce) { .goo-card svg { display: none; } }
   </style>
@@ -56,50 +48,41 @@
 </svg>
 
 <section class="sheet sheet--design">
-  <h2>.design · test</h2>
-  <p>Move the pointer over a card. On a phone, the pattern grows as each card scrolls into view.</p>
+  <h2>.design · test (scroll)</h2>
+  <p>Scroll down. As each card moves up the screen, the pattern grows from a corner and merges until it covers the whole image in white at 40%. Scrolling back reverses it.</p>
   <div class="cards">
     <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="goo-card" href="#" data-corner="tr"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
     <a class="goo-card" href="#" data-corner="br"><img src="https://participa.design/images/placeholders/placeholder-03.jpg" alt=""></a>
+    <a class="goo-card" href="#" data-corner="tl"><img src="https://participa.design/images/placeholders/placeholder-07.jpg" alt=""></a>
+    <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-06.jpg" alt=""></a>
   </div>
+  <div style="height:110vh"></div>
 </section>
 
-<section class="sheet sheet--studio">
-  <h2>.studio · test</h2>
-  <p>The same pattern in the Studio yellow.</p>
-  <div class="cards">
-    <a class="goo-card" href="#" data-corner="tl"><img src="https://participa.design/images/placeholders/placeholder-06.jpg" alt=""></a>
-    <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-04.jpg" alt=""></a>
-    <a class="goo-card" href="#" data-corner="tr"><img src="https://participa.design/images/placeholders/placeholder-07.jpg" alt=""></a>
-  </div>
-</section>
+
 
 <script>
-/* Builds the dot pattern inside every .goo-card.
-   The units sit on a diagonal grid; each unit is two dots side by side (the Participa symbol).
-   Only units near the chosen corner are drawn, so the pattern covers about a third of the image.
-   Each unit waits a little longer the further it is from the corner, so the pattern grows outwards. */
+/* Builds the dot pattern inside every .goo-card and lets the scroll drive it.
+   Units (two dots side by side, the Participa symbol) sit on a diagonal grid over the whole image.
+   Each unit has a threshold: its distance from the chosen corner. As the card moves up the screen,
+   a growth front travels from the corner across the image; units behind the front swell and merge
+   (gooey filter), so the texture morphs into a full white veil at 40%. Scrolling back reverses it.
+   Progress: each card starts clear and is fully covered after scrolling 2 card heights from its starting point. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
-  var W = 300, H = 200;            // drawing units; the svg stretches to the card
-  var STEP_X = 44, STEP_Y = 22;    // grid spacing
-  var GAP = 20;                    // distance between the two dots of a unit
-  var R_MAX = 15, R_MIN = 4.5;     // dots are large near the corner (they melt into one mass) and small at the front
-  var REACH = 0.6;                 // how far from the corner the pattern goes (share of the diagonal)
+  var W = 300, H = 200, STEP_X = 44, STEP_Y = 22, GAP = 20, R = 13, BAND = 0.6;   // BAND: how wide the growth front is (share of the run)
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var cards = [];
 
   document.querySelectorAll(".goo-card").forEach(function (card) {
     var corner = card.getAttribute("data-corner") || "bl";
-    var cx = corner.indexOf("r") > -1 ? W : 0;
-    var cy = corner.indexOf("b") > -1 ? H : 0;
-    var maxD = Math.hypot(W, H) * REACH;
-
+    var cx = corner.indexOf("r") > -1 ? W : 0, cy = corner.indexOf("b") > -1 ? H : 0;
+    var maxD = Math.hypot(W, H);
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
     svg.setAttribute("aria-hidden", "true");
-    // Each card gets its own filter, so the shape can be repainted in the page colour
-    // (without this, the faintest edges of the blur turn into black specks).
     var id = "goo-" + Math.random().toString(36).slice(2, 8);
     var colour = getComputedStyle(card).getPropertyValue("--goo").trim() || "#ffffff";
     var defs = document.createElementNS(NS, "defs");
@@ -107,51 +90,53 @@
       '<filter id="' + id + '" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
       '<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>' +
       '<feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 22 -10" result="shape"/>' +
-      '<feFlood flood-color="' + colour + '"/>' +
-      '<feComposite in2="shape" operator="in"/>' +
-      '</filter>';
+      '<feFlood flood-color="' + colour + '"/><feComposite in2="shape" operator="in"/></filter>';
     svg.appendChild(defs);
     var g = document.createElementNS(NS, "g");
     g.setAttribute("filter", "url(#" + id + ")");
-
+    var dots = [];
     for (var row = -1; row * STEP_Y <= H + STEP_Y; row++) {
       var shift = (row % 2) ? STEP_X / 2 : 0;
       for (var x = -STEP_X + shift; x <= W + STEP_X; x += STEP_X) {
         var y = row * STEP_Y;
-        var d = Math.hypot(x - cx, y - cy);
-        if (d > maxD) continue;
-        // a little irregularity at the edge, so the front is organic rather than a straight line
-        if (d > maxD * 0.75 && ((row * 7 + Math.round(x / 11)) % 3 === 0)) continue;
-        var t = d / maxD;
-        var r = R_MAX - (R_MAX - R_MIN) * Math.pow(t, 0.8);
-        var delay = Math.round(t * 520);
+        // threshold: distance share, with a little irregularity so the front is organic
+        var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD) * (1 - BAND) + ((row * 13 + Math.round(x)) % 7) / 7 * 0.08;
         [x - GAP / 2, x + GAP / 2].forEach(function (dx, i) {
           var c = document.createElementNS(NS, "circle");
-          c.setAttribute("cx", dx.toFixed(1));
-          c.setAttribute("cy", y.toFixed(1));
-          c.setAttribute("r", r.toFixed(1));
-          c.style.setProperty("--d", (delay + i * 40) + "ms");
-          g.appendChild(c);
+          c.setAttribute("cx", dx.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", R);
+          g.appendChild(c); dots.push({ el: c, t: t + i * 0.015, s: -1 });
         });
       }
     }
-    svg.appendChild(g);
-    card.appendChild(svg);
-
-    var hover = window.matchMedia("(hover: hover)").matches;
-    if (hover) {
-      card.addEventListener("pointerenter", function () { card.classList.remove("is-leaving"); card.classList.add("is-on"); });
-      card.addEventListener("pointerleave", function () { card.classList.add("is-leaving"); card.classList.remove("is-on"); });
-      card.addEventListener("focus", function () { card.classList.add("is-on"); });
-      card.addEventListener("blur", function () { card.classList.remove("is-on"); });
-    } else if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries, io) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { e.target.classList.add("is-on"); io.unobserve(e.target); }
-        });
-      }, { threshold: 0.6 }).observe(card);
-    }
+    svg.appendChild(g); card.appendChild(svg);
+    cards.push({ card: card, dots: dots });
   });
+
+  var ticking = false;
+  // Each card starts clear and grows from its own starting point:
+  // from the moment its top passes 90% of the screen height (or from the top of the page for cards
+  // already visible on arrival), until it is fully covered after scrolling 2 card heights.
+  function update() {
+    ticking = false;
+    var vh = window.innerHeight, sy = window.scrollY;
+    cards.forEach(function (c) {
+      var r = c.card.getBoundingClientRect();
+      var topAbs = r.top + sy;
+      var s0 = Math.max(0, topAbs - vh * 0.9);
+      var p = (sy - s0) / (r.height * 2);
+      p = Math.max(0, Math.min(1, p));
+      c.dots.forEach(function (d) {
+        var s = (p - d.t) / BAND;                            // each unit swells over a short stretch behind the front
+        s = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s);   // smooth start and stop
+        s = Math.round(s * 50) / 50;
+        if (s !== d.s) { d.s = s; d.el.style.transform = "scale(" + s + ")"; }
+      });
+    });
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  update();
 })();
 </script>
 </body>
