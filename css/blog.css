@@ -58,8 +58,13 @@
 .blog__thumb {
   grid-column: 3;
   grid-row: 1 / span 3;
+  align-self: start;           /* top in line with the title */
   width: 100%;
+  /* Every preview the same size (11 Nov 2026): one 4:3 frame, filled from the centre of the image */
+  aspect-ratio: 4 / 3;
   height: auto;
+  object-fit: cover;
+  object-position: center;
 }
 .blog__date { grid-column: 1; grid-row: 1; }
 .blog__title { grid-column: 2; grid-row: 1; }
