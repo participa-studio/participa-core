@@ -28,16 +28,15 @@ layout: default
   </dl>
   {%- endif %}
 
-  {%- if page.photos %}
+  {%- comment -%} Only photos with a file are shown. A photo listed with a caption and no file
+      stays in the page text as a note of the image still to come, and is not drawn. {%- endcomment -%}
+  {%- assign real_photos = page.photos | where_exp: "ph", "ph.src" -%}
+  {%- if real_photos.size > 0 %}
   <div class="slider" aria-roledescription="carousel" aria-label="Project photos">
     <div class="slider__track">
-      {%- for ph in page.photos %}
+      {%- for ph in real_photos %}
       <figure class="slider__slide">
-        {%- if ph.src %}
         <img src="{{ ph.src }}" alt="{{ ph.alt | default: ph.caption }}" loading="lazy">
-        {%- else %}
-        <div class="slider__placeholder">Photo {{ forloop.index }} · {{ ph.caption }}</div>
-        {%- endif %}
         {%- if ph.caption %}<figcaption>{{ ph.caption }}</figcaption>{% endif %}
       </figure>
       {%- endfor %}
