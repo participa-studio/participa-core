@@ -54,14 +54,17 @@
   line-height: 1.5;
 }
 /* Post photo in the list: a right-hand column, only on posts that have one */
-.blog__item:has(.blog__thumb) { grid-template-columns: 10rem minmax(0, 1fr) 16rem; }
+.blog__item:has(.blog__thumb) { grid-template-columns: 10rem minmax(0, 1fr) 12rem; }
 .blog__thumb {
   grid-column: 3;
   grid-row: 1 / span 3;
   align-self: start;           /* top in line with the title */
   width: 100%;
-  /* Every preview the same size (11 Nov 2026): one 4:3 frame, filled from the centre of the image */
-  aspect-ratio: 4 / 3;
+  /* Every preview the same size: a circle with a 1 px outline in the text colour (12 Nov 2026), filled from the centre of the image */
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 1px solid var(--colour-ink);
+  box-sizing: border-box;
   height: auto;
   object-fit: cover;
   object-position: center;
@@ -107,12 +110,10 @@
   .blog__item { grid-template-columns: 1fr; row-gap: var(--space-1); }
   .blog__excerpt { grid-column: 1; }
   .blog__date, .blog__title, .blog__excerpt, .blog__thumb { grid-column: 1; grid-row: auto; }
-  .blog__item:has(.blog__thumb) { grid-template-columns: 1fr; }
-  .blog__thumb { margin-top: var(--space-1); }
-  /* order on phones: date, title, lead, photo (tags follow) */
-  .blog__title { order: 1; }
-  .blog__excerpt { order: 2; }
-  .blog__thumb { order: 3; margin-top: var(--space-2); }
+  /* phones (12 Nov 2026): a small circle on the left, the date, title and lead beside it */
+  .blog__item:has(.blog__thumb) { grid-template-columns: 4.5rem minmax(0, 1fr); column-gap: 1.25rem; }
+  .blog__item:has(.blog__thumb) > * { grid-column: 2; }
+  .blog__item:has(.blog__thumb) .blog__thumb { grid-column: 1; grid-row: 1 / span 3; margin-top: 0.25rem; }
 }
 
 /* ---------- Tags: small outlined labels ---------- */
