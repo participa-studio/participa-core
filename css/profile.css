@@ -8,6 +8,24 @@
 /* ---------- Profile ---------- */
 .profile__top { margin-top: var(--space-3); }
 .profile__top .cv__lead { margin-top: 0; }
+/* The opening (11 Nov 2026): the intro in the quote face, italic, as the entrance to the page.
+   Everything after it is body text. */
+.profile .cv__lead,
+.profile .profile__name-line {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px, as the quotes */
+  line-height: 1.4;
+}
+/* Location as a label under the headline, so it no longer floats between the opening and the body */
+.profile__location {
+  margin: var(--space-1) 0 0;
+  font-size: 0.6875rem;   /* 11 px */
+  font-weight: var(--weight-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
 .profile__side { display: grid; gap: var(--space-3); align-content: start; }
 .profile__portrait {
   width: 100%;
@@ -20,6 +38,7 @@
   max-width: 40rem;
   font-size: var(--text-body);
   line-height: 1.6;
+  text-wrap: balance;   /* no single word left alone on the last line */
 }
 .profile__name-line a, .profile__earlier a, .profile .cv__lead a { color: inherit; text-underline-offset: 0.2em; }
 .profile__practice { margin-top: var(--space-4); }

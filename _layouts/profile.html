@@ -20,12 +20,12 @@ layout: default
 
   <h1 class="cv__name">{{ page.person }}</h1>
   {%- if page.headline %}<p class="cv__headline">{{ page.headline }}</p>{% endif %}
+  {%- if page.location %}<p class="profile__location">{{ page.location }}</p>{% endif %}
   {%- comment -%} Name and headline run full width; the CV box aligns with the text below them. {%- endcomment -%}
   <header class="cv__top profile__top">
     <div class="cv__intro">
       {%- if page.intro %}<p class="cv__lead">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
       {%- if page.name_line %}<p class="profile__name-line">{{ page.name_line | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
-      {%- if page.location %}<p class="cv__location">{{ page.location }}</p>{% endif %}
       {%- if page.practice %}
       <p class="about__text profile__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
       {%- endif %}

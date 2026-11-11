@@ -57,8 +57,10 @@
 }
 .home__highlights-more a { color: inherit; text-decoration: none; }
 @media (max-width: 960px) {
-  .home__opening--highlights { grid-template-columns: 1fr; gap: var(--space-6); }
-  .home__highlights { margin-top: 0; }
+  .home__opening--highlights { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  /* Same width as in the right-hand column (23rem), so the panel does not stretch
+     when it drops under the buttons; on narrow phones it takes the full width (11 Nov) */
+  .home__highlights { margin-top: 0; width: 23rem; max-width: 100%; }
 }
 
 .home__actions {
