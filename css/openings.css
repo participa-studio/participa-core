@@ -11,3 +11,38 @@
   font-size: clamp(1.25rem, 2vw, 1.5rem);   /* 20 px on phones, up to 24 px, as the quotes */
   line-height: 1.4;
 }
+
+/* ---------- Opening mark (11 Nov 2026) ----------
+   A thin sketch line between the opening and the body text (Profile, About):
+   a figure eight looped three times, centred in the text column (loops only, no lines out).
+   A short darker stroke travels along the line, once every 14 seconds. */
+.opening-mark {
+  margin: var(--space-4) 0 0;
+  max-width: 40rem;            /* the width of the text column */
+  line-height: 0;
+  color: var(--colour-ink);
+}
+.opening-mark svg { display: block; height: 10px; width: auto; margin: 0 auto; overflow: visible; }   /* 10 px tall, width in proportion (about 31 px), centred */
+.opening-mark path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.7;
+  vector-effect: non-scaling-stroke;   /* the line stays this thin on every screen */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.opening-mark__base { opacity: 0.55; }
+.opening-mark__trace {
+  stroke-width: 0.9;
+  stroke-dasharray: 8 92;
+  animation: opening-mark-trace 14s linear infinite;
+}
+@keyframes opening-mark-trace {
+  to { stroke-dashoffset: -100; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .opening-mark__trace { display: none; }
+}
+/* Equal space above and below the mark */
+.opening-mark + .about__text,
+.opening-mark + .profile__practice { margin-top: var(--space-4); }

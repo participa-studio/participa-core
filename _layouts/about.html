@@ -14,6 +14,7 @@ layout: default
 <article class="about">
   <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
   {%- if page.throughline %}<p class="about__opening page__opening">{{ page.throughline | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+  {%- if page.throughline %}{% include opening-mark.html %}{% endif %}
   {%- if page.intro %}<p class="about__text about__intro">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.practice %}<p class="about__text about__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.practice_links %}

@@ -26,6 +26,7 @@ layout: default
     <div class="cv__intro">
       {%- if page.name_line %}<p class="profile__name-line page__opening">{{ page.name_line | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
       {%- if page.intro %}<p class="cv__lead page__opening">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+      {%- include opening-mark.html %}
       {%- if page.practice %}
       <p class="about__text profile__practice">{{ page.practice | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
       {%- endif %}
