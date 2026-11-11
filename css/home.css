@@ -227,14 +227,11 @@
   .home__cases--hero .home__case-title { margin-top: var(--space-2); }
 }
 
-/* ---------- Connected dots over case images (.design, 11 Nov 2026; js/goo.js) ---------- */
+/* ---------- Connected dots over case images (.design, 11 Nov 2026; js/goo.js draws on a canvas) ---------- */
 .goo-card { position: relative; display: block; overflow: hidden; transition: transform 0.3s ease; }
-.goo-card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.goo-card svg > g > g { opacity: 0.4; }   /* white at 40% over the image (not the openings inside the mask) */
-.goo-card circle { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.goo-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: url(#goo-threshold); opacity: 0.4; }   /* white at 40% */
 .goo-card img { transform: none !important; }                       /* the frame lifts on hover, not the image inside it */
 .home__case:hover .goo-card,
 .home__case:focus-visible .goo-card { transform: translateY(-4px); }
 .home__cases--hero .goo-card { grid-row: 1 / -1; }
-@media (prefers-reduced-motion: reduce) { .goo-card svg { display: none; } }
-.goo-card mask circle { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+@media (prefers-reduced-motion: reduce) { .goo-card canvas { display: none; } }
