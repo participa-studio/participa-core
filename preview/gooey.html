@@ -136,19 +136,25 @@
         if (score > bestScore) { bestScore = score; best = v; }
       });
       best.order = order++;
+      // the unit it grows out of: the youngest grown neighbour
+      best.parent = best.nb.filter(function (w) { return w.order !== undefined && w !== best; })
+        .reduce(function (a, b) { return a.order > b.order ? a : b; });
       grown.push(best);
     }
     var total = order;
 
     // 3. Draw each unit as an 8: two dots along the diagonal
     units.forEach(function (u) {
-      var t = u.order / total;                                     // when it grows in the cycle (0 to 1)
+      // when it grows in the cycle (0 to 1): its place along the threads, held back by its distance from
+      // the corner, so the network travels across the photo from the corner instead of appearing everywhere
+      var t = 0.4 * u.order / total + 0.6 * Math.min(1, Math.hypot(u.x - cx, u.y - cy) / maxD);
+      var px = u.parent ? u.parent.x - u.x : 0, py = u.parent ? u.parent.y - u.y : 0;   // where it slides out from
       [-1, 1].forEach(function (side, i) {
         var c = document.createElementNS(NS, "circle");
         c.setAttribute("cx", (u.x + side * ax * GAP / 2).toFixed(1));
         c.setAttribute("cy", (u.y + side * ay * GAP / 2).toFixed(1));
         c.setAttribute("r", (R * (0.9 + Math.random() * 0.2)).toFixed(1));
-        g.appendChild(c); dots.push({ el: c, t: t + i * 0.004, g: 0, s: 0 });
+        g.appendChild(c); dots.push({ el: c, t: t + i * 0.004, g: 0, s: 0, px: px, py: py });
       });
     });
     svg.appendChild(g); card.appendChild(svg);
@@ -184,7 +190,7 @@
       var thin = b <= 0 ? 0 : b >= 1 ? 1 : b * b * (3 - 2 * b);
       var age = Math.max(0, Math.min(1, (front - d.t) / 0.3));         // older threads swell more
       d.g = grow * thin * (1 + 0.9 * swell * age);
-      if (FORCED !== null) d.s = d.g;                    // fixed stages render without easing
+      if (FORCED !== null) { d.s = d.g; d.q = -1; }      // fixed stages render without easing
     });
     // the whole pattern fades out during the last phase (white at 40% at most)
     var fade = p < 0.65 ? 1 : Math.max(0, 1 - (p - 0.65) / 0.35);
@@ -202,7 +208,12 @@
         var diff = d.g - d.s;
         if (Math.abs(diff) > 0.004) { d.s += diff * 0.06; moving = true; } else d.s = d.g;
         var q = Math.round(d.s * 100) / 100;
-        if (q !== d.q) { d.q = q; d.el.style.transform = "scale(" + q + ")"; }
+        if (q !== d.q) {
+          d.q = q;
+          // while it grows, the 8 slides out of the unit it grew from to its own place
+          var k = Math.min(1, q), m = 1 - k;
+          d.el.style.transform = "translate(" + (d.px * m).toFixed(1) + "px," + (d.py * m).toFixed(1) + "px) scale(" + q + ")";
+        }
       });
     });
     if (moving) requestAnimationFrame(tick); else looping = false;
