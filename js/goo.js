@@ -2,9 +2,8 @@
    PARTICIPA CORE — CONNECTED DOTS OVER CASE IMAGES (11 Nov 2026)
    .design only: switched on with participa.goo: true in the site's _config.yml.
    Over every case card image (Work page and home page), Participa 8s in white at 40%, lying on the diagonal,
-   grow from one of the four corners towards the opposite corner: dense and merged near the corner,
-   smaller dots towards the front (the first version's look). Near the far corner the start corner clears,
-   and the clearing follows, so the image is clean at the end of each cycle.
+   fixed on a grid. From one of the four corners they grow in place across the image until they touch and fill it;
+   then, from the same corner, transparent 8s open up in the same places and grow until the photo is clear.
    It moves on its own, very slowly, like a lava lamp (one cycle in about 45 s per card, each card at its own point);
    scrolling pushes the clock along (back when scrolling up), and hovering a card makes its time run 6 times faster.
    Cards off screen pause. Reduced motion: no pattern.
@@ -30,7 +29,7 @@
    Progress: each card starts clear; the band crosses it over 2.5 card heights of scrolling. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
-  var W = 300, H = 200, STEP_X = 34, STEP_Y = 34, GAP = 17, R = 9, EDGE = 0.2, FRONT = 0.45;   // FRONT: a long soft front, so dots get smaller towards it (as in the first version)   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
+  var W = 300, H = 200, STEP_X = 34, STEP_Y = 34, GAP = 17, R = 9, FILL = 1.9, FRONT = 0.45;   // FILL: how far each 8 grows (enough to touch its neighbours)   // FRONT: a long soft front, so dots get smaller towards it (as in the first version)   // how soft the clearing tail (EDGE) and the growing front (FRONT) are, as a share of the diagonal
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var cards = [];
 
@@ -50,10 +49,22 @@
       '<filter id="' + id + '" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
       '<feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>' +   // a soft melt: the 8s near the corner just merge with their neighbours
       '<feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 22 -10" result="shape"/>' +
-      '<feFlood flood-color="' + colour + '"/><feComposite in2="shape" operator="in"/></filter>';
+      '<feFlood flood-color="' + colour + '"/><feComposite in2="shape" operator="in"/></filter>' +
+      // the same melt in black, for the transparent 8s that open up in the white (used in the mask)
+      '<filter id="' + id + '-h" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
+      '<feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>' +
+      '<feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 22 -10" result="shape"/>' +
+      '<feFlood flood-color="#000"/><feComposite in2="shape" operator="in"/></filter>' +
+      '<mask id="' + id + '-m" maskUnits="userSpaceOnUse" x="-40" y="-40" width="' + (W + 80) + '" height="' + (H + 80) + '">' +
+      '<rect x="-40" y="-40" width="' + (W + 80) + '" height="' + (H + 80) + '" fill="#fff"/>' +
+      '<g filter="url(#' + id + '-h)"></g></mask>';
     svg.appendChild(defs);
+    var holes = defs.querySelector("mask g");
+    var outer = document.createElementNS(NS, "g");
+    outer.setAttribute("mask", "url(#" + id + "-m)");
     var g = document.createElementNS(NS, "g");
     g.setAttribute("filter", "url(#" + id + ")");
+    outer.appendChild(g);
     var dots = [];
     // the 8 lies along the diagonal it grows on (from the start corner towards the opposite one)
     var ax = (cx === 0 ? 1 : -1) / Math.SQRT2, ay = (cy === 0 ? 1 : -1) / Math.SQRT2;
@@ -70,11 +81,13 @@
           c.setAttribute("cx", (x + side * ax * GAP / 2).toFixed(1));
           c.setAttribute("cy", (y + side * ay * GAP / 2).toFixed(1));
           c.setAttribute("r", R);
-          g.appendChild(c); dots.push({ el: c, t: t + i * 0.01, g: 0, s: 0, px: 0, py: 0 });
+          g.appendChild(c);
+          var h = c.cloneNode(); h.setAttribute("fill", "#000"); holes.appendChild(h);   // its transparent twin
+          dots.push({ el: c, hel: h, t: t + i * 0.01, g: 0, s: 0, hg: 0, hs: 0, px: 0, py: 0 });
         });
       }
     }
-    svg.appendChild(g); card.appendChild(svg);
+    svg.appendChild(outer); card.appendChild(svg);
     cards.push({ card: card, dots: dots, g: g });
   });
 
@@ -85,18 +98,18 @@
     if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows a fixed stage
     p = Math.max(0, Math.min(1, p));
     c.p = p;
-    // Life cycle: the pattern grows from the start corner towards the opposite corner, dense and merged
-    // behind the front, smaller dots towards it (as in the first version). Once the front nears the far
-    // corner, the corner clears and the clearing follows, so the image is clean at the end of the cycle.
-    var front = -0.1 + p * 1.6;                                    // reaches the far corner at about p = 0.7
-    var tail = p < 0.55 ? -1 : -0.2 + (p - 0.55) / 0.45 * 1.45;    // clears everything by p = 1
+    // Life cycle, in place (nothing moves, the 8s only grow):
+    // 1. white 8s grow where they stand, from the start corner across the image, until they touch and fill it;
+    // 2. from the same corner, transparent 8s open up in the same places and grow, until the photo is clear.
+    var front = -0.1 + p / 0.7 * 1.3;                              // white: across the image by p ≈ 0.7
+    var hfront = p < 0.22 ? -1 : -0.1 + (p - 0.22) / 0.78 * 1.35;   // transparent: follows close behind, so the white never covers it all
     c.dots.forEach(function (d) {
-      var a = (front - d.t) / FRONT, b = (d.t - tail) / EDGE;
+      var a = (front - d.t) / FRONT, b = (hfront - d.t) / FRONT;
       var grow = a <= 0 ? 0 : a >= 1 ? 1 : a * a * (3 - 2 * a);
-      var thin = b <= 0 ? 0 : b >= 1 ? 1 : b * b * (3 - 2 * b);
-      var depth = Math.max(0, Math.min(1, (front - d.t) / 0.5));       // 0 at the front, 1 well behind it
-      d.g = grow * thin * (0.45 + 0.55 * depth);                         // small dots at the front, full 8s behind
-      if (FORCED !== null) { d.s = d.g; d.q = -1; }      // fixed stages render without easing
+      var open = b <= 0 ? 0 : b >= 1 ? 1 : b * b * (3 - 2 * b);
+      d.g = grow * FILL;                                         // small at the front, large enough to touch behind it
+      d.hg = open * FILL * 1.15;                                 // the transparent twin grows a little larger, to clear fully
+      if (FORCED !== null) { d.s = d.g; d.hs = d.hg; d.q = -1; d.hq = -1; }
     });
     c.g.style.opacity = "0.4";                           // white at 40%
   }
@@ -108,19 +121,21 @@
       c.dots.forEach(function (d) {
         var diff = d.g - d.s;
         if (Math.abs(diff) > 0.004) d.s += diff * 0.06; else d.s = d.g;
+        var hd = d.hg - d.hs;
+        if (Math.abs(hd) > 0.004) d.hs += hd * 0.06; else d.hs = d.hg;
+        var hq = Math.round(d.hs * 100) / 100;
+        if (hq !== d.hq) { d.hq = hq; d.hel.style.transform = "scale(" + hq + ")"; }
         var q = Math.round(d.s * 100) / 100;
         if (q !== d.q) {
           d.q = q;
-          // while it grows, the 8 slides out of the unit it grew from to its own place
-          var k = Math.min(1, q), m = 1 - k;
-          d.el.style.transform = "translate(" + (d.px * m).toFixed(1) + "px," + (d.py * m).toFixed(1) + "px) scale(" + q + ")";
+          d.el.style.transform = "scale(" + q + ")";
         }
       });
     });
   }
 
   // ---------- The clock: a slow lava lamp that the scroll and the pointer push along ----------
-  // Every card runs its own cycle (grow from the corner, then clear) over CYCLE seconds, starting at a random point,
+  // Every card runs its own cycle (fill with white 8s, then open with transparent 8s) over CYCLE seconds, starting at a random point,
   // so the cards never move in step. Scrolling adds to the clock: four card heights of scrolling
   // make one full cycle (back when scrolling up). Hovering a card makes its time run 6 times faster.
   // When a cycle ends the image is clean; the next one grows from another corner (the pattern is mirrored).
