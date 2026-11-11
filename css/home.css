@@ -257,8 +257,11 @@
   opacity: 0.4;                                                     /* white at 40%, as the markers and caption bands */
   transform-box: fill-box; transform-origin: center;
   transform: scale(0);
-  transition: transform 0.45s cubic-bezier(.3, 1.35, .5, 1) var(--d, 0ms);   /* a small bounce */
 }
-.sdots.is-on circle { transform: scale(1); }
-.sdots.is-leaving circle { transition-duration: 0.3s; transition-timing-function: ease-in; }
+/* hover: a wave crosses the whole card from the corner to the opposite side; each dot swells to full size
+   as the wave passes, then settles to its graded size (large at the corner, small far away) */
+.sdots.is-on circle { animation: sdots-wave 0.9s cubic-bezier(.3, 1.2, .5, 1) var(--d, 0ms) both; }
+.sdots.is-leaving circle { animation: sdots-out 0.3s ease-in both; }
+@keyframes sdots-wave { 0% { transform: scale(0); } 45% { transform: scale(1); } 100% { transform: scale(var(--s, 1)); } }
+@keyframes sdots-out { from { transform: scale(var(--s, 1)); } to { transform: scale(0); } }
 @media (prefers-reduced-motion: reduce) { .sdots svg { display: none; } }

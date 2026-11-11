@@ -3,6 +3,7 @@
    Studio only: switched on with participa.sdots: true in the site's _config.yml.
 
    Over every case card image (Experiments page and home page), plain round dots in white at 40%,
+   (12 Nov: the growth now runs as a wave all the way to the opposite corner, then settles into the gradient)
    after a halftone gradient: large near one corner (almost touching), smaller and smaller towards
    the opposite corner. Computer: on hover the field grows in from that corner, dot after dot, with a
    small bounce; when the pointer leaves it shrinks back. Phone (no hover): it grows once as the card
@@ -13,7 +14,7 @@
    ========================================================== */
 (function () {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 20, RMAX = 9.5, RMIN = 0.6, SWEEP = 520;
+  var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 20, RMAX = 9.5, RMIN = 0.6, SWEEP = 900;
   var params = new URLSearchParams(location.search), FORCE = params.get("on") !== null, FIXED = params.get("corner");
   var hoverable = window.matchMedia("(hover: hover)").matches;
 
@@ -31,7 +32,8 @@
         var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD);           // 0 at the corner, 1 at the far corner
         var r = RMIN + (RMAX - RMIN) * Math.pow(1 - t, 1.6);             // large near the corner, tiny far away
         if (r < 0.7) continue;
-        html += '<circle cx="' + x + '" cy="' + y + '" r="' + r.toFixed(2) + '" style="--d:' + Math.round(t * SWEEP) + 'ms"/>';
+        // drawn at full size; the wave grows each dot to full size, then it settles to its graded size (--s)
+        html += '<circle cx="' + x + '" cy="' + y + '" r="' + RMAX + '" style="--d:' + Math.round(t * SWEEP) + 'ms;--s:' + (r / RMAX).toFixed(3) + '"/>';
       }
     }
     var svg = document.createElementNS(NS, "svg");
