@@ -65,6 +65,7 @@
   border-radius: 50%;
   border: 1px solid var(--colour-ink);
   box-sizing: border-box;
+  box-shadow: 1px 1px 0 var(--colour-ink);   /* a 1 px hard shadow (12 Nov 2026) */
   height: auto;
   object-fit: cover;
   object-position: center;
