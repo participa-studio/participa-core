@@ -9,7 +9,7 @@
   min-height: calc(60svh - var(--header-height));   /* 60%: tightened from 70% on 5 Nov */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;   /* the heading starts at the same height on both sites and on every page (11 Nov 2026; was centred) */
 }
 .home__statement {
   margin: 0;
@@ -27,7 +27,7 @@
   grid-template-columns: minmax(0, 1fr) 23rem;
   gap: var(--space-6);
   align-items: start;      /* the block's top meets the top of the heading (12 Nov) */
-  align-content: center;
+  align-content: start;    /* top-aligned, as on Studio (11 Nov 2026; was centred) */
 }
 /* The block: a soft panel behind the list, rounded corners. Colour set per site (--colour-highlight). */
 .home__highlights {
