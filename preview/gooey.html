@@ -49,7 +49,7 @@
 
 <section class="sheet sheet--design">
   <h2>.design · test (scroll)</h2>
-  <p>Scroll down. As each card moves up the screen, a band of connected dots in white at 40% grows in from a corner, travels across the image and leaves on the other side. Scrolling back reverses it.</p>
+  <p>Scroll down: as each card moves up the screen, a band of connected dots in white at 40% grows in from a corner, travels across the image and leaves on the other side. Scrolling back reverses it. Hover over a card: the band sweeps across the whole image and clears it on the other side.</p>
   <div class="cards">
     <a class="goo-card" href="#" data-corner="bl"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="goo-card" href="#" data-corner="tr"><img src="https://participa.design/images/placeholders/placeholder-09.jpg" alt=""></a>
@@ -115,29 +115,64 @@
 
   var FORCED = new URLSearchParams(location.search).get("p"); FORCED = FORCED === null ? null : parseFloat(FORCED);
   var ticking = false;
-  // Each card starts clear and grows from its own starting point:
-  // from the moment its top passes 90% of the screen height (or from the top of the page for cards
-  // already visible on arrival); the band has crossed the card after 2.5 card heights of scrolling.
+
+  // Scroll position -> progress for one card (0 = clear before the band, 1 = the band has left)
+  function scrollProgress(c) {
+    var vh = window.innerHeight, sy = window.scrollY;
+    var r = c.card.getBoundingClientRect();
+    var s0 = Math.max(0, r.top + sy - vh * 0.9);
+    return Math.max(0, Math.min(1, (sy - s0) / (r.height * 2.5)));
+  }
+  function ease(k) { return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; }
+
+  function draw(c, p) {
+    if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows the wave halfway
+    p = Math.max(0, Math.min(1, p));
+    c.p = p;
+    // the band's centre travels from just outside the start corner to just past the opposite corner
+    var front = -HALF + p * (1 + 2 * HALF + 0.06);
+    c.dots.forEach(function (d) {
+      var s = 1 - Math.abs(front - d.t) / HALF;          // grows as the band arrives, shrinks as it moves on
+      s = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s); // smooth start and stop
+      s = Math.round(s * 50) / 50;
+      if (s !== d.s) { d.s = s; d.el.style.transform = "scale(" + s + ")"; }
+    });
+  }
+
+  // Hover (computer): the band sweeps across the whole image and clears it on the other side (1.2 s).
+  // On leaving, the pattern eases back to where the scroll has it (0.6 s).
+  function animate(c, to, dur) {
+    c.anim = { from: c.p || 0, to: to, t0: performance.now(), dur: dur };
+    if (!c.running) { c.running = true; requestAnimationFrame(function step(now) {
+      var a = c.anim; if (!a) { c.running = false; return; }
+      var k = Math.min(1, (now - a.t0) / a.dur);
+      draw(c, a.from + (a.to - a.from) * ease(k));
+      if (k < 1) requestAnimationFrame(step);
+      else { c.running = false; c.anim = null; }
+    }); }
+  }
+
   function update() {
     ticking = false;
-    var vh = window.innerHeight, sy = window.scrollY;
     cards.forEach(function (c) {
-      var r = c.card.getBoundingClientRect();
-      var topAbs = r.top + sy;
-      var s0 = Math.max(0, topAbs - vh * 0.9);
-      var p = (sy - s0) / (r.height * 2.5);
-      if (FORCED !== null) p = FORCED;                     // test switch: ?p=0.5 shows the wave halfway
-      p = Math.max(0, Math.min(1, p));
-      // the band's centre travels from just outside the start corner to just past the opposite corner
-      var front = -HALF + p * (1 + 2 * HALF + 0.06);
-      c.dots.forEach(function (d) {
-        var s = 1 - Math.abs(front - d.t) / HALF;            // grows as the band arrives, shrinks as it moves on
-        s = s <= 0 ? 0 : s >= 1 ? 1 : s * s * (3 - 2 * s);   // smooth start and stop
-        s = Math.round(s * 50) / 50;
-        if (s !== d.s) { d.s = s; d.el.style.transform = "scale(" + s + ")"; }
+      if (c.hovering || c.anim) return;                  // hover owns the card until it has settled
+      draw(c, scrollProgress(c));
+    });
+  }
+
+  if (window.matchMedia("(hover: hover)").matches) {
+    cards.forEach(function (c) {
+      c.card.addEventListener("pointerenter", function () {
+        c.hovering = true;
+        c.p = 0; animate(c, 1, 1200);                    // start from the corner each time
+      });
+      c.card.addEventListener("pointerleave", function () {
+        c.hovering = false;
+        animate(c, scrollProgress(c), 600);
       });
     });
   }
+
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
