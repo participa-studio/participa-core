@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>PREVIEW · Studio graded dots</title>
+  <link rel="stylesheet" href="../core.css?v=20261111-27">
+  <style>
+    /* ==========================================================
+       PREVIEW (11 Nov 2026): Studio hover, a graded dot field.
+       Plain round dots in the Studio yellow over the card photo: large near one corner
+       (almost touching), smaller and smaller towards the opposite corner, after a halftone gradient.
+       Computer: on hover the field grows in from that corner, dot after dot; when the pointer leaves,
+       it shrinks back. Phone (no hover): it grows once as the card scrolls into view.
+       The dot is half of the Participa 8: .design shows the whole 8, the Studio shows its parts.
+       Light: the dots are set up once; CSS transitions do the rest. Reduced motion: no field.
+       ========================================================== */
+    body { margin: 0; font-family: var(--font-body); color: var(--colour-ink); background: #F6DF5B; }
+    .sheet { padding: 3rem var(--inset); }
+    .sheet h2 { margin: 0 0 0.5rem; font-size: 0.8125rem; letter-spacing: 0.16em; text-transform: uppercase; }
+    .sheet p { margin: 0 0 1.5rem; max-width: 40rem; font-size: 1rem; line-height: 1.5; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+    @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+
+    .sdots { position: relative; display: block; overflow: hidden; aspect-ratio: 3 / 2; }
+    .sdots img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sdots svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .sdots circle {
+      fill: #F6DF5B;                       /* the Studio yellow */
+      opacity: 0.85;
+      transform-box: fill-box; transform-origin: center;
+      transform: scale(0);
+      transition: transform 0.45s cubic-bezier(.3, 1.35, .5, 1) var(--d, 0ms);   /* a small overshoot */
+    }
+    .sdots.is-on circle { transform: scale(1); }
+    .sdots.is-leaving circle { transition-duration: 0.3s; transition-timing-function: ease-in; }
+    @media (prefers-reduced-motion: reduce) { .sdots svg { display: none; } }
+  </style>
+</head>
+<body>
+<section class="sheet">
+  <h2>.studio · graded dots (test)</h2>
+  <p>Hover over a card: yellow dots grow in from a corner, large there and smaller towards the far side, like a halftone. On a phone they grow once as each card scrolls into view.</p>
+  <div class="cards">
+    <a class="sdots" href="#" data-corner="tr"><img src="https://participa.studio/images/placeholders/placeholder-05.jpg" alt=""></a>
+    <a class="sdots" href="#" data-corner="bl"><img src="https://participa.studio/images/placeholders/placeholder-04.jpg" alt=""></a>
+    <a class="sdots" href="#" data-corner="tl"><img src="https://participa.studio/images/placeholders/placeholder-02.jpg" alt=""></a>
+    <a class="sdots" href="#" data-corner="br"><img src="https://participa.studio/images/placeholders/placeholder-03.jpg" alt=""></a>
+    <a class="sdots" href="#" data-corner="tl"><img src="https://participa.studio/images/placeholders/placeholder-06.jpg" alt=""></a>
+    <a class="sdots" href="#" data-corner="br"><img src="https://participa.studio/images/placeholders/placeholder-01.jpg" alt=""></a>
+  </div>
+</section>
+<script>
+  (function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, STEP = 20, RMAX = 9.5, RMIN = 0.6, SWEEP = 520;
+    var params = new URLSearchParams(location.search), FORCE = params.get("on") !== null;
+    document.querySelectorAll(".sdots").forEach(function (card) {
+      var corner = card.getAttribute("data-corner") || "tl";
+      var cx = corner.indexOf("r") > -1 ? W : 0, cy = corner.indexOf("b") > -1 ? H : 0;
+      var maxD = Math.hypot(W, H), html = "";
+      for (var y = STEP / 2; y < H + STEP; y += STEP) {
+        for (var x = STEP / 2; x < W + STEP; x += STEP) {
+          var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD);            // 0 at the corner, 1 at the far corner
+          var r = RMIN + (RMAX - RMIN) * Math.pow(1 - t, 1.6);              // large near the corner, tiny far away
+          if (r < 0.7) continue;
+          html += '<circle cx="' + x + '" cy="' + y + '" r="' + r.toFixed(2) + '" style="--d:' + Math.round(t * SWEEP) + 'ms"/>';
+        }
+      }
+      var svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); svg.setAttribute("aria-hidden", "true");
+      svg.innerHTML = html;
+      card.appendChild(svg);
+      if (FORCE) { card.classList.add("is-on"); return; }
+      if (window.matchMedia("(hover: hover)").matches) {
+        card.addEventListener("pointerenter", function () { card.classList.remove("is-leaving"); card.classList.add("is-on"); });
+        card.addEventListener("pointerleave", function () { card.classList.add("is-leaving"); card.classList.remove("is-on"); });
+      } else if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (es, io) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-on"); io.unobserve(e.target); } }); }, { threshold: 0.6 }).observe(card);
+      }
+    });
+  })();
+</script>
+</body>
+</html>
