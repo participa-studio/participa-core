@@ -1,6 +1,10 @@
 {%- comment -%}
-  PARTICIPA THEME — DIVIDER between text blocks (12 Nov 2026): three dingbats, as in old books.
-  Replaces the drawn, animated loop, which is kept in _includes/opening-mark-loop.html
-  (its styles stay in css/openings.css) and can be brought back by including that file instead.
+  PARTICIPA THEME — DIVIDER between text blocks, per site (12 Nov 2026):
+  participa.divider: stars → three four-pointed stars at 60%, as in old books (Studio);
+  otherwise the drawn, animated loop from _includes/opening-mark-loop.html (.design).
 {%- endcomment -%}
+{%- if site.participa.divider == "stars" %}
 <p class="opening-mark opening-mark--dingbats" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span></p>
+{%- else %}
+{%- include opening-mark-loop.html %}
+{%- endif %}
