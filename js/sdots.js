@@ -46,7 +46,6 @@
       for (var x = STEP / 2; x < W + STEP; x += STEP) {
         var t = Math.min(1, Math.hypot(x - cx, y - cy) / maxD);           // 0 at the corner, 1 at the far corner
         var r = RMIN + (RMAX - RMIN) * Math.pow(1 - t, 1.6);             // large near the corner, tiny far away
-        if (r < 0.7) continue;
         // drawn at full size; the wave grows each dot to full size, then it settles to its graded size (--s)
         var style = 'style="--d:' + Math.round(t * SWEEP) + 'ms;--s:' + (r / RMAX).toFixed(3) + '"';
         html += EIGHT ? '<g transform="translate(' + x + ' ' + y + ')"><g ' + style + '>' + mark + '</g></g>'
