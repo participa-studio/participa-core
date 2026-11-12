@@ -3,7 +3,7 @@
    Studio only: switched on with participa.sdots: true in the site's _config.yml.
 
    Over every case card image (Experiments page and home page), plain round dots in white at 40%,
-   (12 Nov: the growth now runs as a wave all the way to the opposite corner, then settles into the gradient)
+   (12 Nov: one wave runs to the opposite corner and clears the image again; nothing stays behind)
    after a halftone gradient: large near one corner (almost touching), smaller and smaller towards
    the opposite corner. Computer: on hover the field grows in from that corner, dot after dot, with a
    small bounce; when the pointer leaves it shrinks back. Phone (no hover): it grows once as the card
@@ -21,6 +21,9 @@
   var MODE = document.documentElement.getAttribute("data-sdots"), EIGHT = params.get("shape") === "8" || MODE === "8";
   if (MODE === "trial" && !EIGHT) return;
   var hoverable = window.matchMedia("(hover: hover)").matches;
+
+  // One wave: restart the animation from the start, even if a wave is still running
+  function play(frame) { frame.classList.remove("is-on"); void frame.offsetWidth; frame.classList.add("is-on"); }
 
   document.querySelectorAll(".home__case > img").forEach(function (img) {
     var frame = document.createElement("span");
@@ -57,14 +60,14 @@
     svg.innerHTML = html;
     frame.appendChild(svg);
 
-    if (FORCE) { frame.classList.add("is-on"); return; }
+    if (FORCE) { play(frame); return; }
     var link = frame.closest(".home__case") || frame;
     if (hoverable) {
-      link.addEventListener("pointerenter", function () { frame.classList.remove("is-leaving"); frame.classList.add("is-on"); });
-      link.addEventListener("pointerleave", function () { frame.classList.add("is-leaving"); frame.classList.remove("is-on"); });
+      // each hover sends one wave through; it clears itself, so leaving needs nothing (12 Nov 2026)
+      link.addEventListener("pointerenter", function () { play(frame); });
     } else if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (es, io) {
-        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-on"); io.unobserve(e.target); } });
+        es.forEach(function (e) { if (e.isIntersecting) play(e.target); });   // a wave each time the card scrolls into view
       }, { threshold: 0.6 }).observe(frame);
     }
   });
