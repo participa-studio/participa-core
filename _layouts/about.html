@@ -14,6 +14,9 @@ layout: default
 {%- endcomment -%}
 <article class="about">
   <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
+  {%- comment -%} With a photo (12 Nov 2026): the text on the left, the photo in a right-hand column, as on the .design Profile. {%- endcomment -%}
+  <div class="about__top{% if page.image %} about__top--photo{% endif %}">
+  <div class="about__main">
   {%- if page.throughline %}<p class="about__opening page__opening">{{ page.throughline | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.throughline %}{% include opening-mark.html %}{% endif %}
   {%- if page.intro %}<p class="about__text about__intro">{{ page.intro | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
@@ -23,13 +26,15 @@ layout: default
     {%- for l in page.practice_links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
   </ul>
   {%- endif %}
-
+  </div>
   {%- if page.image %}
   <figure class="about__photo">
     <img src="{{ page.image }}" alt="{{ page.image_alt }}" loading="lazy">
     {%- if page.image_caption %}<figcaption>{{ page.image_caption }}</figcaption>{% endif %}
   </figure>
   {%- endif %}
+  </div>
+
 
   {%- if page.direction %}<p class="about__text about__direction">{{ page.direction | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
   {%- if page.sides %}
