@@ -51,3 +51,10 @@ a.home__highlight-org:hover, a.home__highlight-org:focus-visible,
 .site-header__sister:hover span, .site-header__sister:focus-visible span {
   color: var(--colour-here);
 }
+
+/* Visited links keep the text colour (12 Nov 2026): no browser blue or purple anywhere.
+   :where() keeps the rule at zero weight, so every component's own link colour still wins. */
+:where(a), :where(a:visited) { color: inherit; }
+/* Links inside case text (Challenge, Approach, Outcome): underlined like other links in sentences, red on hover */
+.case__blocks a { text-underline-offset: 0.2em; }
+.case__blocks a:hover, .case__blocks a:focus-visible { color: var(--colour-here); }
