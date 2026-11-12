@@ -20,11 +20,13 @@ layout: default
   <p class="case__lead page__opening">{{ page.lead }}</p>
   {%- endif %}
 
+  {%- comment -%} Facts (12 Nov 2026): Link and Licence move to their own band at the end of the page; the rest stay at the top. {%- endcomment -%}
+  {%- assign end_labels = "Link,Licence,License" | split: "," %}
   {%- if page.facts %}
   <dl class="case__facts">
-    {%- for f in page.facts %}
+    {%- for f in page.facts %}{% unless end_labels contains f.label %}
     <div><dt>{{ f.label }}</dt><dd>{{ f.value | markdownify | remove: "<p>" | remove: "</p>" | strip }}</dd></div>
-    {%- endfor %}
+    {%- endunless %}{% endfor %}
   </dl>
   {%- endif %}
 
@@ -121,5 +123,15 @@ layout: default
 
   {%- if page.note %}
   <p class="case__note">{{ page.note | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+  {%- endif %}
+
+  {%- assign end_facts = "" | split: "" %}
+  {%- for f in page.facts %}{% if end_labels contains f.label %}{% assign end_facts = end_facts | push: f %}{% endif %}{% endfor %}
+  {%- if end_facts.size > 0 %}
+  <dl class="case__facts case__facts--end">
+    {%- for f in end_facts %}
+    <div><dt>{{ f.label }}</dt><dd>{{ f.value | markdownify | remove: "<p>" | remove: "</p>" | strip }}</dd></div>
+    {%- endfor %}
+  </dl>
   {%- endif %}
 </article>

@@ -193,3 +193,12 @@ body.page main {
 }
 .case__video figcaption a { color: inherit; text-underline-offset: 0.2em; }
 .case__video figcaption a:hover { color: var(--colour-here); }
+
+/* ---------- Link and Licence: their own band at the end of a case, between two rules (12 Nov 2026) ---------- */
+.case__facts--end {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;   /* Link on the left, Licence on the right */
+  gap: var(--space-3) var(--space-6);
+  margin-top: var(--space-8);
+}
