@@ -65,3 +65,15 @@
 /* Equal space above and below the mark */
 .opening-mark + .about__text,
 .opening-mark + .profile__practice { margin-top: var(--space-4); }
+
+/* ---------- Divider: three dingbats, as in old books (12 Nov 2026; replaces the animated loop) ---------- */
+.opening-mark--dingbats {
+  display: flex;
+  justify-content: center;
+  gap: 1.25em;
+  line-height: 1;
+  font-family: var(--font-quote);
+  font-size: 1.375rem;
+  transform: translateX(-2.5%);       /* the same optical centring as the loop: the ragged text sits left of the column's middle */
+}
+.opening-mark--dingbats span { display: block; font-size: 0.8em; opacity: 0.6; }   /* four-pointed stars, the ink at 60% (12 Nov 2026) */
