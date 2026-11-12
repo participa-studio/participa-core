@@ -112,8 +112,9 @@
 /* ---------- Photo on the About page (12 Nov 2026): the right half of the page, next to the text; the whole photo, uncropped ---------- */
 .about__top--photo {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);   /* two halves: the photo takes the other half of the screen */
-  column-gap: var(--space-8);
+  /* The photo takes a little less than half, with more room between text and photo; both scale with the screen (12 Nov 2026) */
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+  column-gap: clamp(3rem, 7vw, 7rem);
   align-items: start;
 }
 .about__photo { margin: 0; }
