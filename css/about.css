@@ -109,19 +109,16 @@
 }
 .about__practice-links + .about__throughline { margin-top: var(--space-4); }
 
-/* ---------- Photo on the About page (12 Nov 2026): a right-hand column next to the text, as on the .design Profile ---------- */
+/* ---------- Photo on the About page (12 Nov 2026): the right half of the page, next to the text; the whole photo, uncropped ---------- */
 .about__top--photo {
   display: grid;
-  grid-template-columns: minmax(0, 40rem) 16rem;
-  justify-content: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);   /* two halves: the photo takes the other half of the screen */
   column-gap: var(--space-8);
   align-items: start;
 }
 .about__photo { margin: 0; }
 .about__top--photo .about__photo { margin-top: var(--space-3); }   /* top in line with the opening line */
 .about__photo img { display: block; width: 100%; height: auto; }
-/* In the right column: a 4:5 frame like the .design Profile portrait, centred on the people at work; phones show the whole photo */
-@media (min-width: 721px) { .about__top--photo .about__photo img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 55% center; } }
 .about__photo figcaption {
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.4);
