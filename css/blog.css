@@ -106,6 +106,9 @@
   font-size: 1.25rem;
   line-height: 1.45;
 }
+/* The quote block (_includes/quote.html markup) inside a post keeps its own look: no left rule, no extra inset (12 Nov 2026) */
+.post__body .quote { margin: var(--space-4) 0 var(--space-6); max-width: none; justify-content: start; }
+.post__body .quote blockquote { margin: 0; padding-left: 0; border-left: 0; }
 
 @media (max-width: 720px) {
   .blog__item { grid-template-columns: 1fr; row-gap: var(--space-1); }
