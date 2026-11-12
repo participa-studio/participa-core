@@ -49,6 +49,13 @@
   object-fit: cover;
 }
 
+/* Images that must not be cropped (illustrations, square or upright images):
+   set fit: true on the photo. The whole image fits the frame's height, on white. */
+.slider__slide--fit img {
+  object-fit: contain;
+  background: #fff;
+}
+
 /* Placeholder box until real photos arrive */
 .slider__placeholder {
   display: grid;

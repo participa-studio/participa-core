@@ -37,7 +37,7 @@ layout: default
   <div class="slider" aria-roledescription="carousel" aria-label="Project photos">
     <div class="slider__track">
       {%- for ph in real_photos %}
-      <figure class="slider__slide">
+      <figure class="slider__slide{% if ph.fit %} slider__slide--fit{% endif %}">
         <img src="{{ ph.src }}" alt="{{ ph.alt | default: ph.caption }}" loading="lazy">
         {%- if ph.caption %}<figcaption>{{ ph.caption }}</figcaption>{% endif %}
       </figure>
