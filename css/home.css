@@ -262,10 +262,10 @@
    grows to full size as the wave passes, then shrinks away, so the image is clear again
    (12 Nov 2026: it used to stop on the graded field, which looked frozen) */
 .sdots.is-on > svg > circle, .sdots.is-on g g { animation: sdots-wave 1.1s var(--d, 0ms) both; }
-.sdots g g { --peak: 1.25; }   /* .design 8s: a higher crest than the dots, so the wave seems to rise (12 Nov 2026); above about 1.29 they touch */
+.sdots g g { --base: 0.7; --peak: 1.2; transform: scale(var(--base)); }   /* .design 8s (12 Nov 2026): always present at 0.7, the wave lifts them to 1.2 and lets them settle back; above about 1.29 they touch */
 @keyframes sdots-wave {
-  0%   { transform: scale(0); animation-timing-function: cubic-bezier(.3, 1.3, .5, 1); }   /* grow, with a small bounce */
+  0%   { transform: scale(var(--base, 0)); animation-timing-function: cubic-bezier(.3, 1.3, .5, 1); }   /* grow, with a small bounce */
   40%  { transform: scale(var(--peak, 1)); animation-timing-function: cubic-bezier(.5, 0, .7, .4); }   /* the crest, then shrink away */
-  100% { transform: scale(0); }
+  100% { transform: scale(var(--base, 0)); }   /* back to rest: nothing for the dots, 0.7 for the 8s */
 }
 @media (prefers-reduced-motion: reduce) { .sdots svg { display: none; } }
