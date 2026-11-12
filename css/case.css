@@ -88,6 +88,10 @@ body.page main {
   line-height: 1.55;
 }
 
+.case__blocks p + p {
+  margin-top: 0.75em;
+}
+
 /* ---------- Artefacts: files to download (books, reports, toolkits) ----------
    One row per file: name on the left, format and status on the right.
    A row with a file is a download link; without one it shows its status. */
