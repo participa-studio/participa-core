@@ -14,7 +14,7 @@
        Hover (computer) or scroll into view (phone): one wave crosses the card from a corner to the
        opposite side; each 8 grows to full size as the wave passes, then shrinks away, and the
        image is clear again. Same timing as the live Studio dots (js/sdots.js, css/home.css).
-       Test switches: ?step=14 (grid, in units of a 300 x 200 card), ?size=0.6 (8 size), ?corner=tl|tr|bl|br.
+       Test switches: ?peak=1.25 (size at the crest), ?step=20 (grid, in units of a 300 x 200 card), ?size=0.6 (8 size), ?corner=tl|tr|bl|br.
        ========================================================== */
     body { margin: 0; font-family: var(--font-body); color: var(--colour-ink); background: #73D4DC; }
     .sheet { padding: 3rem var(--inset); }
@@ -36,7 +36,7 @@
     .w8.is-on g g { animation: w8-wave 1.1s var(--d, 0ms) both; }
     @keyframes w8-wave {
       0%   { transform: scale(0); animation-timing-function: cubic-bezier(.3, 1.3, .5, 1); }   /* grow, small bounce */
-      40%  { transform: scale(1); animation-timing-function: cubic-bezier(.5, 0, .7, .4); }    /* then shrink away */
+      40%  { transform: scale(var(--peak, 1.25)); animation-timing-function: cubic-bezier(.5, 0, .7, .4); }    /* the crest: bigger than at rest, then shrink away */
       100% { transform: scale(0); }
     }
     @media (prefers-reduced-motion: reduce) { .w8 svg { display: none; } }
@@ -63,6 +63,8 @@
     var STEP = parseFloat(params.get("step")) || 20;                // the same grid as the Studio dots
     var SIZE = parseFloat(params.get("size")) || 1;                 // the full .design 8 (as in goo.js)
     var FIXED = params.get("corner");
+    // the crest: how big each 8 grows as the wave passes (12 Nov 2026: 1.25, so the wave seems to rise towards you; above about 1.29 neighbouring 8s touch)
+    document.documentElement.style.setProperty("--peak", parseFloat(params.get("peak")) || 1.25);
     var hoverable = window.matchMedia("(hover: hover)").matches;
 
     function play(card) { card.classList.remove("is-on"); void card.offsetWidth; card.classList.add("is-on"); }
