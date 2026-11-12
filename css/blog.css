@@ -54,7 +54,7 @@
   line-height: 1.5;
 }
 /* Post photo in the list: a right-hand column, only on posts that have one */
-.blog__item:has(.blog__thumb) { grid-template-columns: 10rem minmax(0, 1fr) 7.5rem; }   /* circle 120 px at most (12 Nov 2026) */
+.blog__item:has(.blog__thumb) { grid-template-columns: 10rem minmax(0, 1fr) 10rem; }   /* circle 160 px (12 Nov 2026) */
 .blog__thumb {
   grid-column: 3;
   grid-row: 1 / span 3;
