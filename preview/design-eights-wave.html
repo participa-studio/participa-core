@@ -9,7 +9,8 @@
   <style>
     /* ==========================================================
        PREVIEW (12 Nov 2026): the Studio dot wave, drawn with the Participa 8 for .design.
-       Smaller 8s on a closer grid, set along the diagonal the wave travels on, white at 40%.
+       The Studio dot wave exactly (grid 20, same timing), with the full-size .design 8 in place of the dot,
+       set along the diagonal the wave travels on, white at 40%. (First try: 8s at 60% on a grid of 14 felt too small.)
        Hover (computer) or scroll into view (phone): one wave crosses the card from a corner to the
        opposite side; each 8 grows to full size as the wave passes, then shrinks away, and the
        image is clear again. Same timing as the live Studio dots (js/sdots.js, css/home.css).
@@ -44,7 +45,7 @@
 <body>
 <section class="sheet">
   <h2>.design · 8s wave (test)</h2>
-  <p>Hover over a card: one wave of small 8s crosses the photo from a corner to the opposite side, then the photo is clear again. On a phone, a wave runs each time a card scrolls into view.</p>
+  <p>Hover over a card: one wave of 8s crosses the photo from a corner to the opposite side, then the photo is clear again. On a phone, a wave runs each time a card scrolls into view.</p>
   <div class="cards">
     <a class="w8" href="#" data-corner="tl"><img src="https://participa.design/images/placeholders/placeholder-01.jpg" alt=""></a>
     <a class="w8" href="#" data-corner="br"><img src="https://participa.design/images/placeholders/placeholder-02.jpg" alt=""></a>
@@ -59,8 +60,8 @@
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     var NS = "http://www.w3.org/2000/svg", W = 300, H = 200, SWEEP = 900;
     var params = new URLSearchParams(location.search);
-    var STEP = parseFloat(params.get("step")) || 14;                // closer than the Studio dots (20)
-    var SIZE = parseFloat(params.get("size")) || 0.6;               // the 8 at 60% of the current .design 8
+    var STEP = parseFloat(params.get("step")) || 20;                // the same grid as the Studio dots
+    var SIZE = parseFloat(params.get("size")) || 1;                 // the full .design 8 (as in goo.js)
     var FIXED = params.get("corner");
     var hoverable = window.matchMedia("(hover: hover)").matches;
 
