@@ -108,3 +108,16 @@
   .about__side { padding: var(--space-3); }
 }
 .about__practice-links + .about__throughline { margin-top: var(--space-4); }
+
+/* ---------- Photo on the About page (12 Nov 2026): the width of the text column, caption as on the case photos ---------- */
+.about__photo { margin: var(--space-6) 0 0; max-width: 40rem; }
+.about__photo img { display: block; width: 100%; height: auto; }
+.about__photo figcaption {
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.4);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}

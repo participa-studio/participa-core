@@ -8,6 +8,7 @@ layout: default
     practice (what this site offers) + practice_links (title + url),
     throughline (the one idea; shown under the heading in the quote face, 11 Nov 2026),
     direction,
+    image + image_alt + image_caption (optional photo after the practice links, 12 Nov 2026),
     sides (the sister site only: own = design or studio, name, tag, url, text, links), facts (label + value; links allowed as [text](url), e.g. a Contact fact), contact (optional line, Markdown allowed)
   Written once; each site fills it with its own text.
 {%- endcomment -%}
@@ -21,6 +22,13 @@ layout: default
   <ul class="about__side-links about__practice-links">
     {%- for l in page.practice_links %}<li><a href="{{ l.url }}">{{ l.title }} →</a></li>{% endfor %}
   </ul>
+  {%- endif %}
+
+  {%- if page.image %}
+  <figure class="about__photo">
+    <img src="{{ page.image }}" alt="{{ page.image_alt }}" loading="lazy">
+    {%- if page.image_caption %}<figcaption>{{ page.image_caption }}</figcaption>{% endif %}
+  </figure>
   {%- endif %}
 
   {%- if page.direction %}<p class="about__text about__direction">{{ page.direction | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
