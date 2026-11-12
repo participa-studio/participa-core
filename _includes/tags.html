@@ -1,6 +1,11 @@
-{%- comment -%} PARTICIPA THEME — a post's tags as small labels. {% include tags.html tags=post.tags %} {%- endcomment -%}
+{%- comment -%}
+  PARTICIPA THEME — a post's tags as small labels. {% include tags.html tags=post.tags %}
+  Each tag links to the Writing page filtered to that tag (12 Nov 2026): /blog/?tag=participa
+  (the Writing page is found by its layout, so the link follows it from /lab/ to the root at launch).
+{%- endcomment -%}
 {%- if include.tags and include.tags.size > 0 %}
+{%- assign blog_page = site.pages | where: "layout", "blog" | first %}
 <ul class="tags" aria-label="Tags">
-  {%- for t in include.tags %}<li>{{ t }}</li>{% endfor %}
+  {%- for t in include.tags %}<li>{% if blog_page %}<a href="{{ blog_page.url | relative_url }}?tag={{ t | slugify }}">{{ t }}</a>{% else %}<span>{{ t }}</span>{% endif %}</li>{% endfor %}
 </ul>
 {%- endif %}

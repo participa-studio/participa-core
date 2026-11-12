@@ -5,15 +5,18 @@ layout: default
   PARTICIPA THEME — BLOG (list of posts, newest first)
   Fields: heading, intro, empty (shown while there are no posts yet).
   Posts are files in _posts/, named YYYY-MM-DD-title.md, with layout: post.
+  Tag filter (12 Nov 2026): ?tag=<tag> in the address shows only the posts with that tag; the intro gives way
+  to the tag, in a white box with a cross that goes back to all posts. Tags on posts link here.
 {%- endcomment -%}
 <article class="blog">
   <h1 class="case__title">{{ page.heading | default: page.title }}</h1>
-  {%- if page.intro %}<p class="case__lead page__opening">{{ page.intro }}</p>{% endif %}
+  {%- if page.intro %}<p class="case__lead page__opening blog__intro">{{ page.intro }}</p>{% endif %}
+  <p class="blog__filter" hidden><span class="blog__filter-tag"><span class="blog__filter-name"></span><a class="blog__filter-clear" href="{{ page.url | relative_url }}" aria-label="Show all posts">×</a></span><span class="blog__filter-count"></span></p>
 
   {%- if site.posts.size > 0 %}
   <ul class="blog__list">
     {%- for post in site.posts %}
-    <li>
+    <li data-tags="{% for t in post.tags %}{{ t | slugify }} {% endfor %}">
       <a class="blog__item" href="{{ post.url }}">
         <time class="blog__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B %Y" }}</time>
         {%- if post.image %}<img class="blog__thumb" src="{{ post.image }}" alt="{{ post.image_alt }}" loading="lazy">{% endif %}
@@ -28,3 +31,22 @@ layout: default
   <p class="shelf__empty">{{ page.empty | default: "First posts to follow." }}</p>
   {%- endif %}
 </article>
+<script>
+  /* Tag filter: show only the posts with ?tag=…; if no post has that tag, show all (12 Nov 2026) */
+  (function () {
+    var tag = new URLSearchParams(location.search).get("tag");
+    if (!tag) return;
+    var items = [].slice.call(document.querySelectorAll(".blog__list > li"));
+    var hits = items.filter(function (li) { return (" " + li.getAttribute("data-tags") + " ").indexOf(" " + tag + " ") > -1; });
+    if (!hits.length) return;
+    var link = hits[0].querySelector('.tags a[href$="?tag=' + tag + '"]');
+    var name = link ? link.textContent : tag;
+    items.forEach(function (li) { if (hits.indexOf(li) < 0) li.hidden = true; });
+    var intro = document.querySelector(".blog__intro"); if (intro) intro.hidden = true;
+    var box = document.querySelector(".blog__filter");
+    box.querySelector(".blog__filter-name").textContent = name;
+    box.querySelector(".blog__filter-count").textContent = hits.length + (hits.length === 1 ? " post" : " posts");
+    box.hidden = false;
+    document.title = name + " · " + document.title;
+  })();
+</script>
