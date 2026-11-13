@@ -134,9 +134,10 @@
   .about__top--photo .about__photo { margin-top: var(--space-6); }   /* phones: the photo follows the text */
 }
 
-/* About: the licence note as a caption band (13 Nov 2026): the same shade as the "with" markers and the photo caption,
-   in the caption's small bold capitals, with the rounded corners of the highlights panel on the .design home page. */
-.about .page__rights {
+/* Rights note on .studio About and .design Contact, as a caption band (13 Nov 2026): the site's marker shade
+   (as the "with" markers and the photo captions), small bold capitals, rounded corners as the .design home panel. */
+.about .page__rights,
+.contact .page__rights {
   margin-top: var(--space-4);
   padding: 0.875rem 1.25rem;
   border-radius: 16px;
