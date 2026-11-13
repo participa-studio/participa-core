@@ -86,7 +86,7 @@ layout: default
   {%- assign related = site.posts | where_exp: "p", "p.tags contains page.tag" %}
   {%- if related.size > 0 %}
   <section class="case__writing" aria-labelledby="writing-title">
-    <h2 id="writing-title" class="cv__heading">Writing about this project</h2>
+    <h2 id="writing-title" class="cv__heading">Reflections</h2>
     <ul class="blog__list">
       {%- for post in related %}
       <li><a class="blog__item" href="{{ post.url }}">
