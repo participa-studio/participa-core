@@ -134,5 +134,14 @@
   .about__top--photo .about__photo { margin-top: var(--space-6); }   /* phones: the photo follows the text */
 }
 
-/* About: the rights note sits just below the facts divider (13 Nov 2026) */
-.about .case__facts + .page__rights { margin-top: 0; }
+/* About: the rights note as a soft panel, like the highlights block on the home page (13 Nov 2026).
+   Same padding, radius and site panel colour (--colour-highlight); full ink text. */
+.about .page__rights {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border-radius: 16px;
+  background: var(--colour-highlight, rgba(255, 255, 255, 0.3));
+  color: var(--colour-ink);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
