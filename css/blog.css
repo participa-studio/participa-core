@@ -210,8 +210,7 @@
   line-height: 1.45;
 }
 
-/* Two images side by side inside a post, with one caption below; side by side on phones too (13 Nov 2026) */
-.post__body .post__pair { margin: var(--space-4) 0 var(--space-4); }
-.post__pair-images { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
-.post__body .post__pair img { display: block; width: 100%; height: auto; margin: 0; border-radius: 4px; }
-.post__pair figcaption { margin-top: var(--space-2); font-size: 0.6875rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.5; }
+/* One image inside a post, with a caption below (13 Nov 2026) */
+.post__body .post__figure { margin: var(--space-4) 0; }
+.post__body .post__figure img { display: block; width: 100%; height: auto; margin: 0; border-radius: 4px; }
+.post__figure figcaption { margin-top: var(--space-2); font-size: 0.6875rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.5; }
