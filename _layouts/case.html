@@ -109,7 +109,7 @@ layout: default
         {%- if a.url %}
         <a href="{{ a.url }}" rel="noopener" target="_blank">
           <span class="case__artefact-name">{{ a.label }}</span>
-          <span class="case__artefact-meta">{{ a.format | default: "Link" }} · Open ↗</span>
+          <span class="case__artefact-meta">{{ a.format | default: "Link" }} · Open ↗&#xFE0E;</span>
         </a>
         {%- elsif a.file %}
         <a href="{{ a.file }}" download>
@@ -135,7 +135,7 @@ layout: default
         {%- if r.url %}
         <a href="{{ r.url }}" rel="noopener" target="_blank">
           <span class="case__artefact-name">{{ r.title }}</span>
-          <span class="case__artefact-meta">{{ r.source }} · Open ↗</span>
+          <span class="case__artefact-meta">{{ r.source }} · Open ↗&#xFE0E;</span>
         </a>
         {%- else %}
         <span class="case__artefact-name">{{ r.title }}</span>

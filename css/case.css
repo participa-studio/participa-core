@@ -206,3 +206,15 @@ body.page main {
   gap: var(--space-3) var(--space-6);
   margin-top: var(--space-8);
 }
+
+/* Artefacts and references on phones (13 Nov 2026): the name and the meta line stack,
+   so a long source (e.g. "Lang Center, Swarthmore College") never pushes the page wider than the screen. */
+@media (max-width: 720px) {
+  .case__artefacts li > a,
+  .case__artefacts li:not(:has(a)) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+  .case__artefact-meta { flex-shrink: 1; }
+}
