@@ -73,5 +73,5 @@ mark {
   margin: var(--space-6) 0 0;
   font-size: 0.8125rem;
   line-height: 1.5;
-  opacity: 0.75;
+  color: color-mix(in srgb, var(--colour-ink) 75%, transparent);   /* faded text only, so a divider above stays full ink */
 }

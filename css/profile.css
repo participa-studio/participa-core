@@ -179,3 +179,10 @@
 }
 @media (max-width: 720px) { .opening-mark:has(+ .profile__sides), .opening-mark:has(+ .about__sides) { max-width: none; } }
 .opening-mark + .profile__sides { margin-top: 0; }                       /* the panel already carries 48 px of space above it */
+
+/* Contact: a divider closes the page, with the rights note just below it (13 Nov 2026) */
+.contact .page__rights {
+  margin-top: var(--space-8);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--colour-ink);
+}
