@@ -58,3 +58,16 @@ a.home__highlight-org:hover, a.home__highlight-org:focus-visible,
 /* Links inside case text (Challenge, Approach, Outcome): underlined like other links in sentences, red on hover */
 .case__blocks a { text-underline-offset: 0.2em; }
 .case__blocks a:hover, .case__blocks a:focus-visible { color: var(--colour-here); }
+
+/* Links in a case lead (13 Nov 2026): a light dotted underline, so the italic lead is not broken up;
+   on hover and focus the line turns solid and the text red, like other links */
+.case > .case__lead a {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+.case > .case__lead a:hover, .case > .case__lead a:focus-visible {
+  color: var(--colour-here);
+  text-decoration-style: solid;
+}
