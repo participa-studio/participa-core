@@ -79,7 +79,7 @@
   align-items: baseline;
   margin-top: 0;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.4);   /* a light band under the photo, the same shade as the markers (11 Nov 2026) */
+  background: var(--colour-marker, rgba(255, 255, 255, 0.4));   /* a light band under the photo, the same shade as the markers (11 Nov 2026; tied to --colour-marker 13 Nov) */
   font-size: 0.6875rem;          /* 11 px */
   font-weight: var(--weight-display);
   letter-spacing: 0.14em;
