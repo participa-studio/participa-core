@@ -10,7 +10,7 @@ layout: default
     quote (text, name, role, place) — or quotes: a list of them, which rotate,
     tag (optional: posts carrying this tag are listed under the case),
     video (youtube = the video id, caption; optional),
-    artefacts (label, file, format = PDF, status; leave file out while in preparation),
+    artefacts (label, file or url, format = PDF, status; leave file out while in preparation), references (title, source, url),
     note
   Anything written below the fields appears after the three blocks.
 {%- endcomment -%}
@@ -106,7 +106,12 @@ layout: default
       {%- for a in page.artefacts %}
       {%- assign format = a.format | default: "PDF" %}
       <li>
-        {%- if a.file %}
+        {%- if a.url %}
+        <a href="{{ a.url }}" rel="noopener" target="_blank">
+          <span class="case__artefact-name">{{ a.label }}</span>
+          <span class="case__artefact-meta">{{ a.format | default: "Link" }} · Open ↗</span>
+        </a>
+        {%- elsif a.file %}
         <a href="{{ a.file }}" download>
           <span class="case__artefact-name">{{ a.label }}</span>
           <span class="case__artefact-meta">{{ format }} · Download ↓</span>
@@ -114,6 +119,27 @@ layout: default
         {%- else %}
         <span class="case__artefact-name">{{ a.label }}</span>
         <span class="case__artefact-meta">{{ format }} · {{ a.status | default: "In preparation" }}</span>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  {%- if page.references %}
+  <section class="case__artefacts case__references" aria-labelledby="references-title">
+    <h2 id="references-title">References</h2>
+    <ul>
+      {%- for r in page.references %}
+      <li>
+        {%- if r.url %}
+        <a href="{{ r.url }}" rel="noopener" target="_blank">
+          <span class="case__artefact-name">{{ r.title }}</span>
+          <span class="case__artefact-meta">{{ r.source }} · Open ↗</span>
+        </a>
+        {%- else %}
+        <span class="case__artefact-name">{{ r.title }}</span>
+        <span class="case__artefact-meta">{{ r.source }}</span>
         {%- endif %}
       </li>
       {%- endfor %}
