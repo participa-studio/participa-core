@@ -19,7 +19,8 @@ layout: default
     <li data-tags="{% for t in post.tags %}{{ t | slugify }} {% endfor %}">
       <a class="blog__item" href="{{ post.url }}">
         <time class="blog__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B %Y" }}</time>
-        {%- if post.image %}<img class="blog__thumb" src="{{ post.image }}" alt="{{ post.image_alt }}" loading="lazy">{% endif %}
+        {%- assign thumb = post.thumb | default: post.image %}{%- assign thumb_alt = post.thumb_alt | default: post.image_alt %}
+        {%- if thumb %}<img class="blog__thumb" src="{{ thumb }}" alt="{{ thumb_alt }}" loading="lazy">{% endif %}
         <span class="blog__title">{{ post.title }}</span>
         {%- if post.lead %}<span class="blog__excerpt">{{ post.lead }}</span>{% endif %}
       </a>
