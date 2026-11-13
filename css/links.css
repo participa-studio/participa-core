@@ -60,7 +60,7 @@ a.home__highlight-org:hover, a.home__highlight-org:focus-visible,
 .case__blocks a:hover, .case__blocks a:focus-visible { color: var(--colour-here); }
 
 /* Links in a case lead (13 Nov 2026): a light dotted underline, so the italic lead is not broken up;
-   on hover and focus the line turns solid and the text red, like other links */
+   on hover and focus the line goes and the text turns red */
 .case > .case__lead a {
   text-decoration-line: underline;
   text-decoration-style: dotted;
@@ -69,5 +69,5 @@ a.home__highlight-org:hover, a.home__highlight-org:focus-visible,
 }
 .case > .case__lead a:hover, .case > .case__lead a:focus-visible {
   color: var(--colour-here);
-  text-decoration-style: solid;
+  text-decoration-line: none;
 }
