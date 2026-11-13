@@ -67,3 +67,11 @@ mark {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+
+/* Rights note (13 Nov 2026): one quiet line at the end of the .studio About and .design Contact pages */
+.page__rights {
+  margin: var(--space-6) 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  opacity: 0.75;
+}

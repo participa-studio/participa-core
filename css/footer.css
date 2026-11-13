@@ -94,3 +94,7 @@ body.holding .site-footer {
     font-size: 0.625rem;       /* 10 px copyright on phones */
   }
 }
+
+/* Copyright and KvK on two short lines (13 Nov 2026), on every screen width */
+.site-footer p { line-height: 1.6; }
+.site-footer .site-footer__kvk { display: block; margin: 0; }

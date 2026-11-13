@@ -53,5 +53,9 @@ layout: default
   <p class="about__text about__contact">{{ page.contact | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
   {%- endif %}
 
+  {%- if page.rights %}
+  <p class="page__rights">{{ page.rights | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+  {%- endif %}
+
   {{ content }}
 </article>
