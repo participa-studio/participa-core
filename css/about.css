@@ -133,3 +133,6 @@
   .about__top--photo { grid-template-columns: 1fr; }
   .about__top--photo .about__photo { margin-top: var(--space-6); }   /* phones: the photo follows the text */
 }
+
+/* About: the rights note sits just below the facts divider (13 Nov 2026) */
+.about .case__facts + .page__rights { margin-top: 0; }
