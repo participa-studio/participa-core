@@ -14,7 +14,7 @@ layout: default
     experience_heading, experience (org, role, years, result, link),
     earlier (one line under the list; Markdown allowed),
     pdf (file, updated; leave file out while in preparation),
-    sides (the sister panel, as on About), contact (one line, Markdown allowed)
+    contact (one line, Markdown allowed; sits above the panel), sides (the sister panel, as on About)
 {%- endcomment -%}
 <article class="cv profile">
 
@@ -80,13 +80,14 @@ layout: default
   {%- endif %}
 
 
+  {%- if page.contact %}
+  <p class="about__text about__contact">{{ page.contact | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
+  {%- endif %}
+
   {%- if page.sides %}
   <div class="about profile__sides">{% include sides.html sides=page.sides %}</div>
   {%- endif %}
 
-  {%- if page.contact %}
-  <p class="about__text about__contact">{{ page.contact | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>
-  {%- endif %}
 
   {{ content }}
 </article>
