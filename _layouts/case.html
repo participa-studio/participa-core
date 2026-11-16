@@ -9,7 +9,7 @@ layout: default
     challenge, approach, outcome,
     quote (text, name, role, place) — or quotes: a list of them, which rotate,
     tag (optional: posts carrying this tag are listed under the case),
-    video (youtube = the video id, caption; optional),
+    video (youtube or vimeo = the video id, caption; optional),
     artefacts (label, file or url, format = PDF, status; leave file out while in preparation), references (title, source, url),
     note
   Anything written below the fields appears after the three blocks.
@@ -46,11 +46,15 @@ layout: default
   </div>
   {%- endif %}
 
-  {%- if page.video and page.video.youtube %}
-  {%- comment -%} A YouTube video, from the privacy-enhanced address: nothing loads from YouTube until play is pressed. {%- endcomment -%}
+  {%- if page.video and page.video.youtube or page.video.vimeo %}
+  {%- comment -%} A YouTube video from the privacy-enhanced address, or a Vimeo video with do-not-track on. {%- endcomment -%}
   <figure class="case__video">
     <div class="case__video-frame">
+      {%- if page.video.vimeo %}
+      <iframe src="https://player.vimeo.com/video/{{ page.video.vimeo }}?dnt=1&amp;title=0&amp;byline=0&amp;portrait=0" title="{{ page.video.caption | strip_html | default: 'Video' | escape }}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      {%- else %}
       <iframe src="https://www.youtube-nocookie.com/embed/{{ page.video.youtube }}?rel=0" title="{{ page.video.caption | default: 'Video' | escape }}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      {%- endif %}
     </div>
     {%- if page.video.caption %}<figcaption>{{ page.video.caption | markdownify | remove: "<p>" | remove: "</p>" | strip }}</figcaption>{% endif %}
   </figure>
