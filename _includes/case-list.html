@@ -32,7 +32,7 @@
       {%- endif %}
       <span class="home__case-meta">{{ c.org }}{% if c.years %} · {{ c.years }}{% endif %}</span>
       {%- if include.hero %}
-      {%- if c.lead %}<span class="home__case-lead">{{ c.lead }}</span>{% endif %}
+      {%- if c.lead %}<span class="home__case-lead">{{ c.lead | strip_html }}</span>{% endif %}   {%- comment -%} no links inside the card link (21 Nov 2026): a nested link broke out of the card {%- endcomment -%}
       <span class="home__case-more">See the case →</span>
       {%- endif %}
     </a>
