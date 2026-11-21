@@ -303,7 +303,7 @@
    1 px outline; "Selected experience" in the serif, spaced capitals, lighter. The main text block stays without lines. */
 [data-reading] .profile .cv__entry { border-top: 1px solid var(--colour-ink); border-bottom: 1px solid var(--colour-ink); }
 [data-reading] .profile .profile__sides .about__side { border: 1px solid var(--colour-ink); }
-[data-reading] .profile .cv__heading { font-family: var(--font-quote); font-weight: 400; font-style: normal; font-size: clamp(1.125rem, 2vw, 1.625rem); letter-spacing: 0.34em; text-transform: uppercase; color: rgba(26, 26, 26, 0.6); }   /* Bernardo, 21 Nov 2026: a little smaller, wider spacing, in grey: a quiet divider line */
+[data-reading] .profile .cv__heading { font-family: var(--font-body); font-weight: var(--weight-display); font-style: normal; font-size: clamp(0.875rem, 1.2vw, 1rem); letter-spacing: 0.34em; text-transform: uppercase; color: rgba(26, 26, 26, 0.6); }   /* Bernardo, 21 Nov 2026, evening: the typeface of the role line under the name, larger, same wide spacing, in grey */
 /* Contact (21 Nov 2026): each offer is its own small block, with a line above and a line below;
    the full-width line under the three is gone */
 [data-reading] .contact__offer { padding-bottom: var(--space-3); border-bottom: 1px solid var(--colour-ink); }
@@ -326,3 +326,6 @@
   [data-reading] .home__work--quote .home__cases--hero { padding-bottom: 0; }
   [data-reading] .home__cases--hero .home__case > :not(img):not(.home__case-image):not(.sdots):not(.goo-card) { padding-left: var(--space-2); padding-right: var(--space-2); }
 }
+
+/* Profile, Participa Studio box (21 Nov 2026, evening): as wide as the Selected experience blocks (960 px), not half the page */
+[data-reading] .profile .profile__sides .about__sides { grid-template-columns: 1fr; max-width: 960px; }
