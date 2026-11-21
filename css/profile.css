@@ -191,3 +191,6 @@
 .profile__cv-caption { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; background: var(--colour-marker, rgba(255, 255, 255, 0.4)); border-bottom: 1px solid var(--colour-ink); color: inherit; text-decoration: none; font-size: 0.6875rem; font-weight: var(--weight-display); letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4; white-space: nowrap; }
 .profile__cv-meta { margin-left: auto; opacity: 0.7; }
 .profile__cv-caption:hover, .profile__cv-caption:focus-visible { background: var(--colour-paper, #FFFFFF); }
+/* CV placeholder (21 Nov 2026): the caption band with a dotted outline until the PDF is added; not clickable */
+.profile__cv-caption--placeholder { border: 1px dashed var(--colour-ink); background: transparent; cursor: default; opacity: 0.75; }
+.profile__cv-caption--placeholder:hover { background: transparent; }

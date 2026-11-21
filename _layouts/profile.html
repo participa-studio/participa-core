@@ -45,6 +45,12 @@ layout: default
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M14 2.5V7h4.5"/><path d="M12 10.5v6.5"/><path d="M9.2 14.2l2.8 2.8 2.8-2.8"/></svg>
         <span>Curriculum vitae</span><span class="profile__cv-meta">PDF ↓</span>
       </a>
+      {%- else %}
+      {%- comment -%} Placeholder until the PDF is in: the same band, with a dotted outline, not a link (21 Nov 2026) {%- endcomment -%}
+      <span class="profile__cv-caption profile__cv-caption--placeholder">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M14 2.5V7h4.5"/></svg>
+        <span>Curriculum vitae</span><span class="profile__cv-meta">PDF to follow</span>
+      </span>
       {%- endif %}
     </div>
     {%- endif %}
