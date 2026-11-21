@@ -134,3 +134,19 @@ document.addEventListener('DOMContentLoaded', function () {
   texts[0].before(panel);
   [].forEach.call(texts, function (t) { panel.appendChild(t); });
 });
+
+/* About on phones (21 Nov 2026): the photo moves into the top of the text panel; back beside the text on wider screens */
+(function () {
+  if (!document.documentElement.hasAttribute('data-reading')) return;
+  var mq = window.matchMedia('(max-width: 720px)');
+  function place() {
+    var fig = document.querySelector('.about__photo');
+    var panel = document.querySelector('.about__panel');
+    var top = document.querySelector('.about__top');
+    if (!fig || !panel || !top) return;
+    if (mq.matches) { if (fig.parentNode !== panel) panel.prepend(fig); }
+    else if (fig.parentNode !== top) top.appendChild(fig);
+  }
+  document.addEventListener('DOMContentLoaded', function () { setTimeout(place, 0); });
+  if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
+})();

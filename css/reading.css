@@ -186,11 +186,12 @@
 
 /* ---------- About (21 Nov 2026) ----------
    The opening stays on the yellow, without a band (Bernardo: a band on the whole line was too much);
-   only the marked words, Participa and each "with", sit on a pure white block.
+   only the marked words, Participa and each "with", sit on the cream block used everywhere for marked leads.
+   On phones the photo moves into the top of the panel, edge to edge, with its caption band and a line, as on the cases.
    The main text sits in a 40% white panel between two lines, above the Experiments and Reflections links.
    The sister-site box is filled with the same panel tone. */
 [data-reading] .about__opening-wrap { margin: 0; }
-[data-reading] .about__opening mark { background: var(--colour-paper, #FFFFFF); padding: 0.08em 0.15em; }
+[data-reading] .about__opening mark { background: var(--colour-cream); padding: 0.08em 0.15em; }   /* the cream used for all marked leads */
 [data-reading] .about__panel {
   margin: var(--space-4) 0;
   padding: var(--space-4);
@@ -203,3 +204,5 @@
 [data-reading] .about__side { background: var(--colour-panel); }
 @media (max-width: 720px) { [data-reading] .about__panel { padding: var(--space-3) var(--space-2); } }
 [data-reading] .about > .case__title { margin-bottom: var(--space-2); }   /* the same 16 px to the marked opening */
+[data-reading] .about__panel > .about__photo { margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-2)) var(--space-3); }
+[data-reading] .about__panel > .about__photo figcaption { border-bottom: 1px solid var(--colour-ink); }
