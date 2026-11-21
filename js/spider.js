@@ -27,7 +27,7 @@
   var silk = host.querySelector('.silk'), sp = host.querySelector('.sp'), legsG = host.querySelector('.legs');
   /* long, thin legs: femur and tibia almost three times the body length together */
   /* cellar spider (Pholcidae, 21 Nov 2026): legs about five times the body length, the front pair longest */
-  var LEGS = [ { a: -62, f: 15, t: 21 }, { a: -28, f: 13, t: 17 }, { a: 14, f: 12, t: 15 }, { a: 46, f: 13, t: 18 } ];
+  var LEGS = [ { a: -68, f: 19, t: 26 }, { a: -30, f: 16, t: 21 }, { a: 12, f: 15, t: 20 }, { a: 50, f: 17, t: 23 } ];   /* radiating like a star, as in the references */
   var paths = [];
   for (var i = 0; i < 8; i++) { var p = document.createElementNS(NS, 'path'); legsG.appendChild(p); paths.push(p); }
   function drawLegs(phase, amp, jitter, spread) {
@@ -37,10 +37,11 @@
         var g = ((i + s) % 2 ? 1 : -1) * Math.sin(phase) * amp + (jitter ? Math.sin(phase * 1.7 + i * 1.3 + s * 2.1) * jitter : 0);
         var a = (L.a * (1 - spread * 0.35) + g) * Math.PI / 180;   /* spread: legs splay outwards, as a parachute */
         var ox = 45 + side * 0.9, oy = 1.2;
-        var kx = ox + side * Math.cos(a) * L.f * (1 + spread * 0.25), ky = oy + Math.sin(a) * L.f - 4.5 * (1 - spread * 0.6);        /* high knees */
-        var bend = a + (i < 2 ? -0.2 : 0.55);
-        var fx = kx + side * Math.cos(bend) * L.t * (0.5 + spread * 0.4), fy = ky + Math.abs(Math.sin(bend + 0.9)) * L.t;
-        paths[i * 2 + s].setAttribute('d', 'M' + ox + ' ' + oy + ' Q' + (kx - side * 1.5).toFixed(2) + ' ' + (ky - 1).toFixed(2) + ' ' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2));
+        var kx = ox + side * Math.cos(a) * L.f * (1 + spread * 0.15), ky = oy + Math.sin(a) * L.f - 2.5 * (1 - spread * 0.5);   /* a gentle knee */
+        var b2 = a + 0.28 - spread * 0.12;                                   /* the lower leg carries on outwards, bending slightly down */
+        var fx = kx + side * Math.cos(b2) * L.t, fy = ky + Math.sin(b2) * L.t;
+        var hx = fx + side * 1.4, hy = fy + 1.2;                             /* a tiny hooked tip */
+        paths[i * 2 + s].setAttribute('d', 'M' + ox + ' ' + oy + ' L' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2) + ' L' + hx.toFixed(2) + ' ' + hy.toFixed(2));
       });
     });
   }
@@ -50,7 +51,7 @@
     var lr = li.getBoundingClientRect();
     if (!thumb || !title) return lr.width * 0.75;
     var t = thumb.getBoundingClientRect(), h = title.getBoundingClientRect();
-    if (t.left > h.left) return (t.left - lr.left) - 48;                 /* image on the right: 48 px before it, clear of the long legs */
+    if (t.left > h.left) return (t.left - lr.left) - 64;                 /* image on the right: 64 px before it, clear of the long legs */
     return (t.right - lr.left) + (h.left - t.right) / 2;                 /* image on the left: midway to the text */
   }
   var last = -1;
