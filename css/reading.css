@@ -299,3 +299,8 @@
 [data-reading] .profile .cv__entry { grid-template-columns: 9rem minmax(0, 1fr); gap: var(--space-3); }
 @media (max-width: 720px) { [data-reading] .profile .cv__entry { grid-template-columns: 1fr; gap: var(--space-1); } }
 [data-reading] .profile .cv__entry-body > * { max-width: none; }   /* the text uses the card's width */
+/* Profile (21 Nov 2026, Bernardo): a line above and below each role card; the Participa . Studio box with a single
+   1 px outline; "Selected experience" in the serif, spaced capitals, lighter. The main text block stays without lines. */
+[data-reading] .profile .cv__entry { border-top: 1px solid var(--colour-ink); border-bottom: 1px solid var(--colour-ink); }
+[data-reading] .profile .profile__sides .about__side { border: 1px solid var(--colour-ink); }
+[data-reading] .profile .cv__heading { font-family: var(--font-quote); font-weight: 400; font-style: normal; font-size: clamp(1rem, 1.6vw, 1.25rem); letter-spacing: 0.24em; text-transform: uppercase; }
