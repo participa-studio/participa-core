@@ -156,3 +156,11 @@
 [data-reading] .tags li > span { background: #F9EC9C; }
 [data-reading] .tags a:hover,
 [data-reading] .tags a:focus-visible { background: var(--colour-paper, #FFFFFF); }
+
+/* Captions (21 Nov 2026): a line under every caption band inside a panel, so the caption reads apart from the text below.
+   Not under a caption that already sits on the panel's closing line. */
+[data-reading] .case__panel .slider__slide figcaption,
+[data-reading] .case__panel .case__video figcaption,
+[data-reading] .post__panel .post__lead-figure figcaption,
+[data-reading] .post__panel .post__figure figcaption { border-bottom: 1px solid var(--colour-ink); }
+[data-reading] .post__panel:has(.post__body > .post__figure:last-child) .post__body > .post__figure:last-child figcaption { border-bottom: 0; }
