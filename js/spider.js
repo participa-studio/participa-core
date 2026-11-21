@@ -109,7 +109,7 @@
     var drop = walkOut ? (lineY - 10.5 * scale) / scale : (lineY * (0.25 + Math.random() * 0.67) - 16) / scale;   /* anywhere from a quarter of the way down to almost the line */
     var startX = parseFloat(host.style.left), toLeft = startX < li.clientWidth / 2;
     var walkDist = (toLeft ? startX : li.clientWidth - startX) + 10;            /* the shorter way to the end of the line */
-    var t0 = null, D = 2400 + drop * 6, H = walkOut ? 350 : 2400, U = 900 + drop * 3, W = walkDist * 9;   /* walk-off: she runs, about 110 px a second */
+    var t0 = null, D = 2400 + drop * 6, H = walkOut ? 350 : 2400, U = 900 + drop * 3, P = 450, W = walkDist * 9;   /* walk-off: she runs, about 110 px a second */
     drawLegs(0, 0, 0, 0);
     host.style.opacity = 1;
     function frame(t) {
@@ -125,7 +125,8 @@
       }
       else if (walkOut) { host.remove(); silk.style.opacity = 1; host.style.opacity = 1; sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       else if (e < D + H) { var h = (e - D) / H; pose(true); y = drop + 1.5; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 60; jit = 3 + 5 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, bobbing; the legs twitch in bursts */
-      else if (e < D + H + U) { var u = (e - D - H) / U; pose(false); y = drop - (drop + 26) * u * (2 - u); climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand, on past the line and out of view */
+      else if (e < D + H + P) { var g = (e - D - H) / P; pose(false); y = drop; climb = g * g * (3 - 2 * g); open = 0.4; phase = Math.PI / 2; }   /* first she turns and reaches up the thread with the front legs, still in place */
+      else if (e < D + H + P + U) { var u = (e - D - H - P) / U; pose(false); y = drop - (drop + 26) * u * (2 - u); climb = 1; open = 0.4; phase = (e - D - H - P) / 45 + Math.PI / 2; }   /* then she pulls: hand over hand, on past the line and out of view */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); pose(false); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it; she disappears behind the line */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
