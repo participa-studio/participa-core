@@ -295,3 +295,7 @@
   [data-reading] .profile .profile__side .profile__portrait { width: 8rem; }
   [data-reading] .profile .cv__entry { padding: var(--space-3) var(--space-2); }
 }
+/* Profile roles (21 Nov 2026): the organisation column narrows to its content and the text moves up to it */
+[data-reading] .profile .cv__entry { grid-template-columns: 9rem minmax(0, 1fr); gap: var(--space-3); }
+@media (max-width: 720px) { [data-reading] .profile .cv__entry { grid-template-columns: 1fr; gap: var(--space-1); } }
+[data-reading] .profile .cv__entry-body > * { max-width: none; }   /* the text uses the card's width */
