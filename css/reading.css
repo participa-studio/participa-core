@@ -308,3 +308,10 @@
    the full-width line under the three is gone */
 [data-reading] .contact__offer { padding-bottom: var(--space-3); border-bottom: 1px solid var(--colour-ink); }
 [data-reading] .contact__close { border-top: 0; padding-top: 0; margin-top: var(--space-6); }
+
+/* Profile main text (21 Nov 2026): a line above and below the shade, as the .studio About panel */
+[data-reading] .profile .profile__top .cv__intro { border-top: 1px solid var(--colour-ink); border-bottom: 1px solid var(--colour-ink); }
+@media (max-width: 720px) {
+  [data-reading] .profile .profile__side { flex-wrap: wrap; }
+  [data-reading] .profile .profile__cv-caption { flex: 1 1 10rem; margin-top: 0; align-self: center; }
+}

@@ -39,11 +39,11 @@ layout: default
         <img class="profile__portrait" src="{{ page.portrait }}" alt="{{ page.portrait_alt | default: page.person }}">
       </picture>
       {%- endif %}
-      {%- comment -%} CV (21 Nov 2026): one compact button, shown only once the PDF exists {%- endcomment -%}
+      {%- comment -%} CV (21 Nov 2026): a caption band under the portrait, as the photo captions; shown only once the PDF exists {%- endcomment -%}
       {%- if page.pdf and page.pdf.file %}
-      <a class="cv-button" href="{{ page.pdf.file }}" download>
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>
-        <span>Download CV</span><span class="cv-button__meta">PDF</span>
+      <a class="profile__cv-caption" href="{{ page.pdf.file }}" download>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M14 2.5V7h4.5"/><path d="M12 10.5v6.5"/><path d="M9.2 14.2l2.8 2.8 2.8-2.8"/></svg>
+        <span>Curriculum vitae</span><span class="profile__cv-meta">PDF ↓</span>
       </a>
       {%- endif %}
     </div>

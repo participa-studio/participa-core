@@ -185,3 +185,9 @@
 .cv-button { display: inline-flex; align-items: center; gap: 0.6rem; justify-self: start; padding: 0.85rem 1.1rem; border: 1px solid var(--colour-ink); color: inherit; text-decoration: none; font-size: 0.75rem; font-weight: var(--weight-display); letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
 .cv-button:hover, .cv-button:focus-visible { background: var(--colour-paper, #FFFFFF); }
 .cv-button__meta { padding-left: 0.6rem; border-left: 1px solid currentColor; opacity: 0.65; }
+
+/* CV caption under the portrait (21 Nov 2026): the same band as the photo captions, as a download link */
+.profile__side picture + .profile__cv-caption { margin-top: calc(-1 * var(--space-3)); }
+.profile__cv-caption { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; background: var(--colour-marker, rgba(255, 255, 255, 0.4)); border-bottom: 1px solid var(--colour-ink); color: inherit; text-decoration: none; font-size: 0.6875rem; font-weight: var(--weight-display); letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4; white-space: nowrap; }
+.profile__cv-meta { margin-left: auto; opacity: 0.7; }
+.profile__cv-caption:hover, .profile__cv-caption:focus-visible { background: var(--colour-paper, #FFFFFF); }

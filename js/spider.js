@@ -17,7 +17,7 @@
   /* size (21 Nov 2026): a little larger on wide screens, smaller on phones; the whole drawing scales, thread included */
   var svgEl = host.querySelector('svg');
   function size() {
-    var s = window.innerWidth <= 720 ? 0.7 : 1.2;
+    var s = window.innerWidth <= 720 ? 0.95 : 1.2;   /* phones a little smaller than desktop, not tiny */
     svgEl.setAttribute('width', 90 * s); svgEl.setAttribute('height', 420 * s);
     host.style.width = (90 * s) + 'px'; host.style.height = (420 * s) + 'px'; host.style.marginLeft = (-45 * s) + 'px';
     return s;
@@ -92,12 +92,12 @@
     li.style.position = 'relative';
     li.appendChild(host);
     host.style.left = Math.round(spot(li)) + 'px';
-    /* now and then (about one in three) she goes all the way down to the bottom line and walks off along it */
-    var walkOut = Math.random() < 0.34;
+    /* about one visit in twenty she goes all the way down to the bottom line and walks off along it */
+    var walkOut = Math.random() < 0.05;
     /* the bottom line is the next post's top line (or the list's end): measured, as a margin can sit between */
     var lrTop = li.getBoundingClientRect().top, nxt = li.nextElementSibling;
     var lineY = (nxt ? nxt.getBoundingClientRect().top : list.getBoundingClientRect().bottom - 1) - lrTop + 1;
-    var drop = walkOut ? (lineY - 10.5 * scale) / scale : (lineY * (0.5 + Math.random() * 0.42) - 16) / scale;   /* drawing units */
+    var drop = walkOut ? (lineY - 10.5 * scale) / scale : (lineY * (0.25 + Math.random() * 0.67) - 16) / scale;   /* anywhere from a quarter of the way down to almost the line */
     var startX = parseFloat(host.style.left), toLeft = startX < li.clientWidth / 2;
     var walkDist = (toLeft ? startX : li.clientWidth - startX) + 10;            /* the shorter way to the end of the line */
     var t0 = null, D = 2400 + drop * 6, H = walkOut ? 700 : 2400, U = 900 + drop * 3, W = walkDist * 22;   /* walking about 45 px a second */
