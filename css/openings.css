@@ -77,3 +77,72 @@
   transform: translateX(-2.5%);       /* the same optical centring as the loop: the ragged text sits left of the column's middle */
 }
 .opening-mark--dingbats span { display: block; font-size: 0.8em; opacity: 0.6; }   /* four-pointed stars, the ink at 60% (12 Nov 2026) */
+
+/* Chain divider (.design, 21 Nov 2026): four even loops, a thin line always in place,
+   a tapered pencil stroke (five layers from one tip) going over it. One run every 12 s; the speed eases
+   slightly at the ends of the loops and changes gradually, so the motion stays smooth. */
+.opening-mark--chain svg { height: 15px; }
+.opening-mark--chain .opening-mark__base { stroke-width: 1.1; opacity: 0.55; }
+.opening-mark--chain .opening-mark__trace { animation: opening-mark-chain 12s linear infinite; }
+.opening-mark--chain .opening-mark__l0 { stroke-width: 1.3; opacity: 0.75; stroke-dasharray: 48 52; --lead: 0; }
+.opening-mark--chain .opening-mark__l1 { stroke-width: 1.9; opacity: 0.85; stroke-dasharray: 36 64; --lead: -12; }
+.opening-mark--chain .opening-mark__l2 { stroke-width: 2.5; opacity: 1; stroke-dasharray: 24 76; --lead: -24; }
+.opening-mark--chain .opening-mark__l3 { stroke-width: 3.1; opacity: 1; stroke-dasharray: 13 87; --lead: -35; }
+.opening-mark--chain .opening-mark__l4 { stroke-width: 3.8; opacity: 1; stroke-dasharray: 5 95; --lead: -43; }
+@keyframes opening-mark-chain {
+  0% { stroke-dashoffset: calc(-0.00 + var(--lead)); }
+  2% { stroke-dashoffset: calc(-2.13 + var(--lead)); }
+  4% { stroke-dashoffset: calc(-4.40 + var(--lead)); }
+  6% { stroke-dashoffset: calc(-6.55 + var(--lead)); }
+  8% { stroke-dashoffset: calc(-8.46 + var(--lead)); }
+  10% { stroke-dashoffset: calc(-10.19 + var(--lead)); }
+  12% { stroke-dashoffset: calc(-12.01 + var(--lead)); }
+  14% { stroke-dashoffset: calc(-14.08 + var(--lead)); }
+  16% { stroke-dashoffset: calc(-16.33 + var(--lead)); }
+  18% { stroke-dashoffset: calc(-18.54 + var(--lead)); }
+  20% { stroke-dashoffset: calc(-20.50 + var(--lead)); }
+  22% { stroke-dashoffset: calc(-22.26 + var(--lead)); }
+  24% { stroke-dashoffset: calc(-24.03 + var(--lead)); }
+  26% { stroke-dashoffset: calc(-26.03 + var(--lead)); }
+  28% { stroke-dashoffset: calc(-28.26 + var(--lead)); }
+  30% { stroke-dashoffset: calc(-30.50 + var(--lead)); }
+  32% { stroke-dashoffset: calc(-32.54 + var(--lead)); }
+  34% { stroke-dashoffset: calc(-34.33 + var(--lead)); }
+  36% { stroke-dashoffset: calc(-36.08 + var(--lead)); }
+  38% { stroke-dashoffset: calc(-38.01 + var(--lead)); }
+  40% { stroke-dashoffset: calc(-40.19 + var(--lead)); }
+  42% { stroke-dashoffset: calc(-42.46 + var(--lead)); }
+  44% { stroke-dashoffset: calc(-44.55 + var(--lead)); }
+  46% { stroke-dashoffset: calc(-46.40 + var(--lead)); }
+  48% { stroke-dashoffset: calc(-48.13 + var(--lead)); }
+  50% { stroke-dashoffset: calc(-50.00 + var(--lead)); }
+  52% { stroke-dashoffset: calc(-52.13 + var(--lead)); }
+  54% { stroke-dashoffset: calc(-54.40 + var(--lead)); }
+  56% { stroke-dashoffset: calc(-56.55 + var(--lead)); }
+  58% { stroke-dashoffset: calc(-58.46 + var(--lead)); }
+  60% { stroke-dashoffset: calc(-60.19 + var(--lead)); }
+  62% { stroke-dashoffset: calc(-62.01 + var(--lead)); }
+  64% { stroke-dashoffset: calc(-64.08 + var(--lead)); }
+  66% { stroke-dashoffset: calc(-66.33 + var(--lead)); }
+  68% { stroke-dashoffset: calc(-68.54 + var(--lead)); }
+  70% { stroke-dashoffset: calc(-70.50 + var(--lead)); }
+  72% { stroke-dashoffset: calc(-72.26 + var(--lead)); }
+  74% { stroke-dashoffset: calc(-74.03 + var(--lead)); }
+  76% { stroke-dashoffset: calc(-76.03 + var(--lead)); }
+  78% { stroke-dashoffset: calc(-78.26 + var(--lead)); }
+  80% { stroke-dashoffset: calc(-80.50 + var(--lead)); }
+  82% { stroke-dashoffset: calc(-82.54 + var(--lead)); }
+  84% { stroke-dashoffset: calc(-84.33 + var(--lead)); }
+  86% { stroke-dashoffset: calc(-86.08 + var(--lead)); }
+  88% { stroke-dashoffset: calc(-88.01 + var(--lead)); }
+  90% { stroke-dashoffset: calc(-90.19 + var(--lead)); }
+  92% { stroke-dashoffset: calc(-92.46 + var(--lead)); }
+  94% { stroke-dashoffset: calc(-94.55 + var(--lead)); }
+  96% { stroke-dashoffset: calc(-96.40 + var(--lead)); }
+  98% { stroke-dashoffset: calc(-98.13 + var(--lead)); }
+  100% { stroke-dashoffset: calc(-100.00 + var(--lead)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .opening-mark--chain .opening-mark__trace { animation: none; display: none; }
+  .opening-mark--chain .opening-mark__base { stroke-width: 2.4; opacity: 1; }
+}

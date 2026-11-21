@@ -1,10 +1,13 @@
 {%- comment -%}
   PARTICIPA THEME — DIVIDER between text blocks, per site (12 Nov 2026):
   participa.divider: stars → three four-pointed stars at 60%, as in old books (Studio);
+  chain → four even loops drawn on (.design, 21 Nov 2026);
   otherwise the drawn, animated loop from _includes/opening-mark-loop.html (.design).
 {%- endcomment -%}
 {%- if site.participa.divider == "stars" %}
 <p class="opening-mark opening-mark--dingbats" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span></p>
+{%- elsif site.participa.divider == "chain" %}
+{%- include opening-mark-chain.html %}
 {%- else %}
 {%- include opening-mark-loop.html %}
 {%- endif %}
