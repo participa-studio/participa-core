@@ -183,3 +183,11 @@ document.addEventListener('DOMContentLoaded', function () {
   if (lead) { var w = document.createElement('div'); w.className = 'cv__lead-wrap'; lead.before(w); w.appendChild(lead); }
   top.before(open);
 });
+
+/* Chosen tag (Bernardo, 21 Nov 2026): the whole box clears the filter, not only the cross */
+document.addEventListener('click', function (e) {
+  var box = e.target.closest && e.target.closest('.blog__filter-tag');
+  if (!box || e.target.closest('.blog__filter-clear')) return;
+  var clear = box.querySelector('.blog__filter-clear');
+  if (clear) clear.click();
+});

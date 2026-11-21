@@ -388,3 +388,7 @@
 [data-reading] .contact__button:hover, [data-reading] .contact__button:focus-visible,
 [data-reading] .tags a:hover, [data-reading] .tags a:focus-visible { color: var(--colour-here, #BD483D); }
 [data-reading] .blog__filter-clear:hover, [data-reading] .blog__filter-clear:focus-visible { color: var(--colour-here, #BD483D); opacity: 1; }
+/* the whole chosen-tag box clears the filter: pointer, and the text turns red with the cross on hover */
+[data-reading] .blog__filter-tag { cursor: pointer; }
+[data-reading] .blog__filter-tag:hover,
+[data-reading] .blog__filter-tag:hover .blog__filter-clear { color: var(--colour-here, #BD483D); }
