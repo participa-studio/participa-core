@@ -228,11 +228,9 @@
 /* Marked words in any opening (21 Nov 2026): the cream block, on both sites (.design Profile, .studio About) */
 [data-reading] .page__opening mark { background: var(--colour-cream); }
 
-/* Home case (21 Nov 2026): the image sits against the section line; the case closes with its own line;
-   "See the case" and the "All ..." link sit under that line, close to it */
+/* Home case (21 Nov 2026): the image sits against the section line; "See the case" stays under the case text;
+   the case closes with its own line, and the "All ..." link sits under that line, close to it */
 [data-reading] .home__work > .cv__heading { margin-bottom: 0; }
 [data-reading] .home__cases--hero { margin-top: 0; padding-bottom: var(--space-4); border-bottom: 1px solid var(--colour-ink); }
-[data-reading] .home__cases--hero .home__case-more { display: none; }
 [data-reading] .home__work .home__more { margin-top: 0.75rem; }
-[data-reading] .home__work .home__more + .home__more { margin-top: var(--space-1); }
 [data-reading] .home__cases--hero .home__case-title { margin-top: var(--space-3); }   /* the text column starts a little under the line; the image sits against it */

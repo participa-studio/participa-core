@@ -156,19 +156,3 @@ document.addEventListener('DOMContentLoaded', function () {
   if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
 })();
 
-/* Home case (21 Nov 2026): "See the case" moves out of the card, under the case's closing line */
-document.addEventListener('DOMContentLoaded', function () {
-  if (!document.documentElement.hasAttribute('data-reading')) return;
-  var list = document.querySelector('.home__work .home__cases--hero');
-  if (!list) return;
-  function place() {
-    var card = [].filter.call(list.querySelectorAll('.home__case'), function (c) { return c.offsetParent !== null; })[0] || list.querySelector('.home__case');
-    if (!card) return;
-    var more = card.querySelector('.home__case-more');
-    var p = list.parentNode.querySelector('.home__more--case');
-    if (!p) { p = document.createElement('p'); p.className = 'home__more home__more--case'; p.innerHTML = '<a></a>'; list.after(p); }
-    p.firstChild.href = card.getAttribute('href');
-    p.firstChild.textContent = more ? more.textContent.trim() : 'See the case →';
-  }
-  place(); setTimeout(place, 0);   /* after js/shuffle.js has picked the case */
-});
