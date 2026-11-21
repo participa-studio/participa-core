@@ -13,11 +13,11 @@
   host.innerHTML = '<svg width="90" height="420" viewBox="0 0 90 420" style="overflow:visible;display:block">' +
     '<line class="silk" x1="45" y1="-2" x2="45" y2="0" stroke="' + INK + '" stroke-width="0.6"/>' +
     '<g class="sp"><g class="legs" fill="none" stroke="' + INK + '" stroke-opacity="0.7" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></g>' +
-    '<circle cx="45" cy="0.4" r="1.3" fill="' + INK + '"/><ellipse cx="45" cy="4.3" rx="2.1" ry="2.8" fill="' + INK + '"/></g></svg>';
+    '<circle class="head" cx="45" cy="0.4" r="1.3" fill="' + INK + '"/><ellipse class="abd" cx="45" cy="4.3" rx="2.1" ry="2.8" fill="' + INK + '"/></g></svg>';
   /* size (21 Nov 2026): a little larger on wide screens, smaller on phones; the whole drawing scales, thread included */
   var svgEl = host.querySelector('svg');
   function size() {
-    var s = window.innerWidth <= 720 ? 2.4 : 2.2;   /* Bernardo, 21 Nov 2026, evening: clearly larger than the ants on the same site, as a cellar spider is */
+    var s = window.innerWidth <= 720 ? 1.5 : 2.0;   /* Bernardo, 21 Nov 2026, evening: larger than the ants on wide screens; smaller on phones, so the legs read as quick, not mechanical */
     svgEl.setAttribute('width', 90 * s); svgEl.setAttribute('height', 420 * s);
     host.style.width = (90 * s) + 'px'; host.style.height = (420 * s) + 'px'; host.style.marginLeft = (-45 * s) + 'px';
     return s;
@@ -25,6 +25,15 @@
   var scale = size();
   window.addEventListener('resize', function () { scale = size(); });
   var silk = host.querySelector('.silk'), sp = host.querySelector('.sp'), legsG = host.querySelector('.legs');
+  var headEl = host.querySelector('.head'), abdEl = host.querySelector('.abd');
+  /* Hanging (Bernardo, 21 Nov 2026): the thread comes from the spinnerets at the back, so on the way down and
+     while she hangs the abdomen is up, on the thread, and the head and legs are below it. Climbing back she turns,
+     head up, and pulls herself along the thread with the front legs. */
+  var OY = 1.2;
+  function pose(hanging) {
+    if (hanging) { abdEl.setAttribute('cy', 1.7); headEl.setAttribute('cy', 5.6); OY = 5.2; }
+    else { abdEl.setAttribute('cy', 4.3); headEl.setAttribute('cy', 0.4); OY = 1.2; }
+  }
   /* long, thin legs: femur and tibia almost three times the body length together */
   /* cellar spider (Pholcidae), drawn as a cartoon (21 Nov 2026). Each leg: a femur rising from the body to a high
      knee, then a tibia falling outwards and down: together a curved umbrella. Angles in degrees from the horizontal,
@@ -41,7 +50,7 @@
   function drawLegs(open, jitter, climb, phase, ground) {
     LEGS.forEach(function (L, i) {
       [-1, 1].forEach(function (side, s) {
-        var ox = 45 + side * 0.9, oy = 1.2;
+        var ox = 45 + side * 0.9, oy = OY;
         var tw = jitter ? Math.sin(phase * 1.7 + i * 1.3 + s * 2.1) * jitter : 0;
         var up = (L.up - open * 6 + tw) * R, down = (L.down - open * 14 - tw * 0.5) * R;
         var kx = ox + side * Math.cos(up) * L.f, ky = oy + Math.sin(up) * L.f;
@@ -100,24 +109,24 @@
     var drop = walkOut ? (lineY - 10.5 * scale) / scale : (lineY * (0.25 + Math.random() * 0.67) - 16) / scale;   /* anywhere from a quarter of the way down to almost the line */
     var startX = parseFloat(host.style.left), toLeft = startX < li.clientWidth / 2;
     var walkDist = (toLeft ? startX : li.clientWidth - startX) + 10;            /* the shorter way to the end of the line */
-    var t0 = null, D = 2400 + drop * 6, H = walkOut ? 700 : 2400, U = 900 + drop * 3, W = walkDist * 22;   /* walking about 45 px a second */
+    var t0 = null, D = 2400 + drop * 6, H = walkOut ? 350 : 2400, U = 900 + drop * 3, W = walkDist * 9;   /* walk-off: she runs, about 110 px a second */
     drawLegs(0, 0, 0, 0);
     host.style.opacity = 1;
     function frame(t) {
       if (!t0) t0 = t;
       var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0, ground = 0;
-      if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 2.4)); open = Math.min(1, k * 3); jit = 1.2; phase = e / 140; }      /* umbrella opens as she slides down */
-      else if (walkOut && e < D + H) { y = drop; open = 1 - (e - D) / H * 0.5; phase = (e - D) / 120; jit = 1.5; silk.style.opacity = 1 - (e - D) / H; }   /* lands, lets go of the thread */
+      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 7 + 4 * Math.sin(e / 400); phase = e / 55; }      /* she lets herself down from the spinnerets; the legs keep feeling and paddling the air */
+      else if (walkOut && e < D + H) { pose(false); y = drop; open = 1 - (e - D) / H * 0.5; phase = (e - D) / 120; jit = 1.5; silk.style.opacity = 1 - (e - D) / H; }   /* lands, lets go of the thread */
       else if (walkOut && e < D + H + W) {
         var wk = (e - D - H) / W, dx = (toLeft ? -1 : 1) * walkDist * wk;
         host.style.left = (startX + dx) + 'px';
         host.style.opacity = Math.min(1, (walkDist - Math.abs(dx)) / 40);    /* fades over the last 40 px, at the end of the line */
-        y = drop; ground = 9.5; open = 0.3; phase = (e - D - H) / 70;
+        y = drop; ground = 9.5; open = 0.3; phase = (e - D - H) / 32;
       }
       else if (walkOut) { host.remove(); silk.style.opacity = 1; host.style.opacity = 1; sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
-      else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 90; jit = 2 * Math.max(0, Math.sin(h * Math.PI * 3)); }
-      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop - (drop + 26) * u * (2 - u); climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand, on past the line and out of view */
-      else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
+      else if (e < D + H) { var h = (e - D) / H; pose(true); y = drop + 1.5; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 60; jit = 3 + 5 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, bobbing; the legs twitch in bursts */
+      else if (e < D + H + U) { var u = (e - D - H) / U; pose(false); y = drop - (drop + 26) * u * (2 - u); climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand, on past the line and out of view */
+      else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); pose(false); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it; she disappears behind the line */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
       drawLegs(open, jit, climb, phase, ground ? ground : 0);
