@@ -24,8 +24,8 @@
 
 /* Lead. A marked opening is inline, so its own top margin does nothing: the space comes from the title above it,
    so the cream band never touches the descenders of the title (g, p, y). */
-[data-reading] .case__title:has(+ .page__opening) { margin-bottom: var(--space-4); }
-[data-reading] .case__lead-wrap { max-width: 40rem; margin: var(--space-4) 0 0; }
+[data-reading] .case__title:has(+ .page__opening) { margin-bottom: var(--space-2); }   /* 16 px (halved 21 Nov 2026) */
+[data-reading] .case__lead-wrap { max-width: 40rem; margin: var(--space-2) 0 0; }
 [data-reading] .case__lead.page__opening {
   display: inline;
   margin: 0;
@@ -104,7 +104,7 @@
    with its caption on a band below; then the tags and the text. Images in the text also run edge to edge
    with a caption band. References leave the panel: small label, small items, no shade, closed by a line.
    Reflections list: no shade and no markers (clean list, as before). */
-[data-reading] .post__lead-wrap { max-width: 40rem; margin: var(--space-4) 0 0; }
+[data-reading] .post__lead-wrap { max-width: 40rem; margin: var(--space-2) 0 0; }
 [data-reading] .post__lead-wrap .post__lead {
   display: inline;
   margin: 0;
