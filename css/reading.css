@@ -304,3 +304,7 @@
 [data-reading] .profile .cv__entry { border-top: 1px solid var(--colour-ink); border-bottom: 1px solid var(--colour-ink); }
 [data-reading] .profile .profile__sides .about__side { border: 1px solid var(--colour-ink); }
 [data-reading] .profile .cv__heading { font-family: var(--font-quote); font-weight: 400; font-style: normal; font-size: clamp(1rem, 1.6vw, 1.25rem); letter-spacing: 0.24em; text-transform: uppercase; }
+/* Contact (21 Nov 2026): each offer is its own small block, with a line above and a line below;
+   the full-width line under the three is gone */
+[data-reading] .contact__offer { padding-bottom: var(--space-3); border-bottom: 1px solid var(--colour-ink); }
+[data-reading] .contact__close { border-top: 0; padding-top: 0; margin-top: var(--space-6); }
