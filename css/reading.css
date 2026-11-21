@@ -337,11 +337,11 @@
    The caption band is two layers of the panel white, as on the cases, so it reads apart from the text panel. */
 [data-reading] .about__top--banded { grid-template-columns: 1fr; }
 [data-reading] .about__top--banded .about__opening-wrap,
-[data-reading] .about__top--banded .opening-mark { max-width: calc((100% - clamp(3rem, 7vw, 7rem)) * 5 / 9); }
-[data-reading] .about__band {
+[data-reading] .about__top--banded .opening-mark { max-width: calc((100% - var(--space-6)) * 5 / 9); }
+[data-reading] .about__band {   /* gap between text and photo: the same 48 px as on the .design Profile (21 Nov 2026) */
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
-  column-gap: clamp(3rem, 7vw, 7rem);
+  column-gap: var(--space-6);
   align-items: stretch;
   margin: var(--space-4) 0 0.75rem;
 }
@@ -373,7 +373,7 @@
 [data-reading] .about__side { box-shadow: 1px 1px 0 var(--colour-ink); }
 [data-reading] .about__side { border: 1px solid var(--colour-ink); }   /* one thin line on every side, so the 1 px shadow reads as the extra pixel */
 /* About: the sister-site box takes exactly the width of the text panel (the left column of the band) */
-[data-reading] .about:not(.profile__sides) .about__sides { grid-template-columns: 1fr; max-width: calc((100% - clamp(3rem, 7vw, 7rem)) * 5 / 9); }
+[data-reading] .about:not(.profile__sides) .about__sides { grid-template-columns: 1fr; max-width: calc((100% - var(--space-6)) * 5 / 9); }
 @media (max-width: 720px) { [data-reading] .about:not(.profile__sides) .about__sides { max-width: none; } }
 
 /* Tags and the chosen-tag box (Bernardo, 21 Nov 2026, evening): the same finish as the buttons, a thin line and the 1 px
