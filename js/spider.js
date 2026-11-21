@@ -17,7 +17,7 @@
   /* size (21 Nov 2026): a little larger on wide screens, smaller on phones; the whole drawing scales, thread included */
   var svgEl = host.querySelector('svg');
   function size() {
-    var s = window.innerWidth <= 720 ? 0.95 : 1.2;   /* phones a little smaller than desktop, not tiny */
+    var s = window.innerWidth <= 720 ? 1.4 : 1.2;   /* Bernardo, 21 Nov 2026: phones larger than desktop, so she reads on a small screen */
     svgEl.setAttribute('width', 90 * s); svgEl.setAttribute('height', 420 * s);
     host.style.width = (90 * s) + 'px'; host.style.height = (420 * s) + 'px'; host.style.marginLeft = (-45 * s) + 'px';
     return s;
