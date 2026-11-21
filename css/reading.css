@@ -329,3 +329,29 @@
 
 /* Profile, Participa Studio box (21 Nov 2026, evening): as wide as the Selected experience blocks (960 px), not half the page */
 [data-reading] .profile .profile__sides .about__sides { grid-template-columns: 1fr; max-width: 960px; }
+
+/* About band (Bernardo, 21 Nov 2026, evening): panel and photo in one wider block, one line above and one below.
+   The opening keeps the 70% lead width; the sister-site box below runs the full width, like the block. */
+[data-reading] .about__top--banded { grid-template-columns: 1fr; }
+[data-reading] .about__top--banded .about__opening-wrap,
+[data-reading] .about__top--banded .opening-mark { max-width: 70%; }
+[data-reading] .about__band {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+  margin: var(--space-4) 0 0.75rem;
+  border-top: 1px solid var(--colour-ink);
+  border-bottom: 1px solid var(--colour-ink);
+}
+[data-reading] .about__band > .about__panel { margin: 0; border: 0; }
+[data-reading] .about__band > .about__photo { margin: 0; display: flex; flex-direction: column; }
+[data-reading] .about__band > .about__photo img { flex: 1 1 auto; min-height: 0; height: 100%; object-fit: cover; }
+[data-reading] .about__band > .about__photo figcaption { border-bottom: 0; }
+[data-reading] .about .about__sides { grid-template-columns: 1fr; }
+@media (max-width: 720px) {
+  [data-reading] .about__top--banded .about__opening-wrap,
+  [data-reading] .about__top--banded .opening-mark { max-width: none; }
+  [data-reading] .about__band { grid-template-columns: 1fr; }
+  [data-reading] .about__band > .about__photo { order: -1; }
+  [data-reading] .about__band > .about__photo img { height: auto; }
+  [data-reading] .about__band > .about__photo figcaption { border-bottom: 1px solid var(--colour-ink); }
+}

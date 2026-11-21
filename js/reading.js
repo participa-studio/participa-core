@@ -138,22 +138,24 @@ document.addEventListener('DOMContentLoaded', function () {
   [].forEach.call(texts, function (t) { panel.appendChild(t); });
 });
 
-/* About on phones (21 Nov 2026): the photo moves into the top of the text panel; back beside the text on wider screens */
-(function () {
+/* About band (Bernardo, 21 Nov 2026, evening): the text panel and the photo form one block between two lines,
+   panel on the left and photo on the right on wide screens, the photo on top on phones; the caption stays under
+   the photo. The Experiments and Reflections links follow the block. */
+document.addEventListener('DOMContentLoaded', function () {
   if (!document.documentElement.hasAttribute('data-reading')) return;
-  var mq = window.matchMedia('(max-width: 720px)');
-  function place() {
+  setTimeout(function () {
     var fig = document.querySelector('.about__photo');
     var panel = document.querySelector('.about__panel');
     var top = document.querySelector('.about__top');
     if (!fig || !panel || !top) return;
-    if (mq.matches) { if (fig.parentNode !== panel) panel.prepend(fig); }
-    else if (fig.parentNode !== top) top.appendChild(fig);
-  }
-  document.addEventListener('DOMContentLoaded', function () { setTimeout(place, 0); });
-  if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
-})();
-
+    var band = document.createElement('div'); band.className = 'about__band';
+    top.after(band);
+    band.appendChild(panel); band.appendChild(fig);
+    var links = document.querySelector('.about__main > .about__practice-links');
+    if (links) band.after(links);
+    top.classList.add('about__top--banded');
+  }, 0);
+});
 
 /* Home quote (21 Nov 2026): the quote of the case on screen moves under the case, inside its frame,
    on the panel shade; the closing line and the "All ..." link follow it */
