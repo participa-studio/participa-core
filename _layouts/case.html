@@ -11,6 +11,7 @@ layout: default
     tag (optional: posts carrying this tag are listed under the case),
     video (youtube or vimeo = the video id, caption; optional),
     artefacts (label, file or url, format = PDF, status; leave file out while in preparation), references (title, source, url),
+    references_label (optional: a heading other than References, e.g. "Builds on"),
     note
   Anything written below the fields appears after the three blocks.
 {%- endcomment -%}
@@ -132,7 +133,7 @@ layout: default
 
   {%- if page.references %}
   <section class="case__artefacts case__references" aria-labelledby="references-title">
-    <h2 id="references-title">References</h2>
+    <h2 id="references-title">{{ page.references_label | default: "References" }}</h2>
     <ul>
       {%- for r in page.references %}
       <li>

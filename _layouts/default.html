@@ -4,7 +4,7 @@
   Header + content + footer. Every page on both sites builds on this.
 {%- endcomment -%}
 {%- assign p = site.participa %}
-<html lang="en-GB"{% if site.participa.sdots %} data-sdots="{{ site.participa.sdots }}"{% endif %}>
+<html lang="en-GB"{% if site.participa.sdots %} data-sdots="{{ site.participa.sdots }}"{% endif %}{% if site.participa.reading %} data-reading{% endif %}>
 <head>
 {% include head.html %}
 </head>
@@ -32,6 +32,9 @@
 {%- endif %}
 {%- if p.goo %}
 <script src="{{ p.core }}/js/goo.js?v={{ p.version }}" defer></script>
+{%- endif %}
+{%- if p.reading %}
+<script src="{{ p.core }}/js/reading.js?v={{ p.version }}" defer></script>
 {%- endif %}
 <script src="{{ p.core }}/js/year.js?v={{ p.version }}" defer></script>
 </body>
