@@ -4,7 +4,7 @@ layout: default
 {%- comment -%}
   PARTICIPA THEME — ONE POST
   Fields: title, lead (optional), tags (optional), image + image_alt + image_caption (optional), published, and the text.
-  Rule (21 Nov 2026): at most two images per post, the post image at the top and one figure at the end of the text.
+  Rule (21 Nov 2026): at most two images per post, both at the top: list them under images (they show as a slider).
   Written in Pages CMS (.pages.yml in the site repository) or as a file in _posts/.
   The date comes from the file name (YYYY-MM-DD-title.md).
 {%- endcomment -%}
@@ -12,7 +12,20 @@ layout: default
   <time class="blog__date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d %B %Y" }}</time>
   <h1 class="case__title">{{ page.title }}</h1>
   {%- if page.lead %}<p class="case__lead post__lead">{{ page.lead }}</p>{% endif %}
-  {%- if page.image %}
+  {%- comment -%} images (21 Nov 2026): a list of up to two images (src, alt, caption) shown as a slider at the top,
+      as on the cases; without it, the single post image (image, image_alt, image_caption). {%- endcomment -%}
+  {%- if page.images and page.images.size > 0 %}
+  <div class="slider post__slider" aria-roledescription="carousel" aria-label="Post images">
+    <div class="slider__track">
+      {%- for ph in page.images %}
+      <figure class="slider__slide{% if ph.fit %} slider__slide--fit{% endif %}">
+        <img src="{{ ph.src }}" alt="{{ ph.alt | default: ph.caption }}"{% unless forloop.first %} loading="lazy"{% endunless %}>
+        {%- if ph.caption %}<figcaption>{{ ph.caption }}</figcaption>{% endif %}
+      </figure>
+      {%- endfor %}
+    </div>
+  </div>
+  {%- elsif page.image %}
   <figure class="post__lead-figure">
     <img class="post__image" src="{{ page.image }}" alt="{{ page.image_alt }}">
     {%- if page.image_caption %}<figcaption>{{ page.image_caption | markdownify | remove: "<p>" | remove: "</p>" | strip }}</figcaption>{% endif %}

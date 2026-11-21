@@ -213,3 +213,12 @@
 /* Post tags (21 Nov 2026): under the lead, above the panel line */
 [data-reading] .post > .tags { margin-top: var(--space-3); }
 [data-reading] .post > .tags + .post__panel { margin-top: var(--space-4); }
+
+/* Post slider (21 Nov 2026): up to two images at the top of the panel, edge to edge, as on the cases */
+[data-reading] .post__panel > .post__slider { margin: 0 calc(-1 * var(--pp)) var(--space-4); width: auto; max-width: none; }
+[data-reading] .post__panel:has(> .post__slider) { padding-top: 0; }
+[data-reading] .post__panel .slider__slide figcaption { border-bottom: 1px solid var(--colour-ink); }
+/* About photo beside the text: a line under its caption too, as everywhere */
+[data-reading] .about__photo figcaption { border-bottom: 1px solid var(--colour-ink); }
+[data-reading] article.work > .case__title + .home__opening-wrap,
+[data-reading] article.blog > .case__title + .home__opening-wrap { margin-top: var(--space-2); }

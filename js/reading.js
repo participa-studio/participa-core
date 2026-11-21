@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!body) return;
   var more = post.querySelector('.home__more');
   var panel = document.createElement('div'); panel.className = 'post__panel';
-  var fig = post.querySelector(':scope > .post__lead-figure');
+  var fig = post.querySelector(':scope > .post__lead-figure, :scope > .post__slider');
   var tags = post.querySelector(':scope > .tags');
   (fig || body).before(panel);
   if (fig) panel.appendChild(fig);
@@ -107,15 +107,19 @@ document.addEventListener('DOMContentLoaded', function () {
 /* Home (21 Nov 2026): the marked opening under the statement stays within the statement's visual width */
 (function () {
   if (!document.documentElement.hasAttribute('data-reading')) return;
-  function fit() {
-    var h = document.querySelector('.home__statement');
-    var o = h && h.nextElementSibling;
+  /* Also the Experiments and Reflections landing pages (21 Nov 2026): their opening wraps within the title's width */
+  function fitOne(h) {
+    var o = h.nextElementSibling;
+    if (o && o.classList.contains('home__opening-wrap')) o = o.firstElementChild;
     if (!o || !o.classList.contains('page__opening')) return;
     var wrap = o.parentNode.classList.contains('home__opening-wrap') ? o.parentNode : null;
     if (!wrap) { wrap = document.createElement('div'); wrap.className = 'home__opening-wrap'; o.before(wrap); wrap.appendChild(o); }
     var r = document.createRange(); r.selectNodeContents(h);
     var w = 0; [].forEach.call(r.getClientRects(), function (q) { w = Math.max(w, q.width); });
     wrap.style.maxWidth = Math.ceil(w) + 'px';
+  }
+  function fit() {
+    [].forEach.call(document.querySelectorAll('.home__statement, article.work > .case__title, article.blog > .case__title'), fitOne);
   }
   document.addEventListener('DOMContentLoaded', fit);
   window.addEventListener('load', fit);   /* after the web fonts, so the width is the real one */
