@@ -194,3 +194,10 @@
 /* CV placeholder (21 Nov 2026): the caption band with a dotted outline until the PDF is added; not clickable */
 .profile__cv-caption--placeholder { border: 1px dashed var(--colour-ink); background: transparent; cursor: default; opacity: 0.75; }
 .profile__cv-caption--placeholder:hover { background: transparent; }
+/* The photo column is 16rem: the CV band must not push it wider (21 Nov 2026, evening). The band's text was set
+   not to wrap, so its length forced the photo and the band 56 px past the column edge. Now the text may wrap
+   and nothing in the column grows beyond it. */
+.profile__side { min-width: 0; }
+.profile__side > *, .profile__side img { max-width: 100%; }
+.profile__cv-caption { white-space: normal; flex-wrap: wrap; row-gap: 0.25rem; min-width: 0; }
+.profile__cv-caption > span { white-space: nowrap; }
