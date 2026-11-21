@@ -392,3 +392,7 @@
 [data-reading] .blog__filter-tag { cursor: pointer; }
 [data-reading] .blog__filter-tag:hover,
 [data-reading] .blog__filter-tag:hover .blog__filter-clear { color: var(--colour-here, #BD483D); }
+
+/* Home (Bernardo, 22 Nov 2026): the opening no longer fills 60% of the screen height. On tall screens that left
+   a large empty band under the buttons; now the selected work follows the buttons at the normal section spacing. */
+[data-reading] .home__opening { min-height: 0; }
