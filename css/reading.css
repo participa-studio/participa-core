@@ -330,28 +330,30 @@
 /* Profile, Participa Studio box (21 Nov 2026, evening): as wide as the Selected experience blocks (960 px), not half the page */
 [data-reading] .profile .profile__sides .about__sides { grid-template-columns: 1fr; max-width: 960px; }
 
-/* About band (Bernardo, 21 Nov 2026, evening): panel and photo in one wider block, one line above and one below.
-   The opening keeps the 70% lead width; the sister-site box below runs the full width, like the block. */
+/* About band (Bernardo, 21 Nov 2026, evening, second pass): wide screens, the text panel on the left and the photo
+   on the right, the same height, with the page colour between them. Each has its own lines: the panel above and below
+   its text, the photo above the image and below its caption. The opening, the links and the sister-site box keep the
+   width of the left column. Phones: the photo with its caption on top, then the panel, as one stack.
+   The caption band is two layers of the panel white, as on the cases, so it reads apart from the text panel. */
 [data-reading] .about__top--banded { grid-template-columns: 1fr; }
 [data-reading] .about__top--banded .about__opening-wrap,
-[data-reading] .about__top--banded .opening-mark { max-width: 70%; }
+[data-reading] .about__top--banded .opening-mark { max-width: calc((100% - clamp(3rem, 7vw, 7rem)) * 5 / 9); }
 [data-reading] .about__band {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+  column-gap: clamp(3rem, 7vw, 7rem);
+  align-items: stretch;
   margin: var(--space-4) 0 0.75rem;
-  border-top: 1px solid var(--colour-ink);
-  border-bottom: 1px solid var(--colour-ink);
 }
-[data-reading] .about__band > .about__panel { margin: 0; border: 0; }
-[data-reading] .about__band > .about__photo { margin: 0; display: flex; flex-direction: column; }
+[data-reading] .about__band > .about__panel { margin: 0; }
+[data-reading] .about__band > .about__photo { margin: 0; display: flex; flex-direction: column; border-top: 1px solid var(--colour-ink); }
 [data-reading] .about__band > .about__photo img { flex: 1 1 auto; min-height: 0; height: 100%; object-fit: cover; }
-[data-reading] .about__band > .about__photo figcaption { border-bottom: 0; }
-[data-reading] .about .about__sides { grid-template-columns: 1fr; }
+[data-reading] .about__photo figcaption { background: linear-gradient(var(--colour-panel), var(--colour-panel)), var(--colour-panel); border-bottom: 1px solid var(--colour-ink); }
 @media (max-width: 720px) {
   [data-reading] .about__top--banded .about__opening-wrap,
   [data-reading] .about__top--banded .opening-mark { max-width: none; }
   [data-reading] .about__band { grid-template-columns: 1fr; }
   [data-reading] .about__band > .about__photo { order: -1; }
   [data-reading] .about__band > .about__photo img { height: auto; }
-  [data-reading] .about__band > .about__photo figcaption { border-bottom: 1px solid var(--colour-ink); }
+  [data-reading] .about__band > .about__panel { border-top: 0; }
 }
