@@ -185,19 +185,11 @@
 [data-reading] .home__statement + .home__opening-wrap { margin-top: var(--space-2); }
 
 /* ---------- About (21 Nov 2026) ----------
-   The opening is marked per line in cream, as the other leads; "with" stands out on a pure white block.
+   The opening stays on the yellow, without a band (Bernardo: a band on the whole line was too much);
+   only the marked words, Participa and each "with", sit on a pure white block.
    The main text sits in a 40% white panel between two lines, above the Experiments and Reflections links.
    The sister-site box is filled with the same panel tone. */
 [data-reading] .about__opening-wrap { margin: 0; }
-[data-reading] .about__opening.page__opening {
-  display: inline;
-  margin: 0;
-  line-height: 1.6;
-  background: var(--colour-cream);
-  padding: 0.08em 0.3em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
 [data-reading] .about__opening mark { background: var(--colour-paper, #FFFFFF); padding: 0.08em 0.15em; }
 [data-reading] .about__panel {
   margin: var(--space-4) 0;
