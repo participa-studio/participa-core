@@ -115,7 +115,7 @@
     function frame(t) {
       if (!t0) t0 = t;
       var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0, ground = 0;
-      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 4 + 2 * Math.sin(e / 400); phase = e / 70; }      /* she lets herself down from the spinnerets; the legs keep feeling and paddling the air */
+      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 2 + 1 * Math.sin(e / 500); phase = e / 120; }      /* she lets herself down from the spinnerets; the legs keep feeling and paddling the air */
       else if (walkOut && e < D + H) { pose(false); y = drop; open = 1 - (e - D) / H * 0.5; phase = (e - D) / 120; jit = 1.5; silk.style.opacity = 1 - (e - D) / H; }   /* lands, lets go of the thread */
       else if (walkOut && e < D + H + W) {
         var wk = (e - D - H) / W, dx = (toLeft ? -1 : 1) * walkDist * wk;
@@ -124,7 +124,7 @@
         y = drop; ground = 9.5; open = 0.3; phase = (e - D - H) / 32;
       }
       else if (walkOut) { host.remove(); silk.style.opacity = 1; host.style.opacity = 1; sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
-      else if (e < D + H) { var h = (e - D) / H; pose(true); y = drop + 1.5; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 60; jit = 3 + 5 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, bobbing; the legs twitch in bursts */
+      else if (e < D + H) { var h = (e - D) / H; pose(true); y = drop + 1.5; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 100; jit = 1.5 + 3 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, bobbing; the legs twitch in bursts */
       else if (e < D + H + P) { var g = (e - D - H) / P; pose(false); y = drop; climb = g * g * (3 - 2 * g); open = 0.4; phase = Math.PI / 2; }   /* first she turns and reaches up the thread with the front legs, still in place */
       else if (e < D + H + P + U) { var u = (e - D - H - P) / U; pose(false); y = drop - (drop + 26) * u * (2 - u); climb = 1; open = 0.4; phase = (e - D - H - P) / 45 + Math.PI / 2; }   /* then she pulls: hand over hand, on past the line and out of view */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); pose(false); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
