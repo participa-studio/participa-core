@@ -375,3 +375,16 @@
 /* About: the sister-site box takes exactly the width of the text panel (the left column of the band) */
 [data-reading] .about:not(.profile__sides) .about__sides { grid-template-columns: 1fr; max-width: calc((100% - clamp(3rem, 7vw, 7rem)) * 5 / 9); }
 @media (max-width: 720px) { [data-reading] .about:not(.profile__sides) .about__sides { max-width: none; } }
+
+/* Tags and the chosen-tag box (Bernardo, 21 Nov 2026, evening): the same finish as the buttons, a thin line and the 1 px
+   hard shadow. The list line of the Reflections list no longer lands on top of each tag (that was the thicker top line). */
+[data-reading] .blog__list .tags li { border-top: 0; position: static; }
+[data-reading] .tags li > a,
+[data-reading] .tags li > span,
+[data-reading] .blog__filter-tag { box-shadow: 1px 1px 0 var(--colour-ink); }
+/* Hover, everywhere the same (Bernardo, 21 Nov 2026): white fill and the text in the "here" red,
+   on the home buttons, the Contact buttons and the tags */
+[data-reading] .home__action:hover, [data-reading] .home__action:focus-visible,
+[data-reading] .contact__button:hover, [data-reading] .contact__button:focus-visible,
+[data-reading] .tags a:hover, [data-reading] .tags a:focus-visible { color: var(--colour-here, #BD483D); }
+[data-reading] .blog__filter-clear:hover, [data-reading] .blog__filter-clear:focus-visible { color: var(--colour-here, #BD483D); opacity: 1; }
