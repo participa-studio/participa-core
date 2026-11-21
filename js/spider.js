@@ -26,21 +26,40 @@
   window.addEventListener('resize', function () { scale = size(); });
   var silk = host.querySelector('.silk'), sp = host.querySelector('.sp'), legsG = host.querySelector('.legs');
   /* long, thin legs: femur and tibia almost three times the body length together */
-  /* cellar spider (Pholcidae, 21 Nov 2026): legs about five times the body length, the front pair longest */
-  var LEGS = [ { a: -68, f: 15, t: 20 }, { a: -30, f: 13, t: 17 }, { a: 12, f: 12, t: 16 }, { a: 50, f: 13.5, t: 18 } ];   /* radiating like a star; a cartoon, so a little shorter than the real thing */
+  /* cellar spider (Pholcidae), drawn as a cartoon (21 Nov 2026). Each leg: a femur rising from the body to a high
+     knee, then a tibia falling outwards and down: together a curved umbrella. Angles in degrees from the horizontal,
+     negative = up. */
+  var LEGS = [ { up: -62, f: 9.5, down: 62, t: 14 }, { up: -45, f: 9, down: 70, t: 13 }, { up: -28, f: 8.5, down: 78, t: 12 }, { up: -12, f: 9, down: 84, t: 13 } ];
   var paths = [];
   for (var i = 0; i < 8; i++) { var p = document.createElementNS(NS, 'path'); legsG.appendChild(p); paths.push(p); }
-  function drawLegs(phase, amp, jitter, spread) {
-    spread = spread || 0;
+  var R = Math.PI / 180;
+  function leg(k, ox, oy, kx, ky, fx, fy) {
+    paths[k].setAttribute('d', 'M' + ox.toFixed(2) + ' ' + oy.toFixed(2) + ' L' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2));
+  }
+  /* open: 0 = umbrella closed in, 1 = opened (sliding down); jitter: small twitches; climb: 0..1 blend into climbing;
+     phase drives the hand-over-hand pull of the front legs on the thread */
+  function drawLegs(open, jitter, climb, phase) {
     LEGS.forEach(function (L, i) {
       [-1, 1].forEach(function (side, s) {
-        var g = ((i + s) % 2 ? 1 : -1) * Math.sin(phase) * amp + (jitter ? Math.sin(phase * 1.7 + i * 1.3 + s * 2.1) * jitter : 0);
-        var a = (L.a * (1 - spread * 0.35) + g) * Math.PI / 180;   /* spread: legs splay outwards, as a parachute */
         var ox = 45 + side * 0.9, oy = 1.2;
-        var kx = ox + side * Math.cos(a) * L.f * (1 + spread * 0.15), ky = oy + Math.sin(a) * L.f - 2.5 * (1 - spread * 0.5);   /* a gentle knee */
-        var b2 = a + 0.28 - spread * 0.12;                                   /* the lower leg carries on outwards, bending slightly down */
-        var fx = kx + side * Math.cos(b2) * L.t, fy = ky + Math.sin(b2) * L.t;
-        paths[i * 2 + s].setAttribute('d', 'M' + ox + ' ' + oy + ' L' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2));
+        var tw = jitter ? Math.sin(phase * 1.7 + i * 1.3 + s * 2.1) * jitter : 0;
+        var up = (L.up - open * 6 + tw) * R, down = (L.down - open * 14 - tw * 0.5) * R;
+        var kx = ox + side * Math.cos(up) * L.f, ky = oy + Math.sin(up) * L.f;
+        var fx = kx + side * Math.cos(down) * L.t, fy = ky + Math.sin(down) * L.t;
+        if (climb > 0 && i < 2) {
+          /* front two pairs reach up to the thread and pull, alternating left and right (and pair 1 against pair 2) */
+          var beat = Math.sin(phase + (s ? Math.PI : 0) + (i ? Math.PI / 2 : 0));
+          var gy = -6 - 7 * (0.5 + 0.5 * beat) - i * 3;                  /* grip point on the thread above the body */
+          var gx = 45 + side * 0.6;
+          var mx = (ox + gx) / 2 + side * (5.5 + i * 1.5), my = (oy + gy) / 2 + 1;   /* elbow bent outwards */
+          kx = kx + (mx - kx) * climb; ky = ky + (my - ky) * climb;
+          fx = fx + (gx - fx) * climb; fy = fy + (gy - fy) * climb;
+        } else if (climb > 0) {
+          /* back legs tuck in a little and trail while she climbs */
+          var tuck = 0.35 * climb, kick = Math.sin(phase * 1.3 + i + s * Math.PI) * 2 * climb;
+          fx = fx + (ox - fx) * tuck + side * kick * 0.3; fy = fy + (oy + 10 - fy) * tuck * 0.5 + kick;
+        }
+        leg(i * 2 + s, ox, oy, kx, ky, fx, fy);
       });
     });
   }
@@ -50,7 +69,7 @@
     var lr = li.getBoundingClientRect();
     if (!thumb || !title) return lr.width * 0.75;
     var t = thumb.getBoundingClientRect(), h = title.getBoundingClientRect();
-    if (t.left > h.left) return (t.left - lr.left) - 64;                 /* image on the right: 64 px before it, clear of the long legs */
+    if (t.left > h.left) return (t.left - lr.left) - 48;                 /* image on the right: 48 px before it */
     return (t.right - lr.left) + (h.left - t.right) / 2;                 /* image on the left: midway to the text */
   }
   var last = -1;
@@ -64,18 +83,18 @@
     li.appendChild(host);
     host.style.left = Math.round(spot(li)) + 'px';
     var drop = Math.min(li.clientHeight - 30, 60 + Math.random() * 70) / scale;   /* in drawing units */
-    var t0 = null, D = 2400, H = 2400, U = 650;                         /* slides down slowly, runs back up fast */
+    var t0 = null, D = 2400, H = 2400, U = 900;                          /* slides down slowly, pulls herself up fast */
     drawLegs(0, 0, 0, 0);
     function frame(t) {
       if (!t0) t0 = t;
-      var e = t - t0, y, sway = 0, phase = 0, amp = 0, jit = 0, spread = 0;
-      if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 2.4)); spread = Math.min(1, k * 4); phase = e / 120; jit = 1.5; }   /* legs open wide like a parachute, a slight float */
-      else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); spread = 1 - h * 0.7; phase = (e - D) / 90; jit = 2.5 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, legs slowly close */
-      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop * (1 - u * (2 - u)); phase = e / 28; amp = 20; }   /* scared: very fast legs, races back up */
+      var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0;
+      if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 2.4)); open = Math.min(1, k * 3); jit = 1.2; phase = e / 140; }      /* umbrella opens as she slides down */
+      else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 90; jit = 2 * Math.max(0, Math.sin(h * Math.PI * 3)); }
+      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop * (1 - u * (2 - u)); climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand up the thread */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
-      drawLegs(phase, amp, jit, spread);
+      drawLegs(open, jit, climb, phase);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
