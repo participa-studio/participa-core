@@ -10,7 +10,7 @@
   var host = document.createElement('div');
   host.className = 'spider';
   host.style.cssText = 'position:absolute;top:-1px;width:60px;height:300px;margin-left:-30px;pointer-events:none;z-index:2;clip-path:inset(1px -60px -400px -60px)';
-  host.innerHTML = '<svg width="90" height="300" viewBox="0 0 90 300" style="overflow:visible;display:block">' +
+  host.innerHTML = '<svg width="90" height="420" viewBox="0 0 90 420" style="overflow:visible;display:block">' +
     '<line class="silk" x1="45" y1="-2" x2="45" y2="0" stroke="' + INK + '" stroke-width="0.6"/>' +
     '<g class="sp"><g class="legs" fill="none" stroke="' + INK + '" stroke-opacity="0.7" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></g>' +
     '<circle cx="45" cy="0.4" r="1.3" fill="' + INK + '"/><ellipse cx="45" cy="4.3" rx="2.1" ry="2.8" fill="' + INK + '"/></g></svg>';
@@ -18,8 +18,8 @@
   var svgEl = host.querySelector('svg');
   function size() {
     var s = window.innerWidth <= 720 ? 0.7 : 1.2;
-    svgEl.setAttribute('width', 90 * s); svgEl.setAttribute('height', 300 * s);
-    host.style.width = (90 * s) + 'px'; host.style.height = (300 * s) + 'px'; host.style.marginLeft = (-45 * s) + 'px';
+    svgEl.setAttribute('width', 90 * s); svgEl.setAttribute('height', 420 * s);
+    host.style.width = (90 * s) + 'px'; host.style.height = (420 * s) + 'px'; host.style.marginLeft = (-45 * s) + 'px';
     return s;
   }
   var scale = size();
@@ -38,7 +38,7 @@
   }
   /* open: 0 = umbrella closed in, 1 = opened (sliding down); jitter: small twitches; climb: 0..1 blend into climbing;
      phase drives the hand-over-hand pull of the front legs on the thread */
-  function drawLegs(open, jitter, climb, phase) {
+  function drawLegs(open, jitter, climb, phase, ground) {
     LEGS.forEach(function (L, i) {
       [-1, 1].forEach(function (side, s) {
         var ox = 45 + side * 0.9, oy = 1.2;
@@ -46,7 +46,12 @@
         var up = (L.up - open * 6 + tw) * R, down = (L.down - open * 14 - tw * 0.5) * R;
         var kx = ox + side * Math.cos(up) * L.f, ky = oy + Math.sin(up) * L.f;
         var fx = kx + side * Math.cos(down) * L.t, fy = ky + Math.sin(down) * L.t;
-        if (climb > 0 && i < 2) {
+        if (ground) {
+          /* walking on the line: every foot on the ground, alternate legs lifting and stepping */
+          var step = Math.sin(phase + ((i + s) % 2 ? Math.PI : 0));
+          fx = fx + side * 1 + step * 2.6; fy = ground - Math.max(0, step) * 2.2;
+          ky = Math.min(ky, fy - 5);
+        } else if (climb > 0 && i < 2) {
           /* front two pairs reach up to the thread and pull, alternating left and right (and pair 1 against pair 2) */
           var beat = Math.sin(phase + (s ? Math.PI : 0) + (i ? Math.PI / 2 : 0));
           var gy = -6 - 7 * (0.5 + 0.5 * beat) - i * 3;                  /* grip point on the thread above the body */
@@ -87,19 +92,35 @@
     li.style.position = 'relative';
     li.appendChild(host);
     host.style.left = Math.round(spot(li)) + 'px';
-    var drop = (li.clientHeight * (0.5 + Math.random() * 0.42) - 16) / scale;   /* half way down to almost the bottom line; drawing units */
-    var t0 = null, D = 2400 + drop * 6, H = 2400, U = 900 + drop * 3;     /* longer drops take a little longer */                          /* slides down slowly, pulls herself up fast */
+    /* now and then (about one in three) she goes all the way down to the bottom line and walks off along it */
+    var walkOut = Math.random() < 0.34;
+    /* the bottom line is the next post's top line (or the list's end): measured, as a margin can sit between */
+    var lrTop = li.getBoundingClientRect().top, nxt = li.nextElementSibling;
+    var lineY = (nxt ? nxt.getBoundingClientRect().top : list.getBoundingClientRect().bottom - 1) - lrTop + 1;
+    var drop = walkOut ? (lineY - 10.5 * scale) / scale : (lineY * (0.5 + Math.random() * 0.42) - 16) / scale;   /* drawing units */
+    var startX = parseFloat(host.style.left), toLeft = startX < li.clientWidth / 2;
+    var walkDist = (toLeft ? startX : li.clientWidth - startX) + 10;            /* the shorter way to the end of the line */
+    var t0 = null, D = 2400 + drop * 6, H = walkOut ? 700 : 2400, U = 900 + drop * 3, W = walkDist * 22;   /* walking about 45 px a second */
     drawLegs(0, 0, 0, 0);
+    host.style.opacity = 1;
     function frame(t) {
       if (!t0) t0 = t;
-      var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0;
+      var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0, ground = 0;
       if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 2.4)); open = Math.min(1, k * 3); jit = 1.2; phase = e / 140; }      /* umbrella opens as she slides down */
+      else if (walkOut && e < D + H) { y = drop; open = 1 - (e - D) / H * 0.5; phase = (e - D) / 120; jit = 1.5; silk.style.opacity = 1 - (e - D) / H; }   /* lands, lets go of the thread */
+      else if (walkOut && e < D + H + W) {
+        var wk = (e - D - H) / W, dx = (toLeft ? -1 : 1) * walkDist * wk;
+        host.style.left = (startX + dx) + 'px';
+        host.style.opacity = Math.min(1, (walkDist - Math.abs(dx)) / 40);    /* fades over the last 40 px, at the end of the line */
+        y = drop; ground = 9.5; open = 0.3; phase = (e - D - H) / 70;
+      }
+      else if (walkOut) { host.remove(); silk.style.opacity = 1; host.style.opacity = 1; sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 90; jit = 2 * Math.max(0, Math.sin(h * Math.PI * 3)); }
-      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop - (drop + 26) * u * (2 - u);   /* climbs on past the line and out of view */ climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand up the thread */
+      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop - (drop + 26) * u * (2 - u); climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand, on past the line and out of view */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it; she disappears behind the line */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
-      drawLegs(open, jit, climb, phase);
+      drawLegs(open, jit, climb, phase, ground ? ground : 0);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
