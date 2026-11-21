@@ -120,3 +120,17 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('load', fit);   /* after the web fonts, so the width is the real one */
   window.addEventListener('resize', fit);
 })();
+
+/* About (21 Nov 2026): marked opening and a panel around the main text; see css/reading.css */
+document.addEventListener('DOMContentLoaded', function () {
+  if (!document.documentElement.hasAttribute('data-reading')) return;
+  var main = document.querySelector('.about__main');
+  if (!main) return;
+  var op = main.querySelector('.about__opening');
+  if (op) { var w = document.createElement('div'); w.className = 'about__opening-wrap'; op.before(w); w.appendChild(op); }
+  var texts = main.querySelectorAll(':scope > .about__text');
+  if (!texts.length) return;
+  var panel = document.createElement('div'); panel.className = 'about__panel';
+  texts[0].before(panel);
+  [].forEach.call(texts, function (t) { panel.appendChild(t); });
+});
