@@ -370,7 +370,9 @@
    the current-page block in the menu and on the sister-site boxes (Profile: Participa Studio; About: Participa Design) */
 [data-reading] .site-header__current,
 [data-reading] .site-header__nav a.is-section,
-
+[data-reading] .contact__button,
+[data-reading] .about__side { box-shadow: 1px 1px 0 var(--colour-ink); }
+[data-reading] .about__side { border: 1px solid var(--colour-ink); }   /* one thin line on every side, so the 1 px shadow reads as the extra pixel */
 /* About: the sister-site box takes exactly the width of the text panel (the left column of the band) */
 [data-reading] .about:not(.profile__sides) .about__sides { grid-template-columns: 1fr; max-width: calc((100% - clamp(3rem, 7vw, 7rem)) * 5 / 9); }
 @media (max-width: 720px) { [data-reading] .about:not(.profile__sides) .about__sides { max-width: none; } }
