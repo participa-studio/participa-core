@@ -95,6 +95,12 @@ body.holding .site-footer {
   }
 }
 
-/* Copyright and KvK on two short lines (13 Nov 2026), on every screen width */
+/* Copyright and KvK (21 Nov 2026): one line on wider screens, separated by a middle dot; two short lines on phones
+   (13 Nov: two lines everywhere) */
 .site-footer p { line-height: 1.6; }
-.site-footer .site-footer__kvk { display: block; margin: 0; }
+.site-footer .site-footer__kvk { display: inline; margin: 0; }
+.site-footer .site-footer__kvk::before { content: "·"; margin: 0 0.6em; }
+@media (max-width: 720px) {
+  .site-footer .site-footer__kvk { display: block; }
+  .site-footer .site-footer__kvk::before { content: none; }
+}

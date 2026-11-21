@@ -14,6 +14,7 @@
    ========================================================== */
 
 [data-reading] {
+  --colour-panel-solid: #F9EC9C;   /* the panel as a solid colour: 40% white on the Studio yellow (for tags) */
   --colour-cream: #FBF3C3;   /* 40% white over 40% white over the Studio yellow: the caption band, sampled 21 Nov 2026 */
   --colour-panel: rgba(255, 255, 255, 0.4);
 }
@@ -153,7 +154,7 @@
 /* Tags (21 Nov 2026): filled with the panel tone (40% white on the Studio yellow, #F9EC9C), so they read as small
    blocks on the yellow list and blend into the panel on a post. Hover still fills with white. */
 [data-reading] .tags li > a,
-[data-reading] .tags li > span { background: #F9EC9C; }
+[data-reading] .tags li > span { background: var(--colour-panel-solid, #F9EC9C); }
 [data-reading] .tags a:hover,
 [data-reading] .tags a:focus-visible { background: var(--colour-paper, #FFFFFF); }
 
@@ -221,4 +222,8 @@
 /* About photo beside the text: a line under its caption too, as everywhere */
 [data-reading] .about__photo figcaption { border-bottom: 1px solid var(--colour-ink); }
 [data-reading] article.work > .case__title + .home__opening-wrap,
-[data-reading] article.blog > .case__title + .home__opening-wrap { margin-top: var(--space-2); }
+[data-reading] article.blog > .case__title + .home__opening-wrap,
+[data-reading] article.contact > .case__title + .home__opening-wrap { margin-top: var(--space-2); }
+
+/* Marked words in any opening (21 Nov 2026): the cream block, on both sites (.design Profile, .studio About) */
+[data-reading] .page__opening mark { background: var(--colour-cream); }

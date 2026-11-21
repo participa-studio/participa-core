@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     wrap.style.maxWidth = Math.ceil(w) + 'px';
   }
   function fit() {
-    [].forEach.call(document.querySelectorAll('.home__statement, article.work > .case__title, article.blog > .case__title'), fitOne);
+    [].forEach.call(document.querySelectorAll('.home__statement, article.work > .case__title, article.blog > .case__title, article.contact > .case__title'), fitOne);
   }
   document.addEventListener('DOMContentLoaded', fit);
   window.addEventListener('load', fit);   /* after the web fonts, so the width is the real one */
