@@ -102,3 +102,21 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   if (more) last.after(more);
 });
+
+/* Home (21 Nov 2026): the marked opening under the statement stays within the statement's visual width */
+(function () {
+  if (!document.documentElement.hasAttribute('data-reading')) return;
+  function fit() {
+    var h = document.querySelector('.home__statement');
+    var o = h && h.nextElementSibling;
+    if (!o || !o.classList.contains('page__opening')) return;
+    var wrap = o.parentNode.classList.contains('home__opening-wrap') ? o.parentNode : null;
+    if (!wrap) { wrap = document.createElement('div'); wrap.className = 'home__opening-wrap'; o.before(wrap); wrap.appendChild(o); }
+    var r = document.createRange(); r.selectNodeContents(h);
+    var w = 0; [].forEach.call(r.getClientRects(), function (q) { w = Math.max(w, q.width); });
+    wrap.style.maxWidth = Math.ceil(w) + 'px';
+  }
+  document.addEventListener('DOMContentLoaded', fit);
+  window.addEventListener('load', fit);   /* after the web fonts, so the width is the real one */
+  window.addEventListener('resize', fit);
+})();

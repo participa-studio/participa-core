@@ -181,3 +181,5 @@
 [data-reading] .case__panel { border-top: 1px solid var(--colour-ink); }
 /* Home statement (21 Nov 2026): the same 16 px gap to the marked opening as the page titles */
 [data-reading] .home__statement:has(+ .page__opening) { margin-bottom: var(--space-2); }
+[data-reading] .home__opening-wrap { margin: var(--space-2) 0 0; }   /* JS sets max-width to the statement's width */
+[data-reading] .home__statement + .home__opening-wrap { margin-top: var(--space-2); }
