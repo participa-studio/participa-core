@@ -84,8 +84,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var tags = post.querySelector(':scope > .tags');
   (fig || body).before(panel);
   if (fig) panel.appendChild(fig);
-  if (tags) panel.appendChild(tags);
   panel.appendChild(body);
+  /* Tags sit under the lead, above the line that opens the panel (where a selected tag shows on the list) */
+  if (tags) panel.before(tags);
   var last = panel;
   /* A "References" heading with a list at the end of the text becomes a small block after the panel */
   [].forEach.call(body.querySelectorAll(':scope > h2'), function (h) {

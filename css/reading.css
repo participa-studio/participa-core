@@ -210,3 +210,6 @@
    (About: Experiments and Reflections, 12 px; posts: All reflections, 12 px). The larger space comes after them. */
 [data-reading] .about__panel { margin-bottom: 0.75rem; }
 [data-reading] .post .home__more { margin-top: 0.75rem; }
+/* Post tags (21 Nov 2026): under the lead, above the panel line */
+[data-reading] .post > .tags { margin-top: var(--space-3); }
+[data-reading] .post > .tags + .post__panel { margin-top: var(--space-4); }
