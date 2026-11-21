@@ -164,3 +164,13 @@
 [data-reading] .post__panel .post__lead-figure figcaption,
 [data-reading] .post__panel .post__figure figcaption { border-bottom: 1px solid var(--colour-ink); }
 [data-reading] .post__panel:has(.post__body > .post__figure:last-child) .post__body > .post__figure:last-child figcaption { border-bottom: 0; }
+
+/* Closing image of a post (21 Nov 2026): when a post ends on an image, its caption moves above it, with a line
+   above the caption that closes the text; the image then meets the panel's closing line.
+   Rule for posts (Bernardo): at most two images, one at the top and one at the end. */
+[data-reading] .post__panel .post__body > .post__figure:last-child { display: flex; flex-direction: column; }
+[data-reading] .post__panel .post__body > .post__figure:last-child figcaption {
+  order: -1;
+  border-top: 1px solid var(--colour-ink);
+  border-bottom: 0;
+}
