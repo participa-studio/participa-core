@@ -315,3 +315,14 @@
   [data-reading] .profile .profile__side { flex-wrap: wrap; }
   [data-reading] .profile .profile__cv-caption { flex: 1 1 10rem; margin-top: 0; align-self: center; }
 }
+
+/* Home case text in the panel shade (Bernardo, 21 Nov 2026, evening): the text beside the photo, or under it on phones,
+   sits on the same 40% white as the quote below it, for contrast. No gap between photo and shade; the text keeps its own padding. */
+[data-reading] .home__cases--hero .home__case { background: var(--colour-panel); column-gap: 0; }
+[data-reading] .home__cases--hero .home__case > :not(img):not(.home__case-image):not(.sdots):not(.goo-card) { padding-left: var(--space-4); padding-right: var(--space-4); }
+[data-reading] .home__cases--hero .home__case-more { padding-bottom: var(--space-4); }
+@media (max-width: 720px) {
+  [data-reading] .home__cases--hero,
+  [data-reading] .home__work--quote .home__cases--hero { padding-bottom: 0; }
+  [data-reading] .home__cases--hero .home__case > :not(img):not(.home__case-image):not(.sdots):not(.goo-card) { padding-left: var(--space-2); padding-right: var(--space-2); }
+}
