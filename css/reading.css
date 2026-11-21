@@ -256,3 +256,13 @@
   [data-reading] .case__lead-wrap,
   [data-reading] .post__lead-wrap { max-width: none; }
 }
+
+/* Home quote inside the case frame (21 Nov 2026): panel shade, the closing line moves under it */
+[data-reading] .home__work .home__quotes { margin: 0; padding: var(--space-4); border-top: 0; background: var(--colour-panel); }
+[data-reading] .home__work--quote .home__cases--hero { border-bottom: 0; padding-bottom: 0; }
+[data-reading] .home__work--quote .home__quotes:not([hidden]) { border-bottom: 1px solid var(--colour-ink); }
+@media (min-width: 721px) { [data-reading] .home__work--quote .home__cases--hero { padding-bottom: 0; } }
+@media (max-width: 720px) {
+  [data-reading] .home__work .home__quotes { padding: var(--space-3) var(--space-2); }
+  [data-reading] .home__work--quote .home__cases--hero { padding-bottom: var(--space-4); }
+}

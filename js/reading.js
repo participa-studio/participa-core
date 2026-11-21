@@ -154,3 +154,17 @@ document.addEventListener('DOMContentLoaded', function () {
   if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
 })();
 
+
+/* Home quote (21 Nov 2026): the quote of the case on screen moves under the case, inside its frame,
+   on the panel shade; the closing line and the "All ..." link follow it */
+document.addEventListener('DOMContentLoaded', function () {
+  if (!document.documentElement.hasAttribute('data-reading')) return;
+  var work = document.querySelector('.home__work');
+  var list = work && work.querySelector('.home__cases--hero');
+  if (!list) return;
+  var blocks = document.querySelectorAll('.home__quotes');
+  var anchor = list;
+  [].forEach.call(blocks, function (b) { anchor.after(b); anchor = b; });
+  var shown = [].some.call(blocks, function (b) { return !b.hidden; });
+  work.classList.toggle('home__work--quote', shown);
+});
