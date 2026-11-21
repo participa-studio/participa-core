@@ -367,9 +367,7 @@
 @media (max-width: 720px) { [data-reading] .profile .prof-openings { max-width: none; } }
 
 /* Hard 1 px shadow (Bernardo, 21 Nov 2026, evening): the small detail used on the Reflections circles, now also on
-   the current-page block in the menu and on the sister-site boxes (Profile: Participa Studio; About: Participa Design) */
-[data-reading] .site-header__current,
-[data-reading] .site-header__nav a.is-section,
+   the Contact buttons and on the sister-site boxes (not on the menu, which keeps a clean block) (Profile: Participa Studio; About: Participa Design) */
 [data-reading] .contact__button,
 [data-reading] .about__side { box-shadow: 1px 1px 0 var(--colour-ink); }
 [data-reading] .about__side { border: 1px solid var(--colour-ink); }   /* one thin line on every side, so the 1 px shadow reads as the extra pixel */
