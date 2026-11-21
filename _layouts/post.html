@@ -3,7 +3,7 @@ layout: default
 ---
 {%- comment -%}
   PARTICIPA THEME — ONE POST
-  Fields: title, lead (optional), tags (optional), image + image_alt (optional), published, and the text.
+  Fields: title, lead (optional), tags (optional), image + image_alt + image_caption (optional), published, and the text.
   Written in Pages CMS (.pages.yml in the site repository) or as a file in _posts/.
   The date comes from the file name (YYYY-MM-DD-title.md).
 {%- endcomment -%}
@@ -11,7 +11,12 @@ layout: default
   <time class="blog__date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d %B %Y" }}</time>
   <h1 class="case__title">{{ page.title }}</h1>
   {%- if page.lead %}<p class="case__lead post__lead">{{ page.lead }}</p>{% endif %}
-  {%- if page.image %}<img class="post__image" src="{{ page.image }}" alt="{{ page.image_alt }}">{% endif %}
+  {%- if page.image %}
+  <figure class="post__lead-figure">
+    <img class="post__image" src="{{ page.image }}" alt="{{ page.image_alt }}">
+    {%- if page.image_caption %}<figcaption>{{ page.image_caption | markdownify | remove: "<p>" | remove: "</p>" | strip }}</figcaption>{% endif %}
+  </figure>
+  {%- endif %}
   {% include tags.html tags=page.tags %}
   <div class="post__body">
     {{ content }}

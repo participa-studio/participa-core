@@ -100,34 +100,52 @@
 }
 
 /* ---------- Reflections (21 Nov 2026) ----------
-   Post page: lead marked per line; a line above the image; under the image a 40% white panel
-   holds the tags and the text, down to a line above "All reflections".
-   Reflections list: the whole list sits in one 40% white panel, from the first line to the last;
-   the lines between posts stay, the leads have no marker (21 Nov 2026, after a first try with marked leads). */
+   Post page: lead marked per line. The panel opens with a line; the post image sits against it, edge to edge,
+   with its caption on a band below; then the tags and the text. Images in the text also run edge to edge
+   with a caption band. References leave the panel: small label, small items, no shade, closed by a line.
+   Reflections list: no shade and no markers (clean list, as before). */
 [data-reading] .post__lead-wrap { max-width: 40rem; margin: var(--space-4) 0 0; }
 [data-reading] .post__lead-wrap .post__lead {
   display: inline;
   margin: 0;
+  line-height: 1.6;
   background: var(--colour-cream);
   padding: 0.08em 0.3em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-[data-reading] .post__lead-wrap .post__lead { line-height: 1.6; }
-[data-reading] .blog > .blog__list { background: var(--colour-panel); }
-[data-reading] .blog > .blog__list > li { padding: 0 var(--space-4); }
-@media (max-width: 720px) { [data-reading] .blog > .blog__list > li { padding: 0 var(--space-2); } }
-[data-reading] .post__image-wrap { margin: var(--space-6) 0 0; padding-top: var(--space-4); border-top: 1px solid var(--colour-ink); }
-[data-reading] .post__image-wrap .post__image { margin: 0; }
 [data-reading] .post__panel {
   --pp: var(--space-4);
-  margin-top: var(--space-4);
-  padding: var(--space-4) var(--pp) var(--space-6);
+  margin-top: var(--space-6);
+  padding: 0 var(--pp) var(--space-6);
   background: var(--colour-panel);
+  border-top: 1px solid var(--colour-ink);
   border-bottom: 1px solid var(--colour-ink);
 }
-[data-reading] .post__panel > .tags:first-child,
-[data-reading] .post__panel > :first-child { margin-top: 0; }
+[data-reading] .post__panel:not(:has(> .post__lead-figure)) { padding-top: var(--space-6); }
+[data-reading] .post__panel .post__lead-figure,
+[data-reading] .post__panel .post__body .post__figure { margin: 0 calc(-1 * var(--pp)) var(--space-4); }
+[data-reading] .post__panel .post__body .post__figure { margin-top: var(--space-4); }
+[data-reading] .post__panel .post__image,
+[data-reading] .post__panel .post__figure img { display: block; width: 100%; max-width: none; height: auto; margin: 0; border-radius: 0; }
+[data-reading] .post__panel .post__lead-figure figcaption,
+[data-reading] .post__panel .post__figure figcaption {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: var(--colour-marker, rgba(255, 255, 255, 0.4));
+  font-size: 0.6875rem;
+  font-weight: var(--weight-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
 [data-reading] .post__panel .post__body > :last-child { margin-bottom: 0; }
+[data-reading] .post__panel:has(.post__body > .post__figure:last-child) { padding-bottom: 0; }
+[data-reading] .post__panel:has(.post__body > .post__figure:last-child) .post__body > .post__figure:last-child { margin-bottom: 0; }
+[data-reading] .post__panel + .case__ending { padding-top: var(--space-3); }
+[data-reading] .post .case__ending .case__ending-item { font-size: 0.875rem; }
 [data-reading] .post .home__more { margin-top: var(--space-4); }
 @media (max-width: 720px) { [data-reading] .post__panel { --pp: var(--space-2); } }
+/* Text keeps its reading width; figures in the text take the whole panel width */
+[data-reading] .post__panel .post__body { max-width: none; }
+[data-reading] .post__panel .post__body > :not(.post__figure) { max-width: 40rem; }

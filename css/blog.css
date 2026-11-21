@@ -214,3 +214,6 @@
 .post__body .post__figure { margin: var(--space-4) 0; }
 .post__body .post__figure img { display: block; width: 100%; height: auto; margin: 0; border-radius: 4px; }
 .post__figure figcaption { margin-top: var(--space-2); font-size: 0.6875rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.5; }
+
+.post__lead-figure { margin: 0; }
+.post__lead-figure figcaption { margin-top: var(--space-2); font-size: 0.6875rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.5; }

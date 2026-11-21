@@ -69,24 +69,36 @@ document.addEventListener('DOMContentLoaded', function () {
   if (ending.children.length) panel.after(ending);
 });
 
-/* Reflections (21 Nov 2026): post page panel and marked lead; see css/reading.css */
+/* Reflections (21 Nov 2026): post page panel, marked lead, references after the panel; see css/reading.css */
 document.addEventListener('DOMContentLoaded', function () {
   if (!document.documentElement.hasAttribute('data-reading')) return;
   var post = document.querySelector('article.post');
-  if (post) {
-    var lead = post.querySelector('.post__lead');
-    if (lead) { var w = document.createElement('div'); w.className = 'post__lead-wrap'; lead.before(w); w.appendChild(lead); }
-    var img = post.querySelector(':scope > .post__image');
-    if (img) { var iw = document.createElement('div'); iw.className = 'post__image-wrap'; img.before(iw); iw.appendChild(img); }
-    var body = post.querySelector('.post__body');
-    var more = post.querySelector('.home__more');
-    if (body) {
-      var panel = document.createElement('div'); panel.className = 'post__panel';
-      var tags = post.querySelector(':scope > .tags');
-      body.before(panel);
-      if (tags) panel.appendChild(tags);
-      panel.appendChild(body);
-      if (more) panel.after(more);
-    }
-  }
+  if (!post) return;
+  var lead = post.querySelector('.post__lead');
+  if (lead) { var w = document.createElement('div'); w.className = 'post__lead-wrap'; lead.before(w); w.appendChild(lead); }
+  var body = post.querySelector('.post__body');
+  if (!body) return;
+  var more = post.querySelector('.home__more');
+  var panel = document.createElement('div'); panel.className = 'post__panel';
+  var fig = post.querySelector(':scope > .post__lead-figure');
+  var tags = post.querySelector(':scope > .tags');
+  (fig || body).before(panel);
+  if (fig) panel.appendChild(fig);
+  if (tags) panel.appendChild(tags);
+  panel.appendChild(body);
+  var last = panel;
+  /* A "References" heading with a list at the end of the text becomes a small block after the panel */
+  [].forEach.call(body.querySelectorAll(':scope > h2'), function (h) {
+    if (!/^references$/i.test(h.textContent.trim())) return;
+    var list = h.nextElementSibling;
+    if (!list || !/^(UL|OL)$/.test(list.tagName)) return;
+    var dl = document.createElement('dl'); dl.className = 'case__ending';
+    var dt = document.createElement('dt'); dt.textContent = h.textContent.trim();
+    var dd = document.createElement('dd');
+    [].forEach.call(list.children, function (li) { var s = document.createElement('span'); s.className = 'case__ending-item case__ending-text'; s.innerHTML = li.innerHTML; dd.appendChild(s); });
+    dl.appendChild(dt); dl.appendChild(dd);
+    h.remove(); list.remove();
+    last.after(dl); last = dl;
+  });
+  if (more) last.after(more);
 });
