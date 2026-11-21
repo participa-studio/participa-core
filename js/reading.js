@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (ending.children.length) panel.after(ending);
 });
 
-/* Reflections (21 Nov 2026): post page panel and marked leads; see css/reading.css */
+/* Reflections (21 Nov 2026): post page panel and marked lead; see css/reading.css */
 document.addEventListener('DOMContentLoaded', function () {
   if (!document.documentElement.hasAttribute('data-reading')) return;
   var post = document.querySelector('article.post');
@@ -89,10 +89,4 @@ document.addEventListener('DOMContentLoaded', function () {
       if (more) panel.after(more);
     }
   }
-  [].forEach.call(document.querySelectorAll('.blog__excerpt'), function (ex) {
-    if (ex.querySelector('.blog__excerpt-mark')) return;
-    var m = document.createElement('span'); m.className = 'blog__excerpt-mark';
-    while (ex.firstChild) m.appendChild(ex.firstChild);
-    ex.appendChild(m);
-  });
 });

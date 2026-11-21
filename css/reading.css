@@ -100,10 +100,10 @@
 /* ---------- Reflections (21 Nov 2026) ----------
    Post page: lead marked per line; a line above the image; under the image a 40% white panel
    holds the tags and the text, down to a line above "All reflections".
-   Reflections list: each lead marked per line, as on the post. */
+   Reflections list: the whole list sits in one 40% white panel, from the first line to the last;
+   the lines between posts stay, the leads have no marker (21 Nov 2026, after a first try with marked leads). */
 [data-reading] .post__lead-wrap { max-width: 40rem; margin: var(--space-3) 0 0; }
-[data-reading] .post__lead-wrap .post__lead,
-[data-reading] .blog__excerpt-mark {
+[data-reading] .post__lead-wrap .post__lead {
   display: inline;
   margin: 0;
   background: var(--colour-cream);
@@ -112,7 +112,9 @@
   box-decoration-break: clone;
 }
 [data-reading] .post__lead-wrap .post__lead { line-height: 1.6; }
-[data-reading] .blog__excerpt-mark { line-height: 1.7; }
+[data-reading] .blog > .blog__list { background: var(--colour-panel); }
+[data-reading] .blog > .blog__list > li { padding: 0 var(--space-4); }
+@media (max-width: 720px) { [data-reading] .blog > .blog__list > li { padding: 0 var(--space-2); } }
 [data-reading] .post__image-wrap { margin: var(--space-6) 0 0; padding-top: var(--space-4); border-top: 1px solid var(--colour-ink); }
 [data-reading] .post__image-wrap .post__image { margin: 0; }
 [data-reading] .post__panel {
