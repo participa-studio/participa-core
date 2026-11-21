@@ -96,3 +96,34 @@
   [data-reading] .case__ending dd:last-child { margin-bottom: 0; }
   [data-reading] .case__ending-meta { display: block; margin: 0.15rem 0 0; white-space: normal; }
 }
+
+/* ---------- Reflections (21 Nov 2026) ----------
+   Post page: lead marked per line; a line above the image; under the image a 40% white panel
+   holds the tags and the text, down to a line above "All reflections".
+   Reflections list: each lead marked per line, as on the post. */
+[data-reading] .post__lead-wrap { max-width: 40rem; margin: var(--space-3) 0 0; }
+[data-reading] .post__lead-wrap .post__lead,
+[data-reading] .blog__excerpt-mark {
+  display: inline;
+  margin: 0;
+  background: var(--colour-cream);
+  padding: 0.08em 0.3em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+[data-reading] .post__lead-wrap .post__lead { line-height: 1.6; }
+[data-reading] .blog__excerpt-mark { line-height: 1.7; }
+[data-reading] .post__image-wrap { margin: var(--space-6) 0 0; padding-top: var(--space-4); border-top: 1px solid var(--colour-ink); }
+[data-reading] .post__image-wrap .post__image { margin: 0; }
+[data-reading] .post__panel {
+  --pp: var(--space-4);
+  margin-top: var(--space-4);
+  padding: var(--space-4) var(--pp) var(--space-6);
+  background: var(--colour-panel);
+  border-bottom: 1px solid var(--colour-ink);
+}
+[data-reading] .post__panel > .tags:first-child,
+[data-reading] .post__panel > :first-child { margin-top: 0; }
+[data-reading] .post__panel .post__body > :last-child { margin-bottom: 0; }
+[data-reading] .post .home__more { margin-top: var(--space-4); }
+@media (max-width: 720px) { [data-reading] .post__panel { --pp: var(--space-2); } }
