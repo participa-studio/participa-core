@@ -149,3 +149,10 @@
 /* Text keeps its reading width; figures in the text take the whole panel width */
 [data-reading] .post__panel .post__body { max-width: none; }
 [data-reading] .post__panel .post__body > :not(.post__figure) { max-width: 40rem; }
+
+/* Tags (21 Nov 2026): filled with the panel tone (40% white on the Studio yellow, #F9EC9C), so they read as small
+   blocks on the yellow list and blend into the panel on a post. Hover still fills with white. */
+[data-reading] .tags li > a,
+[data-reading] .tags li > span { background: #F9EC9C; }
+[data-reading] .tags a:hover,
+[data-reading] .tags a:focus-visible { background: var(--colour-paper, #FFFFFF); }
