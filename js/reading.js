@@ -168,3 +168,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var shown = [].some.call(blocks, function (b) { return !b.hidden; });
   work.classList.toggle('home__work--quote', shown);
 });
+
+/* Profile (21 Nov 2026): the openings and the loop move above the text and photo; see css/reading.css */
+document.addEventListener('DOMContentLoaded', function () {
+  if (!document.documentElement.hasAttribute('data-reading')) return;
+  var top = document.querySelector('.profile .profile__top');
+  if (!top) return;
+  var intro = top.querySelector('.cv__intro'), practice = intro.querySelector('.profile__practice');
+  var open = document.createElement('div'); open.className = 'prof-openings';
+  [].slice.call(intro.children).forEach(function (k) { if (k !== practice) open.appendChild(k); });
+  var lead = open.querySelector('.cv__lead');
+  if (lead) { var w = document.createElement('div'); w.className = 'cv__lead-wrap'; lead.before(w); w.appendChild(lead); }
+  top.before(open);
+});

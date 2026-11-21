@@ -39,20 +39,12 @@ layout: default
         <img class="profile__portrait" src="{{ page.portrait }}" alt="{{ page.portrait_alt | default: page.person }}">
       </picture>
       {%- endif %}
-      {%- if page.pdf %}
-      {%- if page.pdf.file %}
-      <a class="cv__download" href="{{ page.pdf.file }}" download>
-        <span class="cv__download-label">Curriculum vitae (PDF)</span>
-        <span class="cv__download-action">Download ↓</span>
-        {%- if page.pdf.updated %}<span class="cv__download-meta">Updated {{ page.pdf.updated }}</span>{% endif %}
+      {%- comment -%} CV (21 Nov 2026): one compact button, shown only once the PDF exists {%- endcomment -%}
+      {%- if page.pdf and page.pdf.file %}
+      <a class="cv-button" href="{{ page.pdf.file }}" download>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>
+        <span>Download CV</span><span class="cv-button__meta">PDF</span>
       </a>
-      {%- else %}
-      <div class="cv__download cv__download--pending">
-        <span class="cv__download-label">Curriculum vitae (PDF)</span>
-        <span class="cv__download-action">In preparation</span>
-      </div>
-      {%- endif %}
-      {%- if page.pdf.note %}<p class="profile__cv-note">{{ page.pdf.note }}</p>{% endif %}
       {%- endif %}
     </div>
     {%- endif %}

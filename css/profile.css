@@ -180,3 +180,8 @@
 @media (max-width: 720px) { .opening-mark:has(+ .profile__sides), .opening-mark:has(+ .about__sides) { max-width: none; } }
 .opening-mark + .profile__sides { margin-top: 0; }                       /* the panel already carries 48 px of space above it */
 
+
+/* CV button (21 Nov 2026): compact, as the home buttons; white on hover */
+.cv-button { display: inline-flex; align-items: center; gap: 0.6rem; justify-self: start; padding: 0.85rem 1.1rem; border: 1px solid var(--colour-ink); color: inherit; text-decoration: none; font-size: 0.75rem; font-weight: var(--weight-display); letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
+.cv-button:hover, .cv-button:focus-visible { background: var(--colour-paper, #FFFFFF); }
+.cv-button__meta { padding-left: 0.6rem; border-left: 1px solid currentColor; opacity: 0.65; }

@@ -266,3 +266,32 @@
   [data-reading] .home__work .home__quotes { padding: var(--space-3) var(--space-2); }
   [data-reading] .home__work--quote .home__cases--hero { padding-bottom: var(--space-4); }
 }
+
+/* ---------- Profile (21 Nov 2026): no lines on this page; shades organise the content ----------
+   Openings full block width (up to 60rem), second opening marked per line; the loop divides; then the
+   main text on a shade with the photo and the CV button beside it (phones: round photo with the button beside it);
+   Selected experience as a centred title; each role on its own shade; the sister box on a shade, no outline. */
+[data-reading] .profile .prof-openings { max-width: 60rem; margin-bottom: var(--space-4); }
+[data-reading] .profile .prof-openings > p { max-width: none; }
+[data-reading] .profile .prof-openings .cv__lead-wrap { margin-top: var(--space-3); }
+[data-reading] .profile .prof-openings .cv__lead { display: inline; margin: 0; line-height: 1.6; background: var(--colour-cream); padding: 0.08em 0.3em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+[data-reading] .profile .prof-openings > :not(p):not(.cv__lead-wrap) { margin-left: auto; margin-right: auto; }
+[data-reading] .profile .profile__top { margin-top: 0; display: grid; grid-template-columns: minmax(0, 1fr) 16rem; gap: var(--space-6); align-items: start; max-width: 60rem; }
+[data-reading] .profile .profile__top .cv__intro { background: var(--colour-panel); padding: var(--space-4); }
+[data-reading] .profile .profile__top .cv__intro > :first-child { margin-top: 0; }
+[data-reading] .profile .profile__side { display: grid; gap: var(--space-3); }
+[data-reading] .profile .cv__section { max-width: 60rem; margin-top: var(--space-8); }
+[data-reading] .profile .cv__heading { border-bottom: 0; padding-bottom: 0; margin-bottom: var(--space-4); text-align: center; font-family: var(--font-display); font-size: clamp(1.375rem, 2.4vw, 2rem); letter-spacing: -0.01em; text-transform: none; line-height: 1.15; }
+[data-reading] .profile .cv__entry { border: 0; background: var(--colour-panel); padding: var(--space-4); }
+[data-reading] .profile .cv__entry + .cv__entry { margin-top: var(--space-3); }
+[data-reading] .profile .profile__earlier { margin-top: var(--space-4); }
+[data-reading] .profile .profile__sides .about__side { border: 0; background: var(--colour-panel); }
+@media (max-width: 720px) {
+  [data-reading] .profile .prof-openings { max-width: none; }
+  [data-reading] .profile .profile__top { grid-template-columns: 1fr; gap: var(--space-4); }
+  [data-reading] .profile .profile__top .cv__intro { padding: var(--space-3) var(--space-2); order: 2; }
+  [data-reading] .profile .profile__side { display: flex !important; align-items: center; gap: var(--space-3); order: 1; }
+  [data-reading] .profile .profile__side picture { flex: 0 0 auto; order: 0; }
+  [data-reading] .profile .profile__side .profile__portrait { width: 8rem; }
+  [data-reading] .profile .cv__entry { padding: var(--space-3) var(--space-2); }
+}
