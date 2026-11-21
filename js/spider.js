@@ -29,15 +29,16 @@
   var LEGS = [ { a: -58, f: 10, t: 13 }, { a: -22, f: 10.5, t: 13.5 }, { a: 16, f: 10, t: 13 }, { a: 48, f: 9, t: 12 } ];
   var paths = [];
   for (var i = 0; i < 8; i++) { var p = document.createElementNS(NS, 'path'); legsG.appendChild(p); paths.push(p); }
-  function drawLegs(phase, amp, jitter) {
+  function drawLegs(phase, amp, jitter, spread) {
+    spread = spread || 0;
     LEGS.forEach(function (L, i) {
       [-1, 1].forEach(function (side, s) {
         var g = ((i + s) % 2 ? 1 : -1) * Math.sin(phase) * amp + (jitter ? Math.sin(phase * 1.7 + i * 1.3 + s * 2.1) * jitter : 0);
-        var a = (L.a + g) * Math.PI / 180;
+        var a = (L.a * (1 - spread * 0.35) + g) * Math.PI / 180;   /* spread: legs splay outwards, as a parachute */
         var ox = 30 + side * 1.2, oy = 1.2;
-        var kx = ox + side * Math.cos(a) * L.f, ky = oy + Math.sin(a) * L.f - 4.5;        /* high knees */
+        var kx = ox + side * Math.cos(a) * L.f * (1 + spread * 0.25), ky = oy + Math.sin(a) * L.f - 4.5 * (1 - spread * 0.6);        /* high knees */
         var bend = a + (i < 2 ? -0.2 : 0.55);
-        var fx = kx + side * Math.cos(bend) * L.t * 0.5, fy = ky + Math.abs(Math.sin(bend + 0.9)) * L.t;
+        var fx = kx + side * Math.cos(bend) * L.t * (0.5 + spread * 0.4), fy = ky + Math.abs(Math.sin(bend + 0.9)) * L.t;
         paths[i * 2 + s].setAttribute('d', 'M' + ox + ' ' + oy + ' Q' + (kx - side * 1.5).toFixed(2) + ' ' + (ky - 1).toFixed(2) + ' ' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2));
       });
     });
@@ -62,18 +63,18 @@
     li.appendChild(host);
     host.style.left = Math.round(spot(li)) + 'px';
     var drop = Math.min(li.clientHeight - 30, 60 + Math.random() * 70) / scale;   /* in drawing units */
-    var t0 = null, D = 2200, H = 2600, U = 1700;
-    drawLegs(0, 0, 0);
+    var t0 = null, D = 2400, H = 2400, U = 650;                         /* slides down slowly, runs back up fast */
+    drawLegs(0, 0, 0, 0);
     function frame(t) {
       if (!t0) t0 = t;
-      var e = t - t0, y, sway = 0, phase, amp, jit = 0;
-      if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 3)); phase = e / 55; amp = 0; jit = 5 * (1 - k * 0.6); }          /* a light wiggle on the way down */
-      else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); phase = (e - D) / 90; amp = 0; jit = 3 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* twitches */
-      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop * (1 - u * u * (3 - 2 * u)); phase = e / 75; amp = 16; }        /* climbing */
+      var e = t - t0, y, sway = 0, phase = 0, amp = 0, jit = 0, spread = 0;
+      if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 2.4)); spread = Math.min(1, k * 4); phase = e / 120; jit = 1.5; }   /* legs open wide like a parachute, a slight float */
+      else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); spread = 1 - h * 0.7; phase = (e - D) / 90; jit = 2.5 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, legs slowly close */
+      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop * (1 - u * (2 - u)); phase = e / 28; amp = 20; }   /* scared: very fast legs, races back up */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       silk.setAttribute('x2', 30 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
-      drawLegs(phase, amp, jit);
+      drawLegs(phase, amp, jit, spread);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
