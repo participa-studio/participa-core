@@ -179,3 +179,5 @@
    its own line, against the photo. A dark photo no longer swallows the only line under the facts. */
 [data-reading] .case__facts:not(.case__facts--end) { margin-bottom: 0.75rem; }
 [data-reading] .case__panel { border-top: 1px solid var(--colour-ink); }
+/* Home statement (21 Nov 2026): the same 16 px gap to the marked opening as the page titles */
+[data-reading] .home__statement:has(+ .page__opening) { margin-bottom: var(--space-2); }
