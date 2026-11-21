@@ -42,7 +42,7 @@
 .opening-mark__trace { animation: opening-mark-snake 11s infinite; animation-timing-function: linear; }
 .opening-mark__tail { stroke-width: 2.6; opacity: 1;    stroke-dasharray: 55 45; --lead: 0; }
 .opening-mark__body { stroke-width: 3.2; opacity: 1;    stroke-dasharray: 28 72; --lead: -27; }
-.opening-mark__head { stroke-width: 3.8; opacity: 1;    stroke-dasharray: 7 93;  --lead: -48; }
+.opening-mark__head { stroke-width: 5.6; opacity: 1;    stroke-dasharray: 7 93;  --lead: -48; }
 @keyframes opening-mark-snake {
   0%   { stroke-dashoffset: calc(0   + var(--lead)); }
   9%   { stroke-dashoffset: calc(-7  + var(--lead)); }
@@ -79,16 +79,21 @@
 .opening-mark--dingbats span { display: block; font-size: 0.8em; opacity: 0.6; }   /* four-pointed stars, the ink at 60% (12 Nov 2026) */
 
 /* Chain divider (.design, 21 Nov 2026): four even loops, a thin line always in place,
-   a tapered pencil stroke (five layers from one tip) going over it. One run every 12 s; the speed eases
+   a tapered pencil stroke (ten layers from one tip, widening in even steps so the taper reads as one line) going over it. One run every 12 s; the speed eases
    slightly at the ends of the loops and changes gradually, so the motion stays smooth. */
-.opening-mark--chain svg { height: 15px; }
-.opening-mark--chain .opening-mark__base { stroke-width: 1.1; opacity: 0.55; }
+.opening-mark--chain svg { height: 22px; }   /* bigger than the single 8 (21 Nov 2026, evening): about 120 px across */
+.opening-mark--chain .opening-mark__base { stroke-width: 2; opacity: 0.5; }
 .opening-mark--chain .opening-mark__trace { animation: opening-mark-chain 12s linear infinite; }
-.opening-mark--chain .opening-mark__l0 { stroke-width: 1.3; opacity: 0.75; stroke-dasharray: 48 52; --lead: 0; }
-.opening-mark--chain .opening-mark__l1 { stroke-width: 1.9; opacity: 0.85; stroke-dasharray: 36 64; --lead: -12; }
-.opening-mark--chain .opening-mark__l2 { stroke-width: 2.5; opacity: 1; stroke-dasharray: 24 76; --lead: -24; }
-.opening-mark--chain .opening-mark__l3 { stroke-width: 3.1; opacity: 1; stroke-dasharray: 13 87; --lead: -35; }
-.opening-mark--chain .opening-mark__l4 { stroke-width: 3.8; opacity: 1; stroke-dasharray: 5 95; --lead: -43; }
+.opening-mark--chain .opening-mark__l0 { stroke-width: 1.8; stroke-dasharray: 48 52; --lead: 0; }
+.opening-mark--chain .opening-mark__l1 { stroke-width: 2.22; stroke-dasharray: 43 57; --lead: -5; }
+.opening-mark--chain .opening-mark__l2 { stroke-width: 2.64; stroke-dasharray: 38 62; --lead: -10; }
+.opening-mark--chain .opening-mark__l3 { stroke-width: 3.07; stroke-dasharray: 33 67; --lead: -15; }
+.opening-mark--chain .opening-mark__l4 { stroke-width: 3.49; stroke-dasharray: 28 72; --lead: -20; }
+.opening-mark--chain .opening-mark__l5 { stroke-width: 3.91; stroke-dasharray: 24 76; --lead: -24; }
+.opening-mark--chain .opening-mark__l6 { stroke-width: 4.33; stroke-dasharray: 19 81; --lead: -29; }
+.opening-mark--chain .opening-mark__l7 { stroke-width: 4.76; stroke-dasharray: 14 86; --lead: -34; }
+.opening-mark--chain .opening-mark__l8 { stroke-width: 5.18; stroke-dasharray: 9 91; --lead: -39; }
+.opening-mark--chain .opening-mark__l9 { stroke-width: 5.6; stroke-dasharray: 4 96; --lead: -44; }
 @keyframes opening-mark-chain {
   0% { stroke-dashoffset: calc(-0.00 + var(--lead)); }
   2% { stroke-dashoffset: calc(-2.13 + var(--lead)); }
