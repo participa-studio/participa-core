@@ -206,3 +206,7 @@
 [data-reading] .about > .case__title { margin-bottom: var(--space-2); }   /* the same 16 px to the marked opening */
 [data-reading] .about__panel > .about__photo { margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-2)) var(--space-3); }
 [data-reading] .about__panel > .about__photo figcaption { border-bottom: 1px solid var(--colour-ink); }
+/* End links (21 Nov 2026): the links that close a text sit close under its last line, so they belong to it
+   (About: Experiments and Reflections, 12 px; posts: All reflections, 12 px). The larger space comes after them. */
+[data-reading] .about__panel { margin-bottom: 0.75rem; }
+[data-reading] .post .home__more { margin-top: 0.75rem; }
