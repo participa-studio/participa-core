@@ -114,9 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!o || !o.classList.contains('page__opening')) return;
     var wrap = o.parentNode.classList.contains('home__opening-wrap') ? o.parentNode : null;
     if (!wrap) { wrap = document.createElement('div'); wrap.className = 'home__opening-wrap'; o.before(wrap); wrap.appendChild(o); }
-    var r = document.createRange(); r.selectNodeContents(h);
-    var w = 0; [].forEach.call(r.getClientRects(), function (q) { w = Math.max(w, q.width); });
-    wrap.style.maxWidth = Math.ceil(w) + 'px';
+    /* width: css/reading.css, at most 70% of the content area (21 Nov 2026; was the title's width) */
   }
   function fit() {
     [].forEach.call(document.querySelectorAll('.home__statement, article.work > .case__title, article.blog > .case__title, article.contact > .case__title'), fitOne);

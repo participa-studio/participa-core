@@ -231,6 +231,28 @@
 /* Home case (21 Nov 2026): the image sits against the section line; "See the case" stays under the case text;
    the case closes with its own line, and the "All ..." link sits under that line, close to it */
 [data-reading] .home__work > .cv__heading { margin-bottom: 0; }
-[data-reading] .home__cases--hero { margin-top: 0; padding-bottom: var(--space-4); border-bottom: 1px solid var(--colour-ink); }
+[data-reading] .home__cases--hero { margin-top: 0; padding-bottom: 0; border-bottom: 1px solid var(--colour-ink); }   /* wide: the two lines frame the image */
+@media (max-width: 720px) { [data-reading] .home__cases--hero { padding-bottom: var(--space-4); } }   /* phones: the line closes the text under the image */
 [data-reading] .home__work .home__more { margin-top: 0.75rem; }
 [data-reading] .home__cases--hero .home__case-title { margin-top: var(--space-3); }   /* the text column starts a little under the line; the image sits against it */
+/* Wide screens: when the case text runs taller than the photo, the photo stretches to the full height (cropped),
+   so the two lines always frame it */
+@media (min-width: 721px) {
+  [data-reading] .home__cases--hero .home__case img,
+  [data-reading] .home__cases--hero .home__case .sdots,
+  [data-reading] .home__cases--hero .home__case .home__case-image { align-self: stretch; height: 100%; }
+  [data-reading] .home__cases--hero .home__case .sdots img { height: 100%; }
+}
+/* Five rows, so a card with a summary line (.studio) keeps "See the case" beside the photo, not under it */
+@media (min-width: 721px) { [data-reading] .home__cases--hero .home__case { grid-template-rows: auto auto auto auto 1fr; } }
+
+/* Leads (21 Nov 2026, Bernardo): never wider than 70% of the content area, whatever the title's length,
+   on every page (Home, Experiments or Work, Reflections, Contact, cases, posts). Phones: the full width. */
+[data-reading] .home__opening-wrap,
+[data-reading] .case__lead-wrap,
+[data-reading] .post__lead-wrap { max-width: 70%; }
+@media (max-width: 720px) {
+  [data-reading] .home__opening-wrap,
+  [data-reading] .case__lead-wrap,
+  [data-reading] .post__lead-wrap { max-width: none; }
+}
