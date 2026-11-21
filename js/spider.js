@@ -102,7 +102,7 @@
     li.appendChild(host);
     host.style.left = Math.round(spot(li)) + 'px';
     /* about one visit in twenty she goes all the way down to the bottom line and walks off along it */
-    var walkOut = Math.random() < 0.05;
+    var walkOut = false;   /* Bernardo, 21 Nov 2026, evening: no landing and walking off; only down and up the thread */
     /* the bottom line is the next post's top line (or the list's end): measured, as a margin can sit between */
     var lrTop = li.getBoundingClientRect().top, nxt = li.nextElementSibling;
     var lineY = (nxt ? nxt.getBoundingClientRect().top : list.getBoundingClientRect().bottom - 1) - lrTop + 1;
@@ -115,7 +115,7 @@
     function frame(t) {
       if (!t0) t0 = t;
       var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0, ground = 0;
-      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 7 + 4 * Math.sin(e / 400); phase = e / 55; }      /* she lets herself down from the spinnerets; the legs keep feeling and paddling the air */
+      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 4 + 2 * Math.sin(e / 400); phase = e / 70; }      /* she lets herself down from the spinnerets; the legs keep feeling and paddling the air */
       else if (walkOut && e < D + H) { pose(false); y = drop; open = 1 - (e - D) / H * 0.5; phase = (e - D) / 120; jit = 1.5; silk.style.opacity = 1 - (e - D) / H; }   /* lands, lets go of the thread */
       else if (walkOut && e < D + H + W) {
         var wk = (e - D - H) / W, dx = (toLeft ? -1 : 1) * walkDist * wk;
