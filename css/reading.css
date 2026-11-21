@@ -357,3 +357,8 @@
   [data-reading] .about__band > .about__photo img { height: auto; }
   [data-reading] .about__band > .about__panel { border-top: 0; }
 }
+
+/* Profile (Bernardo, 21 Nov 2026, evening): Selected experience and the Participa Studio box take the width of the
+   main text block above (the left column of the top: 60rem less the 16rem photo column and the gap) */
+[data-reading] .profile .cv__section,
+[data-reading] .profile .profile__sides .about__sides { max-width: calc(60rem - 16rem - var(--space-6)); }
