@@ -13,7 +13,7 @@
   host.innerHTML = '<svg width="90" height="300" viewBox="0 0 90 300" style="overflow:visible;display:block">' +
     '<line class="silk" x1="45" y1="-2" x2="45" y2="0" stroke="' + INK + '" stroke-width="0.6"/>' +
     '<g class="sp"><g class="legs" fill="none" stroke="' + INK + '" stroke-opacity="0.7" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></g>' +
-    '<circle cx="45" cy="0.4" r="1.3" fill="' + INK + '"/><ellipse cx="45" cy="5.2" rx="1.5" ry="3.9" fill="' + INK + '"/></g></svg>';
+    '<circle cx="45" cy="0.4" r="1.3" fill="' + INK + '"/><ellipse cx="45" cy="4.3" rx="2.1" ry="2.8" fill="' + INK + '"/></g></svg>';
   /* size (21 Nov 2026): a little larger on wide screens, smaller on phones; the whole drawing scales, thread included */
   var svgEl = host.querySelector('svg');
   function size() {
@@ -27,7 +27,7 @@
   var silk = host.querySelector('.silk'), sp = host.querySelector('.sp'), legsG = host.querySelector('.legs');
   /* long, thin legs: femur and tibia almost three times the body length together */
   /* cellar spider (Pholcidae, 21 Nov 2026): legs about five times the body length, the front pair longest */
-  var LEGS = [ { a: -68, f: 19, t: 26 }, { a: -30, f: 16, t: 21 }, { a: 12, f: 15, t: 20 }, { a: 50, f: 17, t: 23 } ];   /* radiating like a star, as in the references */
+  var LEGS = [ { a: -68, f: 15, t: 20 }, { a: -30, f: 13, t: 17 }, { a: 12, f: 12, t: 16 }, { a: 50, f: 13.5, t: 18 } ];   /* radiating like a star; a cartoon, so a little shorter than the real thing */
   var paths = [];
   for (var i = 0; i < 8; i++) { var p = document.createElementNS(NS, 'path'); legsG.appendChild(p); paths.push(p); }
   function drawLegs(phase, amp, jitter, spread) {
@@ -40,8 +40,7 @@
         var kx = ox + side * Math.cos(a) * L.f * (1 + spread * 0.15), ky = oy + Math.sin(a) * L.f - 2.5 * (1 - spread * 0.5);   /* a gentle knee */
         var b2 = a + 0.28 - spread * 0.12;                                   /* the lower leg carries on outwards, bending slightly down */
         var fx = kx + side * Math.cos(b2) * L.t, fy = ky + Math.sin(b2) * L.t;
-        var hx = fx + side * 1.4, hy = fy + 1.2;                             /* a tiny hooked tip */
-        paths[i * 2 + s].setAttribute('d', 'M' + ox + ' ' + oy + ' L' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2) + ' L' + hx.toFixed(2) + ' ' + hy.toFixed(2));
+        paths[i * 2 + s].setAttribute('d', 'M' + ox + ' ' + oy + ' L' + kx.toFixed(2) + ' ' + ky.toFixed(2) + ' L' + fx.toFixed(2) + ' ' + fy.toFixed(2));
       });
     });
   }
