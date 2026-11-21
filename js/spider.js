@@ -64,13 +64,18 @@
     });
   }
   function spot(li) {
-    /* x in the gap between the text and the image; phones: between the circle and the text */
-    var item = li.querySelector('.blog__item'), thumb = li.querySelector('.blog__thumb'), title = li.querySelector('.blog__title');
-    var lr = li.getBoundingClientRect();
-    if (!thumb || !title) return lr.width * 0.75;
+    /* x in a gap: wide screens, at random, between the date and the text or between the text and the image;
+       phones, between the circle and the text. Each time a little left or right inside the gap. */
+    var thumb = li.querySelector('.blog__thumb'), title = li.querySelector('.blog__title'), date = li.querySelector('.blog__date');
+    var lr = li.getBoundingClientRect(), jig = (Math.random() - 0.5) * 12;
+    if (!thumb || !title) return lr.width * 0.75 + jig;
     var t = thumb.getBoundingClientRect(), h = title.getBoundingClientRect();
-    if (t.left > h.left) return (t.left - lr.left) - 48;                 /* image on the right: 48 px before it */
-    return (t.right - lr.left) + (h.left - t.right) / 2;                 /* image on the left: midway to the text */
+    if (t.left > h.left) {                                                  /* wide: image on the right */
+      var gaps = [(t.left - lr.left) - 48];
+      if (date) { var d = date.getBoundingClientRect(); if (h.left - d.right > 40) gaps.push((d.right - lr.left) + (h.left - d.right) / 2); }
+      return gaps[Math.floor(Math.random() * gaps.length)] + jig;
+    }
+    return (t.right - lr.left) + (h.left - t.right) / 2 + jig / 3;          /* phones: image on the left */
   }
   var last = -1;
   function cycle() {
@@ -82,17 +87,17 @@
     li.style.position = 'relative';
     li.appendChild(host);
     host.style.left = Math.round(spot(li)) + 'px';
-    var drop = Math.min(li.clientHeight - 30, 60 + Math.random() * 70) / scale;   /* in drawing units */
-    var t0 = null, D = 2400, H = 2400, U = 900;                          /* slides down slowly, pulls herself up fast */
+    var drop = (li.clientHeight * (0.5 + Math.random() * 0.42) - 16) / scale;   /* half way down to almost the bottom line; drawing units */
+    var t0 = null, D = 2400 + drop * 6, H = 2400, U = 900 + drop * 3;     /* longer drops take a little longer */                          /* slides down slowly, pulls herself up fast */
     drawLegs(0, 0, 0, 0);
     function frame(t) {
       if (!t0) t0 = t;
       var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0;
       if (e < D) { var k = e / D; y = drop * (1 - Math.pow(1 - k, 2.4)); open = Math.min(1, k * 3); jit = 1.2; phase = e / 140; }      /* umbrella opens as she slides down */
       else if (e < D + H) { var h = (e - D) / H; y = drop; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 90; jit = 2 * Math.max(0, Math.sin(h * Math.PI * 3)); }
-      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop * (1 - u * (2 - u)); climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand up the thread */
+      else if (e < D + H + U) { var u = (e - D - H) / U; y = drop - (drop + 26) * u * (2 - u);   /* climbs on past the line and out of view */ climb = Math.min(1, u * 6); open = 0.4; phase = (e - D - H) / 45; }   /* hand over hand up the thread */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
-      silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it */
+      silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it; she disappears behind the line */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
       drawLegs(open, jit, climb, phase);
       requestAnimationFrame(frame);
