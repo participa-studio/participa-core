@@ -362,3 +362,6 @@
    main text block above (the left column of the top: 60rem less the 16rem photo column and the gap) */
 [data-reading] .profile .cv__section,
 [data-reading] .profile .profile__sides .about__sides { max-width: calc(60rem - 16rem - var(--space-6)); }
+/* the opening (name line, lead and loop) takes the same width as the blocks below, so all left content aligns */
+[data-reading] .profile .prof-openings { max-width: calc(60rem - 16rem - var(--space-6)); }
+@media (max-width: 720px) { [data-reading] .profile .prof-openings { max-width: none; } }
