@@ -396,3 +396,13 @@
 /* Home (Bernardo, 22 Nov 2026): the opening no longer fills 60% of the screen height. On tall screens that left
    a large empty band under the buttons; now the selected work follows the buttons at the normal section spacing. */
 [data-reading] .home__opening { min-height: 0; }
+
+/* Reflections list (23 Nov 2026, Bernardo, trial): each lead marked per line in the cream, as the leads on the post
+   pages; the list itself stays on the page colour, with no panel. */
+[data-reading] .blog__excerpt { margin-top: var(--space-2); line-height: 1.6; }
+[data-reading] .blog__excerpt-text {
+  background: var(--colour-cream);
+  padding: 0.08em 0.3em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}

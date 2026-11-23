@@ -22,7 +22,7 @@ layout: default
         {%- assign thumb = post.thumb | default: post.image %}{%- assign thumb_alt = post.thumb_alt | default: post.image_alt %}
         {%- if thumb %}<span class="blog__thumb"><img src="{{ thumb }}" alt="{{ thumb_alt }}" loading="lazy"></span>{% endif %}
         <span class="blog__title">{{ post.title }}</span>
-        {%- if post.lead %}<span class="blog__excerpt">{{ post.lead }}</span>{% endif %}
+        {%- if post.lead %}<span class="blog__excerpt"><span class="blog__excerpt-text">{{ post.lead }}</span></span>{% endif %}
       </a>
       {%- if post.tags.size > 0 %}<div class="blog__tags">{% include tags.html tags=post.tags %}</div>{% endif %}
     </li>
