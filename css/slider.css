@@ -108,14 +108,14 @@
 
 .slider__dots {
   position: absolute;
-  bottom: 0.75rem;
+  bottom: 1.25rem;                 /* the stripe's own height above the photo's edge (Bernardo, 23 Nov 2026) */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 0;
   padding: 0 0.625rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.2);   /* 80% transparent (Bernardo, 23 Nov 2026) */
+  background: rgba(255, 255, 255, 0.5);   /* half transparent: 80% was lost on dark photos (Bernardo, 23 Nov 2026) */
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   pointer-events: auto;
@@ -141,9 +141,11 @@
   background: rgba(26, 26, 26, 0.3);
   transition: background 0.2s ease;
 }
-.slider__dot:hover::before { background: rgba(26, 26, 26, 0.55); }
+.slider__dot:hover::before,
+.slider__dot:focus-visible::before { background: var(--colour-here, #BD483D); }   /* hover turns red, as links and buttons do */
 .slider__dot[aria-current="true"]::before {
-  background: var(--colour-ink);
+  background: #FFFFFF;                                     /* the current photo: a white dot with the 1 px hard shadow of the buttons */
+  box-shadow: 1px 1px 0 var(--colour-ink);
 }
 
 .slider__arrow {
@@ -157,7 +159,7 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);   /* same shade as the dot stripe */
+  background: rgba(255, 255, 255, 0.5);   /* same shade as the dot stripe */
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   color: var(--colour-ink);
@@ -181,6 +183,6 @@
   .slider__arrow {
     display: none;
   }
-  .slider__dots { bottom: 0.5rem; padding: 0 0.5rem; }
+  .slider__dots { bottom: 1.125rem; padding: 0 0.5rem; }
   .slider__dot { width: 1.75rem; height: 1.125rem; }
 }
