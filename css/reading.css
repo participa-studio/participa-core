@@ -420,3 +420,9 @@
   position: relative;
   margin-top: -1px;
 }
+
+/* Artefact credit (23 Nov 2026): copyright and ISBN after the link, plain and small, not underlined */
+[data-reading] .case__ending-row { display: block; }
+[data-reading] .case__ending-row > .case__ending-item { display: inline; }
+[data-reading] .case__ending-credit { margin-left: 0.4em; font-size: 0.8125rem; opacity: 0.75; }
+.case__artefact-credit { font-size: 0.8125rem; opacity: 0.75; }

@@ -120,7 +120,7 @@ layout: default
         <a href="{{ a.file }}" download>
           <span class="case__artefact-name">{{ a.label }}</span>
           <span class="case__artefact-meta">{{ format }} · Download ↓</span>
-        </a>
+        </a>{% if a.credit %} <span class="case__artefact-credit">{{ a.credit }}</span>{% endif %}
         {%- else %}
         <span class="case__artefact-name">{{ a.label }}</span>
         <span class="case__artefact-meta">{{ format }} · {{ a.status | default: "In preparation" }}</span>

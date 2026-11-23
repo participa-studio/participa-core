@@ -49,8 +49,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var rows = [].map.call(sec.querySelectorAll('li'), function (li) {
       var a = li.querySelector('a');
       var name = li.querySelector('.case__artefact-name'), meta = li.querySelector('.case__artefact-meta');
-      return item(a ? a.getAttribute('href') : null, name ? name.textContent.trim() : li.textContent.trim(), meta ? meta.textContent.trim() : '',
+      var it = item(a ? a.getAttribute('href') : null, name ? name.textContent.trim() : li.textContent.trim(), meta ? meta.textContent.trim() : '',
         a ? { target: a.getAttribute('target'), rel: a.getAttribute('rel'), download: a.hasAttribute('download') ? '' : null } : null);
+      /* a credit (copyright, ISBN) sits after the link, as plain text, not part of it (23 Nov 2026) */
+      var cr = li.querySelector('.case__artefact-credit');
+      if (!cr) return it;
+      var w = document.createElement('span'); w.className = 'case__ending-row';
+      var c = document.createElement('span'); c.className = 'case__ending-credit'; c.textContent = cr.textContent.trim();
+      w.appendChild(it); w.appendChild(c); return w;
     });
     var h = sec.querySelector('h2');
     group(h ? h.textContent.trim() : pair[1], rows); sec.remove();
