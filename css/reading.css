@@ -415,4 +415,8 @@
 [data-reading] .about__photo figcaption {
   border-top: 1px solid var(--colour-ink);
   border-bottom: 1px solid var(--colour-ink);
+  /* the top line overlaps the photo by 1 px: the photo often ends between two screen pixels, and without the overlap
+     one pixel of the panel could show above the line (Bernardo, 23 Nov 2026) */
+  position: relative;
+  margin-top: -1px;
 }
