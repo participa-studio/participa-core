@@ -17,6 +17,10 @@ body.page main {
   flex: 1 0 auto;
 }
 
+/* Behind the page (23 Nov 2026): when the browser scrolls past the end of a page (macOS and phone overscroll), it shows
+   the html background; it was white below the yellow or teal footer. Now it carries the page colour too. */
+html:has(> body.page) { background: var(--colour-accent); }
+
 /* The header stays on top while the page scrolls under it,
    so it needs the page colour behind it */
 body.page .site-header {
