@@ -1,6 +1,6 @@
 /* PARTICIPA CORE — SPIDER (21 Nov 2026; .studio Reflections, participa.spider: true). A cellar spider: tiny long body, very long thin pale legs.: one spider on the whole Reflections list at a time. Each visit it picks one post
    at random and lowers itself from that post's top line, in the gap between the text and the image
-   (phones: between the circle and the text). Small body, long thin legs: they wiggle on the way down,
+   (phones: between the circle and the text). Small body, long thin legs: they reach out one at a time on the way down, searching for a hold,
    twitch while it hangs and pull in an alternating gait as it climbs back. Every 20 to 40 s, another post. */
 (function () {
   var list = document.querySelector('.blog > .blog__list');
@@ -47,14 +47,18 @@
   }
   /* open: 0 = umbrella closed in, 1 = opened (sliding down); jitter: small twitches; climb: 0..1 blend into climbing;
      phase drives the hand-over-hand pull of the front legs on the thread */
-  function drawLegs(open, jitter, climb, phase, ground) {
+  function drawLegs(open, jitter, climb, phase, ground, reach) {
     LEGS.forEach(function (L, i) {
       [-1, 1].forEach(function (side, s) {
         var ox = 45 + side * 0.9, oy = OY;
         var tw = jitter ? Math.sin(phase * 1.7 + i * 1.3 + s * 2.1) * jitter : 0;
-        var up = (L.up - open * 6 + tw) * R, down = (L.down - open * 14 - tw * 0.5) * R;
+        /* reach (23 Nov 2026): this one leg stretches out, searching for something to hold: the knee opens
+           outwards and the lower leg straightens and lengthens towards the side */
+        var r = reach ? reach[i * 2 + s] : 0;
+        var up = (L.up - open * 6 + tw + r * 22) * R, down = (L.down - open * 14 - tw * 0.5 - r * 40) * R;
         var kx = ox + side * Math.cos(up) * L.f, ky = oy + Math.sin(up) * L.f;
-        var fx = kx + side * Math.cos(down) * L.t, fy = ky + Math.sin(down) * L.t;
+        var tl = L.t * (1 + 0.18 * r);
+        var fx = kx + side * Math.cos(down) * tl, fy = ky + Math.sin(down) * tl;
         if (ground) {
           /* walking on the line: every foot on the ground, alternate legs lifting and stepping */
           var step = Math.sin(phase + ((i + s) % 2 ? Math.PI : 0));
@@ -110,12 +114,33 @@
     var startX = parseFloat(host.style.left), toLeft = startX < li.clientWidth / 2;
     var walkDist = (toLeft ? startX : li.clientWidth - startX) + 10;            /* the shorter way to the end of the line */
     var t0 = null, D = 2400 + drop * 6, H = walkOut ? 350 : 2400, U = 900 + drop * 3, P = 450, W = walkDist * 9;   /* walk-off: she runs, about 110 px a second */
+    /* searching on the way down (Bernardo, 23 Nov 2026): no shaking; one leg at a time stretches out to feel for a
+       hold and comes back, then another, sometimes two overlapping. Each reach: out in about 40% of its time, back
+       in the rest. A new reach starts every 250 to 500 ms, on a different leg from the last. */
+    var reaches = [], rt = 150, rl = -1;
+    while (rt < D) {
+      var lg; do { lg = Math.floor(Math.random() * 8); } while (lg === rl);
+      rl = lg;
+      reaches.push({ leg: lg, t: rt, d: 600 + Math.random() * 500, a: 0.6 + Math.random() * 0.4 });
+      rt += 250 + Math.random() * 250;
+    }
+    var reachNow = [0, 0, 0, 0, 0, 0, 0, 0];
+    function searching(e) {
+      for (var q = 0; q < 8; q++) reachNow[q] = 0;
+      reaches.forEach(function (R0) {
+        var x = (e - R0.t) / R0.d;
+        if (x <= 0 || x >= 1) return;
+        var v = x < 0.4 ? Math.sin(x / 0.4 * Math.PI / 2) : 0.5 + 0.5 * Math.cos((x - 0.4) / 0.6 * Math.PI);
+        reachNow[R0.leg] = Math.max(reachNow[R0.leg], v * R0.a);
+      });
+      return reachNow;
+    }
     drawLegs(0, 0, 0, 0);
     host.style.opacity = 1;
     function frame(t) {
       if (!t0) t0 = t;
-      var e = t - t0, y, sway = 0, open = 0, jit = 0, climb = 0, phase = 0, ground = 0;
-      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 2 + 1 * Math.sin(e / 500); phase = e / 120; }      /* she lets herself down from the spinnerets; the legs keep feeling and paddling the air */
+      var e = t - t0, y, sway = 0, rch = null, open = 0, jit = 0, climb = 0, phase = 0, ground = 0;
+      if (e < D) { var k = e / D; pose(true); y = drop * (1 - Math.pow(1 - k, 2.4)) + 1.5; open = Math.min(1, k * 3); jit = 0; phase = e / 120; rch = searching(e); }      /* she lets herself down from the spinnerets; the legs reach out one by one, searching (no shaking) */
       else if (walkOut && e < D + H) { pose(false); y = drop; open = 1 - (e - D) / H * 0.5; phase = (e - D) / 120; jit = 1.5; silk.style.opacity = 1 - (e - D) / H; }   /* lands, lets go of the thread */
       else if (walkOut && e < D + H + W) {
         var wk = (e - D - H) / W, dx = (toLeft ? -1 : 1) * walkDist * wk;
@@ -130,7 +155,7 @@
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); pose(false); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
       silk.setAttribute('x2', 45 + sway); silk.setAttribute('y2', Math.max(0, y - 1));   /* the thread starts under the line and touches it; she disappears behind the line */
       sp.setAttribute('transform', 'translate(' + sway + ',' + y + ')');
-      drawLegs(open, jit, climb, phase, ground ? ground : 0);
+      drawLegs(open, jit, climb, phase, ground ? ground : 0, rch);
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
