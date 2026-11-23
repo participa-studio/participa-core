@@ -142,10 +142,9 @@
   transition: background 0.2s ease;
 }
 .slider__dot:hover::before,
-.slider__dot:focus-visible::before { background: var(--colour-here, #BD483D); }   /* hover turns red, as links and buttons do */
+.slider__dot:focus-visible::before { background: rgba(255, 255, 255, 0.9); }   /* hover: white at 90%, a step below the current dot (Bernardo, 23 Nov 2026) */
 .slider__dot[aria-current="true"]::before {
-  background: #FFFFFF;                                     /* the current photo: a white dot with the 1 px hard shadow of the buttons */
-  box-shadow: 1px 1px 0 var(--colour-ink);
+  background: #FFFFFF;                                     /* the current photo: plain white, no shadow */
 }
 
 .slider__arrow {
