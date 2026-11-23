@@ -183,6 +183,9 @@
   .slider__arrow {
     display: none;
   }
-  .slider__dots { bottom: 1.125rem; padding: 0 0.5rem; }
-  .slider__dot { width: 1.75rem; height: 1.125rem; }
+  /* Phones (23 Nov 2026, Bernardo): the pagination is a guide here, not a control (the whole photo swipes), so it is
+     smaller: 6 px dots, a 12 px stripe, and the stripe sits 8 px above the photo's edge (was 18 px) */
+  .slider__dots { bottom: 0.5rem; padding: 0 0.375rem; }
+  .slider__dot { width: 1.125rem; height: 0.75rem; }
+  .slider__dot::before { width: 0.375rem; height: 0.375rem; }
 }

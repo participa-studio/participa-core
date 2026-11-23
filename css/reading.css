@@ -406,3 +406,13 @@
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+
+/* Captions (23 Nov 2026, Bernardo): every photo caption band, on both sites, has a line above and a line below. */
+[data-reading] .slider__slide figcaption,
+[data-reading] .case__video figcaption,
+[data-reading] .post__lead-figure figcaption,
+[data-reading] .post__figure figcaption,
+[data-reading] .about__photo figcaption {
+  border-top: 1px solid var(--colour-ink);
+  border-bottom: 1px solid var(--colour-ink);
+}
