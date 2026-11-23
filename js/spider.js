@@ -118,11 +118,14 @@
        hold and comes back, then another, sometimes two overlapping. Each reach: out in about 40% of its time, back
        in the rest. A new reach starts every 250 to 500 ms, on a different leg from the last. */
     var reaches = [], rt = 150, rl = -1;
-    while (rt < D) {
+    while (rt < D - 800) {
       var lg; do { lg = Math.floor(Math.random() * 8); } while (lg === rl);
       rl = lg;
-      reaches.push({ leg: lg, t: rt, d: 600 + Math.random() * 500, a: 0.6 + Math.random() * 0.4 });
-      rt += 250 + Math.random() * 250;
+      /* slow (Bernardo, 23 Nov 2026, 12:53: the first version flicked): each reach takes 1.6 to 2.6 s; about one in
+         three is a contraction instead, the leg drawing in a little while another stretches out */
+      var ctr = Math.random() < 0.35;
+      reaches.push({ leg: lg, t: rt, d: 1600 + Math.random() * 1000, a: ctr ? -(0.3 + Math.random() * 0.25) : 0.55 + Math.random() * 0.45 });
+      rt += 450 + Math.random() * 400;
     }
     var reachNow = [0, 0, 0, 0, 0, 0, 0, 0];
     function searching(e) {
@@ -130,8 +133,11 @@
       reaches.forEach(function (R0) {
         var x = (e - R0.t) / R0.d;
         if (x <= 0 || x >= 1) return;
-        var v = x < 0.4 ? Math.sin(x / 0.4 * Math.PI / 2) : 0.5 + 0.5 * Math.cos((x - 0.4) / 0.6 * Math.PI);
-        reachNow[R0.leg] = Math.max(reachNow[R0.leg], v * R0.a);
+        /* eased out over 45% of the time, a short hold, eased back over the last 45%: no snap at either end */
+        var v = x < 0.45 ? x / 0.45 : x > 0.55 ? (1 - x) / 0.45 : 1;
+        v = v * v * (3 - 2 * v);
+        var w = v * R0.a;
+        if (Math.abs(w) > Math.abs(reachNow[R0.leg])) reachNow[R0.leg] = w;
       });
       return reachNow;
     }
@@ -149,7 +155,7 @@
         y = drop; ground = 9.5; open = 0.3; phase = (e - D - H) / 32;
       }
       else if (walkOut) { host.remove(); silk.style.opacity = 1; host.style.opacity = 1; sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
-      else if (e < D + H) { var h = (e - D) / H; pose(true); y = drop + 1.5; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 100; jit = 1.5 + 3 * Math.max(0, Math.sin(h * Math.PI * 3)); }   /* hangs, bobbing; the legs twitch in bursts */
+      else if (e < D + H) { var h = (e - D) / H; pose(true); y = drop + 1.5; sway = Math.sin((e - D) / 320) * 2 * (1 - h); open = 1 - h * 0.6; phase = (e - D) / 100; jit = 1.5 + 3 * Math.max(0, Math.sin(h * Math.PI * 3)); rch = searching(e); }   /* a reach still running when she stops finishes slowly */   /* hangs, bobbing; the legs twitch in bursts */
       else if (e < D + H + P) { var g = (e - D - H) / P; pose(false); y = drop; climb = g * g * (3 - 2 * g); open = 0.4; phase = Math.PI / 2; }   /* first she turns and reaches up the thread with the front legs, still in place */
       else if (e < D + H + P + U) { var u = (e - D - H - P) / U; pose(false); y = drop - (drop + 26) * u * (2 - u); climb = 1; open = 0.4; phase = (e - D - H - P) / 45 + Math.PI / 2; }   /* then she pulls: hand over hand, on past the line and out of view */
       else { sp.setAttribute('transform', 'translate(0,-30)'); silk.setAttribute('y2', 0); pose(false); host.remove(); setTimeout(cycle, 20000 + Math.random() * 20000); return; }
