@@ -158,6 +158,8 @@ layout: default
 
   {%- assign end_facts = "" | split: "" %}
   {%- for f in page.facts %}{% if end_labels contains f.label %}{% assign end_facts = end_facts | push: f %}{% endif %}{% endfor %}
+  {%- comment %} ending (23 Nov 2026): optional page.ending groups (label, value) come first, in their own order, then Link, Licence, Photos from the facts {%- endcomment %}
+  {%- if page.ending %}{% assign end_facts = page.ending | concat: end_facts %}{% endif %}
   {%- if end_facts.size > 0 %}
   <dl class="case__facts case__facts--end">
     {%- for f in end_facts %}
