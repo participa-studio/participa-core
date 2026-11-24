@@ -36,7 +36,7 @@
 {%- if p.spider and page.layout == "blog" %}
 <script src="{{ p.core }}/js/spider.js?v={{ p.version }}" defer></script>
 {%- endif %}
-{%- if p.beetle and page.layout == "about" %}
+{%- if p.beetle and page.layout == "about" %}{%- comment -%} walks inside the Participa Design box {%- endcomment -%}
 <script src="{{ p.core }}/js/beetle.js?v={{ p.version }}" defer></script>
 {%- endif %}
 {%- if p.reading %}

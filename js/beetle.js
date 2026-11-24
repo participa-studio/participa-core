@@ -1,6 +1,7 @@
 /* PARTICIPA CORE — BEETLE (24 Nov 2026; .studio About, participa.beetle: true).
-   A rhinoceros beetle seen from the side, walking along the lowest line of the page (the bottom edge of the
-   footer). Drawn as a silhouette in the ink colour, in parts: wing cases, the band of the abdomen below them,
+   A rhinoceros beetle seen from the side, walking inside the Participa Design box on the About page, on its
+   bottom line. She appears from behind the box's left line and disappears behind its right line (or the
+   other way round). Drawn as a silhouette in the ink colour, in parts: wing cases, the band of the abdomen below them,
    the high neck shield, the head with its curved horn, and three legs on the near side (the far legs paler).
    Thin gaps in the page colour separate the parts. Drawn for Participa, not traced from any picture.
    Each visit she walks in from one side, stops now and then, sometimes turns round for a few steps and turns
@@ -8,16 +9,21 @@
    Same rules as the ants and the spider: never in the way of clicks or text, hidden from screen readers,
    nothing at all with "reduce motion" switched on. */
 (function () {
-  var footer = document.querySelector('.site-footer');
-  if (!footer || !window.requestAnimationFrame) return;
+  var box = document.querySelector('.about__side--design');
+  if (!box || !window.requestAnimationFrame) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (getComputedStyle(box).position === 'static') box.style.position = 'relative';
+  /* a clipping layer inside the box's lines: she is hidden behind the left and right lines */
+  var footer = document.createElement('div');
+  footer.setAttribute('aria-hidden', 'true');
+  footer.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2';
+  box.appendChild(footer);
 
   var INK = '#1A1A1A', NS = 'http://www.w3.org/2000/svg';
-  if (getComputedStyle(footer).position === 'static') footer.style.position = 'relative';
 
   /* the page colour, for the thin gaps between the parts */
   function pageColour() {
-    var els = [footer, document.body, document.documentElement];
+    var els = [box, document.body, document.documentElement];
     for (var i = 0; i < els.length; i++) {
       var c = getComputedStyle(els[i]).backgroundColor;
       if (c && c !== 'transparent' && !/rgba\(.*,\s*0\)$/.test(c)) return c;
