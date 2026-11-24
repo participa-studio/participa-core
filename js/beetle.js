@@ -69,7 +69,7 @@
 
   var S = 1;
   function size() {
-    S = window.innerWidth <= 720 ? 1.15 : 1.6;
+    S = window.innerWidth <= 720 ? 0.8 : 1.0;   /* 24 Nov 2026, 19:37: smaller, about the size of the ants */
     svg.setAttribute('width', 32 * S); svg.setAttribute('height', 18 * S);
   }
   size();
@@ -125,7 +125,7 @@
     }
     plan.push({ to: end });
 
-    var SPEED = rand(36, 46) / 1000 * (S < 1.3 ? 0.85 : 1);   /* px per ms: an unhurried walk */
+    var SPEED = rand(36, 46) / 1000 * (S < 0.9 ? 0.85 : 1);   /* px per ms: an unhurried walk */
     var x = start, step = 0, t0 = null, from = x, phase = 0, prev = null, facing = dir;
     host.style.opacity = 1;
     function frame(t) {
