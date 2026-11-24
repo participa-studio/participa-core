@@ -1,8 +1,8 @@
 /* PARTICIPA CORE — BEETLE (24 Nov 2026; .studio About, participa.beetle: true).
-   A rhinoceros beetle seen from the side, walking inside the Participa Design box on the About page, on its
+   A simple beetle seen from the side, walking inside the Participa Design box on the About page, on its
    bottom line. She appears from behind the box's left line and disappears behind its right line (or the
-   other way round). Drawn as a silhouette in the ink colour, in parts: wing cases, the band of the abdomen below them,
-   the high neck shield, the head with its curved horn, and three legs on the near side (the far legs paler).
+   other way round). A silhouette in the ink colour, in parts: one big domed wing case, the neck shield and a
+   small head with two beaded antennae that move as she goes; three legs on the near side (the far legs paler).
    Thin gaps in the page colour separate the parts. Drawn for Participa, not traced from any picture.
    Each visit she walks in from one side, stops now and then, sometimes turns round for a few steps and turns
    back, and walks off the other side. Then a pause of 20 to 40 s before the next visit.
@@ -41,29 +41,32 @@
     '<svg viewBox="-16 -18 32 18" width="32" height="18" style="display:block;overflow:visible">' +
       '<g class="dir"><g class="walk">' +
         '<g class="far" fill="none" stroke="' + INK + '" stroke-opacity="0.45" stroke-linecap="round" stroke-linejoin="round"></g>' +
+        /* two antennae, beaded, reaching forward and up from the head; they move a little */
+        '<g class="ant" fill="none" stroke="' + INK + '" stroke-width="0.9" stroke-linecap="round" stroke-dasharray="0.01 0.8">' +
+          '<path d="M11.4 -8.6 C12.6 -10.6 13.8 -12.4 15.6 -13.6"/>' +
+          '<path d="M11.0 -8.9 C11.6 -11.2 12.4 -13.4 13.8 -15.0"/>' +
+        '</g>' +
         '<g class="parts" fill="' + INK + '" stroke-width="0.55" stroke-linejoin="round">' +
-          /* band of the abdomen, under the wing cases */
-          '<path d="M-11.4 -6.4 C-6 -4.4 0 -4.3 3.6 -5.2 L3.4 -3.4 C-1.6 -2.4 -7.6 -2.7 -10.6 -4.4 Z"/>' +
+          /* head, low at the front */
+          '<path d="M9.6 -9.2 C11.4 -9.8 12.9 -8.4 12.9 -6.8 C12.9 -5.3 11.8 -4.3 10.3 -4.5 L9.6 -5.1 Z"/>' +
+          /* neck shield */
+          '<path d="M5.4 -11.6 C7.6 -12.2 9.4 -11.2 9.8 -9.4 L9.8 -5.4 C8.2 -4.6 6.6 -4.4 5.2 -4.8 Z"/>' +
         '</g>' +
         /* hind wings: folded away, they unfold behind the raised wing cases */
         '<g class="hw" fill="' + INK + '" fill-opacity="0.22" stroke="' + INK + '" stroke-opacity="0.35" stroke-width="0.3">' +
-          '<path d="M2.4 -12.6 C-3 -21 -13 -22.6 -19 -17.4 C-13.4 -15.6 -5.6 -13.8 2.4 -11.6 Z"/>' +
-          '<path d="M2.4 -12.2 C-2 -18.4 -9.6 -20.2 -15.4 -16.6 C-10.4 -14.8 -4 -13 2.4 -11.4 Z" fill-opacity="0.15"/>' +
+          '<path d="M5 -11.6 C-1 -20.6 -11.6 -22 -17.6 -16.6 C-11.6 -14.8 -3.6 -13 5 -10.6 Z"/>' +
+          '<path d="M5 -11.2 C0 -17.8 -8 -19.6 -14 -16 C-8.8 -14.2 -2 -12.4 5 -10.4 Z" fill-opacity="0.15"/>' +
         '</g>' +
         '<g class="parts2" fill="' + INK + '" stroke-width="0.55" stroke-linejoin="round">' +
-          /* wing cases: a long, low dome; they lift at the front edge */
-          '<g class="ely"><path d="M-13 -8.4 C-13.2 -12.6 -9.6 -14.6 -4.4 -14.6 L1.6 -14.4 C3.4 -14.2 3.8 -12.4 3.8 -10.2 L3.6 -5.4 C-1.8 -4.4 -8.2 -4.8 -11.6 -6.2 C-12.6 -6.7 -13 -7.4 -13 -8.4 Z"/></g>' +
-          /* neck shield (pronotum): high at the back, sloping to the head */
-          '<path d="M3.8 -14.2 C5.8 -15.4 8.4 -15.2 9.4 -14.2 C9.6 -12.2 9.2 -10.6 10.8 -8.8 L11 -5.8 C8.6 -4.8 5.8 -4.8 3.8 -5.4 Z"/>' +
-          /* head with the curved horn */
-          '<path d="M10.6 -8.8 L11.8 -10.2 C12.6 -12.8 12.6 -15 11.8 -17 C13.8 -15.6 14.6 -12.6 13.8 -9.2 L14.2 -6.8 C13 -5.6 11.8 -5.4 11 -5.8 Z"/>' +
+          /* wing cases: one big dome, highest towards the back; they lift at the front edge */
+          '<g class="ely"><path d="M-12.6 -6 C-12.8 -12.4 -6.4 -15.2 0 -14.2 C4.2 -13.6 5.8 -11 5.8 -8 L5.6 -4.8 C-1 -3.6 -8.2 -3.8 -12.6 -6 Z"/></g>' +
         '</g>' +
         '<g class="near" fill="none" stroke="' + INK + '" stroke-linecap="round" stroke-linejoin="round"></g>' +
       '</g></g>' +
     '</svg>';
   footer.appendChild(host);
   var svg = host.querySelector('svg'), dirG = host.querySelector('.dir'), walkG = host.querySelector('.walk');
-  var partsG = host.querySelector('.parts'), parts2G = host.querySelector('.parts2'), elyG = host.querySelector('.ely'), hwG = host.querySelector('.hw'), nearG = host.querySelector('.near'), farG = host.querySelector('.far');
+  var antG = host.querySelector('.ant'), partsG = host.querySelector('.parts'), parts2G = host.querySelector('.parts2'), elyG = host.querySelector('.ely'), hwG = host.querySelector('.hw'), nearG = host.querySelector('.near'), farG = host.querySelector('.far');
   partsG.setAttribute('stroke', GAP); parts2G.setAttribute('stroke', GAP);
   hwG.setAttribute('transform', 'scale(0,0)');
 
@@ -78,9 +81,9 @@
   /* each leg: a thick upper part, a thinner lower part and a short jointed foot along the ground.
      hip = where it leaves the body; knee and foot are the resting positions */
   var LEGS = [
-    { hip: [8.2, -5.4], knee: [11.2, -3.6], foot: [12.6, 0], toe: 1 },     /* front: reaches forward */
-    { hip: [0.6, -4.2], knee: [2.4, -2.6], foot: [3.2, 0], toe: 1 },       /* middle */
-    { hip: [-7.2, -4.4], knee: [-10.6, -3.2], foot: [-13.2, 0], toe: -1 }  /* back: trails behind */
+    { hip: [7.6, -5.0], knee: [10.6, -3.2], foot: [11.8, 0], toe: 1 },     /* front: reaches forward */
+    { hip: [1.0, -4.2], knee: [2.8, -2.6], foot: [3.6, 0], toe: 1 },       /* middle */
+    { hip: [-6.2, -4.4], knee: [-9.4, -3.0], foot: [-12.0, 0], toe: -1 }   /* back: trails behind */
   ];
   function makeLeg(g, w) {
     var a = document.createElementNS(NS, 'path'), b = document.createElementNS(NS, 'path'), c = document.createElementNS(NS, 'path');
@@ -154,11 +157,12 @@
         }
         if (e >= m.wait) { step++; t0 = null; }
       }
-      elyG.setAttribute('transform', 'rotate(' + (-34 * wings).toFixed(2) + ' 3.4 -12.8)');
-      hwG.setAttribute('transform', 'translate(2.4 -12) scale(' + wings.toFixed(3) + ',' + (wings * (1 + wbuzz)).toFixed(3) + ') translate(-2.4 12)');
+      elyG.setAttribute('transform', 'rotate(' + (-26 * wings).toFixed(2) + ' 5.4 -11.6)');
+      hwG.setAttribute('transform', 'translate(5 -11.2) scale(' + wings.toFixed(3) + ',' + (wings * (1 + wbuzz)).toFixed(3) + ') translate(-5 11.2)');
       host.style.transform = 'translateX(' + (x - w / 2).toFixed(1) + 'px)';
       dirG.setAttribute('transform', facing > 0 ? '' : 'scale(-1,1)');
       walkG.setAttribute('transform', 'translate(0,' + bob.toFixed(2) + ')');
+      antG.setAttribute('transform', 'rotate(' + (Math.sin(t / (moving ? 260 : 520)) * 6).toFixed(2) + ' 11.2 -8.8)');   /* feeling the way */
       drawLegs(phase, moving);
       requestAnimationFrame(frame);
     }
