@@ -116,10 +116,11 @@
     var W = footer.clientWidth, w = 32 * S, fromLeft = Math.random() < 0.5;
     var start = fromLeft ? -w : W + w, end = fromLeft ? W + w : -w, dir = fromLeft ? 1 : -1;
     var plan = [], n = 2 + Math.floor(Math.random() * 3);
+    var wingStop = 1 + Math.floor(Math.random() * n);
     for (var k = 1; k <= n; k++) {
       var tx = start + (end - start) * (k / (n + 1)) + rand(-40, 40);
       plan.push({ to: tx });
-      plan.push(Math.random() < 0.55 ? { wait: rand(2200, 3200), wings: true } : { wait: rand(1000, 2200) });
+      plan.push(k === wingStop ? { wait: rand(2200, 3200), wings: true } : { wait: rand(1000, 2200) });   /* wings: once per visit */
       /* now and then she turns round, takes a few steps back the way she came, and turns again */
       if (Math.random() < 0.3) { plan.push({ to: tx - dir * rand(20, 40) }); plan.push({ wait: rand(600, 1400) }); }
     }
