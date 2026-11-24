@@ -44,8 +44,15 @@
         '<g class="parts" fill="' + INK + '" stroke-width="0.55" stroke-linejoin="round">' +
           /* band of the abdomen, under the wing cases */
           '<path d="M-11.4 -6.4 C-6 -4.4 0 -4.3 3.6 -5.2 L3.4 -3.4 C-1.6 -2.4 -7.6 -2.7 -10.6 -4.4 Z"/>' +
-          /* wing cases: a long, low dome */
-          '<path d="M-13 -8.4 C-13.2 -12.6 -9.6 -14.6 -4.4 -14.6 L1.6 -14.4 C3.4 -14.2 3.8 -12.4 3.8 -10.2 L3.6 -5.4 C-1.8 -4.4 -8.2 -4.8 -11.6 -6.2 C-12.6 -6.7 -13 -7.4 -13 -8.4 Z"/>' +
+        '</g>' +
+        /* hind wings: folded away, they unfold behind the raised wing cases */
+        '<g class="hw" fill="' + INK + '" fill-opacity="0.22" stroke="' + INK + '" stroke-opacity="0.35" stroke-width="0.3">' +
+          '<path d="M2.4 -12.6 C-3 -21 -13 -22.6 -19 -17.4 C-13.4 -15.6 -5.6 -13.8 2.4 -11.6 Z"/>' +
+          '<path d="M2.4 -12.2 C-2 -18.4 -9.6 -20.2 -15.4 -16.6 C-10.4 -14.8 -4 -13 2.4 -11.4 Z" fill-opacity="0.15"/>' +
+        '</g>' +
+        '<g class="parts2" fill="' + INK + '" stroke-width="0.55" stroke-linejoin="round">' +
+          /* wing cases: a long, low dome; they lift at the front edge */
+          '<g class="ely"><path d="M-13 -8.4 C-13.2 -12.6 -9.6 -14.6 -4.4 -14.6 L1.6 -14.4 C3.4 -14.2 3.8 -12.4 3.8 -10.2 L3.6 -5.4 C-1.8 -4.4 -8.2 -4.8 -11.6 -6.2 C-12.6 -6.7 -13 -7.4 -13 -8.4 Z"/></g>' +
           /* neck shield (pronotum): high at the back, sloping to the head */
           '<path d="M3.8 -14.2 C5.8 -15.4 8.4 -15.2 9.4 -14.2 C9.6 -12.2 9.2 -10.6 10.8 -8.8 L11 -5.8 C8.6 -4.8 5.8 -4.8 3.8 -5.4 Z"/>' +
           /* head with the curved horn */
@@ -56,8 +63,9 @@
     '</svg>';
   footer.appendChild(host);
   var svg = host.querySelector('svg'), dirG = host.querySelector('.dir'), walkG = host.querySelector('.walk');
-  var partsG = host.querySelector('.parts'), nearG = host.querySelector('.near'), farG = host.querySelector('.far');
-  partsG.setAttribute('stroke', GAP);
+  var partsG = host.querySelector('.parts'), parts2G = host.querySelector('.parts2'), elyG = host.querySelector('.ely'), hwG = host.querySelector('.hw'), nearG = host.querySelector('.near'), farG = host.querySelector('.far');
+  partsG.setAttribute('stroke', GAP); parts2G.setAttribute('stroke', GAP);
+  hwG.setAttribute('transform', 'scale(0,0)');
 
   var S = 1;
   function size() {
@@ -104,20 +112,20 @@
   function rand(a, b) { return a + Math.random() * (b - a); }
 
   function visit() {
-    GAP = pageColour(); partsG.setAttribute('stroke', GAP);
+    GAP = pageColour(); partsG.setAttribute('stroke', GAP); parts2G.setAttribute('stroke', GAP);
     var W = footer.clientWidth, w = 32 * S, fromLeft = Math.random() < 0.5;
     var start = fromLeft ? -w : W + w, end = fromLeft ? W + w : -w, dir = fromLeft ? 1 : -1;
     var plan = [], n = 2 + Math.floor(Math.random() * 3);
     for (var k = 1; k <= n; k++) {
       var tx = start + (end - start) * (k / (n + 1)) + rand(-40, 40);
       plan.push({ to: tx });
-      plan.push({ wait: rand(1200, 2800) });
+      plan.push(Math.random() < 0.55 ? { wait: rand(2200, 3200), wings: true } : { wait: rand(1000, 2200) });
       /* now and then she turns round, takes a few steps back the way she came, and turns again */
       if (Math.random() < 0.3) { plan.push({ to: tx - dir * rand(20, 40) }); plan.push({ wait: rand(600, 1400) }); }
     }
     plan.push({ to: end });
 
-    var SPEED = rand(22, 30) / 1000 * (S < 1.3 ? 0.85 : 1);   /* px per ms: an unhurried walk */
+    var SPEED = rand(36, 46) / 1000 * (S < 1.3 ? 0.85 : 1);   /* px per ms: an unhurried walk */
     var x = start, step = 0, t0 = null, from = x, phase = 0, prev = null, facing = dir;
     host.style.opacity = 1;
     function frame(t) {
@@ -126,15 +134,27 @@
       var m = plan[step];
       if (!m) { host.style.opacity = 0; setTimeout(visit, rand(20000, 40000)); return; }
       if (t0 === null) { t0 = t; from = x; }
-      var e = t - t0, moving = false, bob = 0;
+      var e = t - t0, moving = false, bob = 0, wings = 0, wbuzz = 0;
       if (m.to !== undefined) {
         var dist = m.to - from, dur = Math.abs(dist) / SPEED, k = dur ? Math.min(1, e / dur) : 1;
         if (dist) facing = dist > 0 ? 1 : -1;
         x = from + dist * k;
-        moving = true; phase += dt / 110;
+        moving = true; phase += dt / 75;
         bob = Math.abs(Math.sin(phase)) * -0.35;                 /* a slight rise and fall with each step */
         if (k >= 1) { step++; t0 = null; }
-      } else if (e >= m.wait) { step++; t0 = null; }
+      } else {
+        /* getting ready to fly, but not flying: the wing cases lift at the front, the hind wings unfold and
+           buzz for a moment, then everything folds back */
+        if (m.wings) {
+          var o = e < 450 ? e / 450 : e > m.wait - 450 ? Math.max(0, (m.wait - e) / 450) : 1;
+          o = o * o * (3 - 2 * o);
+          var buzz = o > 0.9 ? Math.sin(e / 18) * 0.12 : 0;
+          wings = o; wbuzz = buzz;
+        }
+        if (e >= m.wait) { step++; t0 = null; }
+      }
+      elyG.setAttribute('transform', 'rotate(' + (-34 * wings).toFixed(2) + ' 3.4 -12.8)');
+      hwG.setAttribute('transform', 'translate(2.4 -12) scale(' + wings.toFixed(3) + ',' + (wings * (1 + wbuzz)).toFixed(3) + ') translate(-2.4 12)');
       host.style.transform = 'translateX(' + (x - w / 2).toFixed(1) + 'px)';
       dirG.setAttribute('transform', facing > 0 ? '' : 'scale(-1,1)');
       walkG.setAttribute('transform', 'translate(0,' + bob.toFixed(2) + ')');
