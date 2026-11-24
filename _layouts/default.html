@@ -36,6 +36,9 @@
 {%- if p.spider and page.layout == "blog" %}
 <script src="{{ p.core }}/js/spider.js?v={{ p.version }}" defer></script>
 {%- endif %}
+{%- if p.ladybug and page.layout == "about" %}
+<script src="{{ p.core }}/js/ladybug.js?v={{ p.version }}" defer></script>
+{%- endif %}
 {%- if p.reading %}
 <script src="{{ p.core }}/js/reading.js?v={{ p.version }}" defer></script>
 {%- endif %}
