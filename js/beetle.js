@@ -5,7 +5,8 @@
    small head with two beaded antennae that move as she goes; three legs on the near side (the far legs paler).
    Thin gaps in the page colour separate the parts. Drawn for Participa, not traced from any picture.
    Each visit she walks in from one side, stops now and then, sometimes turns round for a few steps and turns
-   back, and walks off the other side. Then a pause of 20 to 40 s before the next visit.
+   back, and walks off the other side. About one visit in three she takes off instead, at the stop where she
+   opens her wings, and flies up and away behind the box's top line. Then a pause of 20 to 40 s before the next visit.
    Same rules as the ants and the spider: never in the way of clicks or text, hidden from screen readers,
    nothing at all with "reduce motion" switched on. */
 (function () {
@@ -120,23 +121,27 @@
     var start = fromLeft ? -w : W + w, end = fromLeft ? W + w : -w, dir = fromLeft ? 1 : -1;
     var plan = [], n = 2 + Math.floor(Math.random() * 3);
     var wingStop = 1 + Math.floor(Math.random() * n);
+    /* about one visit in three (25 Nov 2026), at the wing stop she does fly: up and away, behind the box's top line */
+    var flyOut = Math.random() < 0.33, flying = false;
     for (var k = 1; k <= n; k++) {
       var tx = start + (end - start) * (k / (n + 1)) + rand(-40, 40);
       plan.push({ to: tx });
+      if (k === wingStop && flyOut) { plan.push({ fly: true, dx: dir * rand(70, 150) }); flying = true; break; }
       plan.push(k === wingStop ? { wait: rand(2200, 3200), wings: true } : { wait: rand(1000, 2200) });   /* wings: once per visit */
       /* now and then she turns round, takes a few steps back the way she came, and turns again */
       if (Math.random() < 0.3) { plan.push({ to: tx - dir * rand(20, 40) }); plan.push({ wait: rand(600, 1400) }); }
     }
-    plan.push({ to: end });
+    if (!flying) plan.push({ to: end });
 
     var SPEED = rand(36, 46) / 1000 * (S < 2.4 ? 0.85 : 1);   /* px per ms: an unhurried walk */
-    var x = start, step = 0, t0 = null, from = x, phase = 0, prev = null, facing = dir;
+    var x = start, y = 0, step = 0, t0 = null, from = x, phase = 0, prev = null, facing = dir;
+    var H = footer.clientHeight;
     host.style.opacity = 1;
     function frame(t) {
       if (prev === null) prev = t;
       var dt = t - prev; prev = t;
       var m = plan[step];
-      if (!m) { host.style.opacity = 0; setTimeout(visit, rand(20000, 40000)); return; }
+      if (!m) { host.style.opacity = 0; y = 0; setTimeout(visit, rand(20000, 40000)); return; }
       if (t0 === null) { t0 = t; from = x; }
       var e = t - t0, moving = false, bob = 0, wings = 0, wbuzz = 0;
       if (m.to !== undefined) {
@@ -146,6 +151,19 @@
         moving = true; phase += dt / 75;
         bob = Math.abs(Math.sin(phase)) * -0.35;                 /* a slight rise and fall with each step */
         if (k >= 1) { step++; t0 = null; }
+      } else if (m.fly) {
+        /* take-off: wings open (0.45 s), buzz in place (0.5 s), then she lifts off, climbing forwards in a
+           gentle curve until she is gone behind the box's top line */
+        var LIFT = 950, UP = 1700;
+        wings = Math.min(1, e / 450); wings = wings * wings * (3 - 2 * wings);
+        wbuzz = e > 400 ? Math.sin(e / 12) * 0.18 : 0;
+        if (e > LIFT) {
+          var f = Math.min(1, (e - LIFT) / UP), fe = f * f;
+          y = (H + 40) * fe;                                            /* accelerating upwards */
+          x = from + m.dx * f;                                          /* and forwards */
+          bob = Math.sin((e - LIFT) / 90) * -0.6;                       /* a little wobble in the air */
+          if (f >= 1) { step++; t0 = null; }
+        }
       } else {
         /* getting ready to fly, but not flying: the wing cases lift at the front, the hind wings unfold and
            buzz for a moment, then everything folds back */
@@ -159,7 +177,7 @@
       }
       elyG.setAttribute('transform', 'rotate(' + (-26 * wings).toFixed(2) + ' 5.4 -11.6)');
       hwG.setAttribute('transform', 'translate(5 -11.2) scale(' + wings.toFixed(3) + ',' + (wings * (1 + wbuzz)).toFixed(3) + ') translate(-5 11.2)');
-      host.style.transform = 'translateX(' + (x - w / 2).toFixed(1) + 'px)';
+      host.style.transform = 'translate(' + (x - w / 2).toFixed(1) + 'px,' + (-y).toFixed(1) + 'px)';
       dirG.setAttribute('transform', facing > 0 ? '' : 'scale(-1,1)');
       walkG.setAttribute('transform', 'translate(0,' + bob.toFixed(2) + ')');
       antG.setAttribute('transform', 'rotate(' + (Math.sin(t / (moving ? 260 : 520)) * 6).toFixed(2) + ' 11.2 -8.8)');   /* feeling the way */
