@@ -73,7 +73,7 @@
 
   var S = 1;
   function size() {
-    S = window.innerWidth <= 720 ? 2.1 : 2.8;   /* 25 Nov 2026: double size (was 1.4 / 1.05) */
+    S = window.innerWidth <= 720 ? 1.7 : 2.25;   /* 25 Nov 2026, 09:16: 20% smaller (was 2.8 / 2.1) */
     svg.setAttribute('width', 32 * S); svg.setAttribute('height', 18 * S);
   }
   size();
@@ -133,7 +133,7 @@
     }
     if (!flying) plan.push({ to: end });
 
-    var SPEED = rand(36, 46) / 1000 * (S < 2.4 ? 0.85 : 1);   /* px per ms: an unhurried walk */
+    var SPEED = rand(36, 46) / 1000 * (S < 2.0 ? 0.85 : 1);   /* px per ms: an unhurried walk */
     var x = start, y = 0, step = 0, t0 = null, from = x, phase = 0, prev = null, facing = dir;
     var H = footer.clientHeight;
     host.style.opacity = 1;
