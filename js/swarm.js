@@ -153,12 +153,17 @@
     var y = e.clientY, below = y < 120, EDGE = 16;
     bubble.style.cssText = "position:fixed;z-index:70;left:0;top:" + y + "px;" +
       "transform:translateY(" + (below ? "20px" : "calc(-100% - 20px)") + ");" +
-      "width:max-content;max-width:min(13rem,calc(100vw - 32px));" +
+      "width:max-content;max-width:min(15rem,calc(100vw - 32px));box-sizing:content-box;" +
       "padding:.4em .6em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);" +
       "font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;text-wrap:balance;" +
       "box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);" +
       "opacity:0;transition:opacity .3s ease;pointer-events:none;";
     document.body.appendChild(bubble);
+    // Shrink-wrap (25 Nov 2026): when a line wraps, the box keeps its full width and leaves empty space on the
+    // right; measure the longest line and fit the box to it
+    var rg = document.createRange(); rg.selectNodeContents(bubble); var rs = rg.getClientRects(), lo = 1e9, hi = -1e9;
+    for (var ri = 0; ri < rs.length; ri++) { lo = Math.min(lo, rs[ri].left); hi = Math.max(hi, rs[ri].right); }
+    if (rs.length > 1 && hi > lo) bubble.style.width = Math.ceil(hi - lo) + "px";
     var w = bubble.offsetWidth;
     var left = Math.min(Math.max(e.clientX - w / 2, EDGE), window.innerWidth - w - EDGE);
     bubble.style.left = left + "px";
