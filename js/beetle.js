@@ -7,7 +7,7 @@
    Each visit she walks in from one side, stops now and then, sometimes turns round for a few steps and turns
    back, and walks off the other side. About one visit in three she takes off instead, at the stop where she
    opens her wings, and flies up and away behind the box's top line. Then a pause of 20 to 40 s before the next visit.
-   Same rules as the ants and the spider: never in the way of clicks or text, hidden from screen readers,
+   Click her and she says something (participa.beetle_say), as the ants do. Otherwise never in the way of text, hidden from screen readers,
    nothing at all with "reduce motion" switched on. */
 (function () {
   var box = document.querySelector('.about__side--design');
@@ -37,7 +37,7 @@
   var host = document.createElement('div');
   host.className = 'beetle';
   host.setAttribute('aria-hidden', 'true');
-  host.style.cssText = 'position:absolute;bottom:0;left:0;pointer-events:none;z-index:2;opacity:0;will-change:transform';
+  host.style.cssText = 'position:absolute;bottom:0;left:0;pointer-events:auto;cursor:pointer;z-index:2;opacity:0;will-change:transform';
   host.innerHTML =
     '<svg viewBox="-16 -18 32 18" width="32" height="18" style="display:block;overflow:visible">' +
       '<g class="dir"><g class="walk">' +
@@ -65,7 +65,52 @@
         '<g class="near" fill="none" stroke="' + INK + '" stroke-linecap="round" stroke-linejoin="round"></g>' +
       '</g></g>' +
     '</svg>';
+  host.insertAdjacentHTML('beforeend', '<span style="position:absolute;inset:-10px;"></span>');   /* a bigger target than the drawing */
   footer.appendChild(host);
+
+  /* Easter egg (25 Nov 2026), as with the ants: click the beetle and she says something; she keeps going.
+     Lines come from the site (participa.beetle_say in _config.yml). No repeats until all have been seen;
+     the place in the order is kept for the browser session. Same speech bubble as the ants. */
+  var LINES = window.PARTICIPA_BEETLE_SAY || ['Six legs, no hurry.'];
+  var bubble = null, bubbleTimer = 0, order = [], pos = 0, KEY = 'participa-beetle-say';
+  try {
+    var saved = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+    if (saved && saved.n === LINES.length && saved.order && saved.order.length === LINES.length) { order = saved.order; pos = saved.pos; }
+  } catch (err) {}
+  function nextLine() {
+    if (!order.length || pos >= order.length) {
+      var last = order[order.length - 1];
+      order = LINES.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var q = order[i]; order[i] = order[j]; order[j] = q; }
+      if (order.length > 1 && order[0] === last) order.push(order.shift());
+      pos = 0;
+    }
+    var line = LINES[order[pos++]];
+    try { sessionStorage.setItem(KEY, JSON.stringify({ n: LINES.length, order: order, pos: pos })); } catch (err) {}
+    return typeof line === 'string' ? line : line.text;
+  }
+  function say(e) {
+    if (bubble) bubble.remove();
+    clearTimeout(bubbleTimer);
+    bubble = document.createElement('div');
+    bubble.setAttribute('role', 'status');
+    bubble.textContent = nextLine();
+    var y = e.clientY, below = y < 120, EDGE = 16;
+    bubble.style.cssText = 'position:fixed;z-index:70;left:0;top:' + y + 'px;' +
+      'transform:translateY(' + (below ? '20px' : 'calc(-100% - 20px)') + ');' +
+      'width:max-content;max-width:min(13rem,calc(100vw - 32px));' +
+      'padding:.4em .6em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);' +
+      'font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;text-wrap:balance;' +
+      'box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);' +
+      'opacity:0;transition:opacity .3s ease;pointer-events:none;';
+    document.body.appendChild(bubble);
+    var bw = bubble.offsetWidth;
+    bubble.style.left = Math.min(Math.max(e.clientX - bw / 2, EDGE), window.innerWidth - bw - EDGE) + 'px';
+    requestAnimationFrame(function () { bubble.style.opacity = '1'; });
+    var b = bubble;
+    bubbleTimer = setTimeout(function () { b.style.opacity = '0'; setTimeout(function () { b.remove(); }, 400); }, 3200);
+  }
+  host.addEventListener('click', say);
   var svg = host.querySelector('svg'), dirG = host.querySelector('.dir'), walkG = host.querySelector('.walk');
   var antG = host.querySelector('.ant'), partsG = host.querySelector('.parts'), parts2G = host.querySelector('.parts2'), elyG = host.querySelector('.ely'), hwG = host.querySelector('.hw'), nearG = host.querySelector('.near'), farG = host.querySelector('.far');
   partsG.setAttribute('stroke', GAP); parts2G.setAttribute('stroke', GAP);
