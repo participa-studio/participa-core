@@ -13,9 +13,55 @@
   host.innerHTML = '<svg width="90" height="420" viewBox="0 0 90 420" style="overflow:visible;display:block">' +
     '<line class="silk" x1="45" y1="-2" x2="45" y2="0" stroke="' + INK + '" stroke-width="0.6"/>' +
     '<g class="sp"><g class="legs" fill="none" stroke="' + INK + '" stroke-opacity="0.7" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round"></g>' +
+    '<circle class="hit" cx="45" cy="3" r="9" fill="transparent" style="pointer-events:all;cursor:pointer"/>' +
     '<circle class="head" cx="45" cy="0.4" r="1.3" fill="' + INK + '"/><ellipse class="abd" cx="45" cy="4.3" rx="2.1" ry="2.8" fill="' + INK + '"/></g></svg>';
   /* size (21 Nov 2026): a little larger on wide screens, smaller on phones; the whole drawing scales, thread included */
   var svgEl = host.querySelector('svg');
+
+  /* Easter egg (25 Nov 2026), as with the ants and the beetle: click the spider and she says something.
+     Lines come from the site (participa.spider_say in _config.yml). No repeats until all have been seen;
+     the place in the order is kept for the browser session. Same speech bubble as the ants. */
+  var LINES = window.PARTICIPA_SPIDER_SAY || ['Just hanging around.'];
+  var bubble = null, bubbleTimer = 0, order = [], pos = 0, KEY = 'participa-spider-say';
+  try {
+    var saved = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+    if (saved && saved.n === LINES.length && saved.order && saved.order.length === LINES.length) { order = saved.order; pos = saved.pos; }
+  } catch (err) {}
+  function nextLine() {
+    if (!order.length || pos >= order.length) {
+      var last = order[order.length - 1];
+      order = LINES.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var q = order[i]; order[i] = order[j]; order[j] = q; }
+      if (order.length > 1 && order[0] === last) order.push(order.shift());
+      pos = 0;
+    }
+    var line = LINES[order[pos++]];
+    try { sessionStorage.setItem(KEY, JSON.stringify({ n: LINES.length, order: order, pos: pos })); } catch (err) {}
+    return typeof line === 'string' ? line : line.text;
+  }
+  function say(e) {
+    e.preventDefault(); e.stopPropagation();      /* the spider sits on a post link: talk, do not open the post */
+    if (bubble) bubble.remove();
+    clearTimeout(bubbleTimer);
+    bubble = document.createElement('div');
+    bubble.setAttribute('role', 'status');
+    bubble.textContent = nextLine();
+    var y = e.clientY, below = y < 120, EDGE = 16;
+    bubble.style.cssText = 'position:fixed;z-index:70;left:0;top:' + y + 'px;' +
+      'transform:translateY(' + (below ? '20px' : 'calc(-100% - 20px)') + ');' +
+      'width:max-content;max-width:min(13rem,calc(100vw - 32px));' +
+      'padding:.4em .6em;background:var(--colour-ants-say,#FAEEA8);color:var(--colour-ink,#1A1A1A);' +
+      'font-size:.75rem;line-height:1.25;font-weight:500;letter-spacing:.02em;text-wrap:balance;' +
+      'box-shadow:2px 2px 0 0 var(--colour-ink,#1A1A1A);border:1px solid var(--colour-ink,#1A1A1A);' +
+      'opacity:0;transition:opacity .3s ease;pointer-events:none;';
+    document.body.appendChild(bubble);
+    var bw = bubble.offsetWidth;
+    bubble.style.left = Math.min(Math.max(e.clientX - bw / 2, EDGE), window.innerWidth - bw - EDGE) + 'px';
+    requestAnimationFrame(function () { bubble.style.opacity = '1'; });
+    var b = bubble;
+    bubbleTimer = setTimeout(function () { b.style.opacity = '0'; setTimeout(function () { b.remove(); }, 400); }, 3200);
+  }
+  host.querySelector('.hit').addEventListener('click', say);
   function size() {
     var s = window.innerWidth <= 720 ? 1.5 : 2.0;   /* Bernardo, 21 Nov 2026, evening: larger than the ants on wide screens; smaller on phones, so the legs read as quick, not mechanical */
     svgEl.setAttribute('width', 90 * s); svgEl.setAttribute('height', 420 * s);
